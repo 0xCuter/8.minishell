@@ -6,21 +6,37 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:07:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/22 12:38:12 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/22 17:33:14 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	do_nothing()
-{}
-
-int	setup_signals()
+//If a child process exist, redirects the signal to the child
+//Else prints a new line
+void	handle_sig(int sig, siginfo_t *info, void *context)
 {
-	struct sigaction	sig;
+	(void)info;
+	(void)context;
+	if (CHILD_PID)
+	{
+		write(1, "\n", 1);
+		kill(CHILD_PID, sig);
+	}
+	else
+	{
+		write(1, "\n", 1);
+		write(1, PROMPT, ft_strlen(PROMPT));
+	}
+}
 
-	sig.sa_sigaction = do_nothing;
+char	setup_signals()
+{
+	static struct sigaction		sig;
+
+	sig.sa_sigaction = handle_sig;
 	sig.sa_flags = 0;
-	sigaction(SIGINT, &sig, NULL);
+	if (sigaction(SIGINT, &sig, NULL))
+		error("SIGACTION");
 	return (0);
 }

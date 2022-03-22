@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/22 12:34:48 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/22 17:07:46 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,18 @@
 
 # include "libft.h"
 
+# define PROMPT "Minishell$ "
+
+int CHILD_PID;
+
+//utils.c
+void	error(const char *error);
+
 //signals.c
-int	setup_signals(void);
+char		setup_signals();
+
+//command.c
+char	*find_command(char *line, char **path_split);
+int		execute(char *command);
 
 #endif
