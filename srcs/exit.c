@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 22:27:15 by scuter            #+#    #+#             */
-/*   Updated: 2022/03/23 00:42:45 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/23 00:46:54 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static int	str_is_numeric(char *str)
 	return (1);
 }
 
+// Exit the bash shell or shell script with a status of N.
 void	exit_cmd(char **argv)
 {
 	int i;
