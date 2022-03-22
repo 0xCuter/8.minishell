@@ -1,0 +1,62 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/03/22 08:53:40 by vvandenb          #+#    #+#              #
+#    Updated: 2022/03/22 09:19:09 by vvandenb         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror	\
+		-I $(HEADERS_DIR) -I $(LIBFT_DIR)
+ifdef DEBUG
+	CFLAGS += -g 
+endif
+ifdef FSAN
+	CFLAGS += -fsanitize=address
+endif
+
+SRCS_DIR = srcs/
+HEADERS_DIR = includes/
+HEADERS = $(HEADERS_DIR)minishell.h
+NAME = minishell
+SRCS = $(SRCS_DIR)main.c
+OBJS = $(SRCS:c=o)
+
+#LIBFT
+LIBFT_DIR = libft/
+LIBFT = $(LIBFT_DIR)libft.a
+LIBFT_FLAGS = -lft -L$(LIBFT_DIR)
+
+all: $(NAME)
+
+%.o: %.c $(HEADERS) Makefile
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(LIBFT): FORCE
+	@make BONUS=1 -C $(LIBFT_DIR)
+
+$(NAME): $(LIBFT) $(OBJS)
+	@echo Compiling...
+	@$(CC) $(OBJS) -o $@ $(CFLAGS) $(LIBFT_FLAGS)
+	@echo Compiled!
+
+clean:
+	@make clean -C $(LIBFT_DIR)
+	@rm -f $(OBJS)
+	@echo Cleaned!
+
+fclean: clean
+	@make fclean -C $(LIBFT_DIR)
+	@rm -f $(NAME)
+	@echo Fcleaned!
+
+re: fclean all
+
+FORCE:
+
+.PHONY: FORCE clean fclean re
