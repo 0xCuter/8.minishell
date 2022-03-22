@@ -6,13 +6,14 @@
 #    By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/22 08:53:40 by vvandenb          #+#    #+#              #
-#    Updated: 2022/03/22 09:19:09 by vvandenb         ###   ########.fr        #
+#    Updated: 2022/03/22 10:05:15 by vvandenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror	\
-		-I $(HEADERS_DIR) -I $(LIBFT_DIR)
+		-I $(HEADERS_DIR) -I $(LIBFT_DIR)	\
+		-l readline
 ifdef DEBUG
 	CFLAGS += -g 
 endif

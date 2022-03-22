@@ -6,11 +6,15 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/22 09:06:25 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/22 10:11:04 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
+
 int	main()
 {
-	
+	char *test;
+	test = readline("Minishell: ");
+	free(test);
 }
