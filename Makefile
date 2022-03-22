@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+         #
+#    By: scuter <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/22 08:53:40 by vvandenb          #+#    #+#              #
-#    Updated: 2022/03/22 15:38:42 by vvandenb         ###   ########.fr        #
+#    Updated: 2022/03/23 00:15:48 by scuter           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CFLAGS = -Wall -Wextra -Werror	\
 		-I $(HEADERS_DIR) -I $(LIBFT_DIR)	\
 		-l readline
 ifdef DEBUG
-	CFLAGS += -g 
+	CFLAGS += -g
 endif
 ifdef FSAN
 	CFLAGS += -fsanitize=address
@@ -25,7 +25,8 @@ SRCS_DIR = srcs/
 HEADERS_DIR = includes/
 HEADERS = $(HEADERS_DIR)minishell.h
 NAME = minishell
-SRCS = $(SRCS_DIR)main.c $(SRCS_DIR)signals.c $(SRCS_DIR)command.c $(SRCS_DIR)utils.c
+SRCS = $(SRCS_DIR)main.c $(SRCS_DIR)signals.c $(SRCS_DIR)command.c $(SRCS_DIR)utils.c	\
+		$(SRCS_DIR)echo.c $(SRCS_DIR)exit.c $(SRCS_DIR)pwd.c
 OBJS = $(SRCS:c=o)
 
 #LIBFT

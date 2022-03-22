@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/22 17:07:46 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/23 00:18:24 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <readline/history.h>
+# include <signal.h>
 
 # include "libft.h"
 
@@ -39,5 +40,15 @@ char		setup_signals();
 //command.c
 char	*find_command(char *line, char **path_split);
 int		execute(char *command);
+
+
+//echo.c
+void	echo_cmd(char **argv);
+
+//exit.c
+void	exit_cmd(char **argv);
+
+//pwd.c
+int		pwd_cmd(void);
 
 #endif
