@@ -6,11 +6,13 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/23 11:07:05 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/23 13:50:14 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_child_pid;
 
 //Reads line indefinitely
 static void	loop_prompt(char **path_split)

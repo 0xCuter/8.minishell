@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/23 11:14:17 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/23 13:49:55 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_command {
 	char	**cmd_split;
 }	t_command;
 
-int	g_child_pid;
+extern int	g_child_pid;
 
 //utils.c
 void	error(const char *error);
