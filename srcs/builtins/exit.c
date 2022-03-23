@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 22:27:15 by scuter            #+#    #+#             */
-/*   Updated: 2022/03/23 00:46:54 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/23 11:04:30 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	str_is_numeric(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if ((str[i] == '-' || str[i] == '+') && str[i + 1])
@@ -31,7 +31,7 @@ static int	str_is_numeric(char *str)
 // Exit the bash shell or shell script with a status of N.
 void	exit_cmd(char **argv)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (argv[i])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:03:34 by scuter            #+#    #+#             */
-/*   Updated: 2022/03/22 22:14:16 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/23 11:03:57 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 void	echo_cmd(char **argv)
 {
 	int	n_flag;
-	int i;
+	int	i;
 
 	n_flag = 0;
 	i = 1;
@@ -31,8 +31,8 @@ void	echo_cmd(char **argv)
 	{
 		printf("%s", argv[i]);
 		i++;
-			if (argv[i])
-		printf(" ");
+		if (argv[i])
+			printf(" ");
 	}
 	if (!n_flag)
 		printf("\n");

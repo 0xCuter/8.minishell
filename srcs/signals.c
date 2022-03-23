@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:07:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/22 17:33:14 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/23 11:07:05 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	handle_sig(int sig, siginfo_t *info, void *context)
 {
 	(void)info;
 	(void)context;
-	if (CHILD_PID)
+	if (g_child_pid)
 	{
 		write(1, "\n", 1);
-		kill(CHILD_PID, sig);
+		kill(g_child_pid, sig);
 	}
 	else
 	{
@@ -30,7 +30,7 @@ void	handle_sig(int sig, siginfo_t *info, void *context)
 	}
 }
 
-char	setup_signals()
+char	setup_signals(void)
 {
 	static struct sigaction		sig;
 

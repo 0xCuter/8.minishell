@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: scuter <marvin@42.fr>                      +#+  +:+       +#+         #
+#    By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/22 08:53:40 by vvandenb          #+#    #+#              #
-#    Updated: 2022/03/23 00:15:48 by scuter           ###   ########.fr        #
+#    Updated: 2022/03/23 11:14:28 by vvandenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,8 +25,8 @@ SRCS_DIR = srcs/
 HEADERS_DIR = includes/
 HEADERS = $(HEADERS_DIR)minishell.h
 NAME = minishell
-SRCS = $(SRCS_DIR)main.c $(SRCS_DIR)signals.c $(SRCS_DIR)command.c $(SRCS_DIR)utils.c	\
-		$(SRCS_DIR)echo.c $(SRCS_DIR)exit.c $(SRCS_DIR)pwd.c
+SRCS = $(SRCS_DIR)main.c $(SRCS_DIR)signals.c $(SRCS_DIR)parser.c $(SRCS_DIR)command.c $(SRCS_DIR)utils.c	\
+		$(SRCS_DIR)builtins/echo.c $(SRCS_DIR)builtins/exit.c $(SRCS_DIR)builtins/pwd.c
 OBJS = $(SRCS:c=o)
 
 #LIBFT

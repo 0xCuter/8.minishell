@@ -6,17 +6,16 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/22 17:42:44 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/23 11:07:05 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//Reads line indefinitely
 static void	loop_prompt(char **path_split)
 {
-	char	*line;
-	char	*command;
-	int		pid;
+	char		*line;
 
 	while (1)
 	{
@@ -26,16 +25,11 @@ static void	loop_prompt(char **path_split)
 			printf("\n");
 			exit(0);
 		}
-		command = find_command(line, path_split);
-		free(line);
-		if (command)
-			pid = execute(command);
-		waitpid(pid, NULL, 0);
-		CHILD_PID = 0;
+		execute(line, path_split);
 	}
 }
 
-int	main()
+int	main(void)
 {
 	char	*path;
 	char	**path_split;
@@ -46,7 +40,7 @@ int	main()
 	path_split = ft_split(path, ':');
 	if (path_split == NULL)
 		error("MALLOC");
-	CHILD_PID = 0;
+	g_child_pid = 0;
 	setup_signals();
 	loop_prompt(path_split);
 }
