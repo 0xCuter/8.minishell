@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/23 14:07:21 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/23 16:36:00 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,41 @@ static void	execute_cmd(char **cmd_split, char **path_split)
 			if (execve(cmd, cmd_split, NULL))
 				error("EXECVE");
 		}
+
+		setup_signals(1);
+		// struct sigaction	backslash;
+		// sigset_t			set;
+
+		// if (sigemptyset(&set))
+		// 	error("SIGEMPTYSET");
+		// backslash.sa_flags = 0;
+		// backslash.sa_mask = set;
+		// backslash.sa_sigaction = ctrl_backslash;
+		// if (sigaction(SIGQUIT, &backslash, NULL))
+		// 	error("SIGACTION");
+
 		g_child_pid = pid;
 		if (cmd_allocated)
 			free(cmd);
 		waitpid(pid, NULL, 0);
+		setup_signals(0);
 		g_child_pid = 0;
 	}
+}
+
+//Frees the commands list
+static void	clear_cmd_list(void *cmd_void)
+{
+	t_command	*cmd;
+	char		**cmd_split;
+
+	cmd = (t_command *)cmd_void;
+	cmd_split = cmd->cmd_split;
+	--cmd_split;
+	while (*++cmd_split)
+		free(*cmd_split);
+	free(cmd->cmd_split);
+	free(cmd);
 }
 
 //Executes a command or a builtin
@@ -105,5 +134,6 @@ void	execute(char *line, char **path_split)
 			execute_cmd(cmd_content->cmd_split, path_split);
 		current_cmd = current_cmd->next;
 	}
-	ft_lstclear(&cmd_list, clear_cmd_list);
+	if (cmd_list)
+		ft_lstclear(&cmd_list, clear_cmd_list);
 }

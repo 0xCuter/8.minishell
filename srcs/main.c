@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/23 14:07:24 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/23 16:14:08 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	loop_prompt(char **path_split)
 		line = readline(PROMPT);
 		if (line == NULL)
 		{
-			printf("\n");
+			printf("exit\n");
 			exit(0);
 		}
 		execute(line, path_split);
@@ -44,6 +44,6 @@ int	main(void)
 	if (path_split == NULL)
 		error("MALLOC");
 	g_child_pid = 0;
-	setup_signals();
+	setup_signals(0);
 	loop_prompt(path_split);
 }

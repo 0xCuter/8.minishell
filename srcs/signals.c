@@ -6,22 +6,20 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:07:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/23 11:07:05 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/23 17:12:00 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//If a child process exist, redirects the signal to the child
+//If a child process exists, redirects the signal to the child
 //Else prints a new line
-void	handle_sig(int sig, siginfo_t *info, void *context)
+static void	ctrl_c()
 {
-	(void)info;
-	(void)context;
 	if (g_child_pid)
 	{
 		write(1, "\n", 1);
-		kill(g_child_pid, sig);
+		kill(g_child_pid, SIGINT);
 	}
 	else
 	{
@@ -30,13 +28,39 @@ void	handle_sig(int sig, siginfo_t *info, void *context)
 	}
 }
 
-char	setup_signals(void)
+//If a child process exists, redirects the signal to the child
+static void	ctrl_backslash()
 {
-	static struct sigaction		sig;
+	kill(g_child_pid, SIGQUIT);
+	printf("\n");
+}
 
-	sig.sa_sigaction = handle_sig;
-	sig.sa_flags = 0;
-	if (sigaction(SIGINT, &sig, NULL))
+void	setup_signals(char child)
+{
+	struct sigaction		c;
+	struct sigaction		backslash;
+	static struct sigaction	old_backslash;
+	sigset_t				set;
+
+	if (sigemptyset(&set))
+		error("SIGEMPTYSET");
+	c.sa_flags = 0;
+	c.sa_mask = set;
+	c.sa_sigaction = ctrl_c;
+	if (sigaction(SIGINT, &c, NULL))
 		error("SIGACTION");
-	return (0);
+	if (child)
+	{
+		old_backslash.sa_sigaction = ctrl_backslash;
+		if (sigaction(SIGQUIT, &old_backslash, NULL))
+			error("SIGACTION");
+	}
+	else
+	{
+		backslash.sa_flags = 0;
+		backslash.sa_mask = set;
+		backslash.sa_handler = SIG_IGN;
+		if (sigaction(SIGQUIT, &backslash, &old_backslash))
+			error("SIGACTION");
+	}
 }

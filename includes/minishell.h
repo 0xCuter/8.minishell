@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/23 13:49:55 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/23 17:12:03 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,9 @@ extern int	g_child_pid;
 
 //utils.c
 void	error(const char *error);
-void	clear_cmd_list(void *cmd_void);
 
 //signals.c
-char	setup_signals(void);
+void	setup_signals(char child);
 
 //parser.c
 t_list	*parse_line(char *line);
