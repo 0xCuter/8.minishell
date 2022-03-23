@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/23 13:50:14 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/23 14:07:24 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static void	loop_prompt(char **path_split)
 			exit(0);
 		}
 		execute(line, path_split);
+		free(line);
 	}
 }
 

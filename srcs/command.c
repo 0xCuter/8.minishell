@@ -6,22 +6,23 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/23 11:11:58 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/23 14:07:21 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //Searches for the `cmd` path
-static char	*find_command(char *cmd, char **path_split)
+static char	*find_command(char *cmd, char **path_split, char *allocated)
 {
 	struct stat	test;
 	int			size;
-	char		found_command_location;
 	char		*cmd_path;
 
-	found_command_location = 0;
-	while (found_command_location == 0 && *path_split != NULL)
+	*allocated = 0;
+	if (stat(cmd, &test) == 0)
+		return (cmd);
+	while (*path_split != NULL)
 	{
 		size = ft_strlen(*path_split) + ft_strlen(cmd) + 2;
 		cmd_path = malloc(size * sizeof(char));
@@ -30,7 +31,7 @@ static char	*find_command(char *cmd, char **path_split)
 		ft_strlcat(cmd_path, cmd, size);
 		if (stat(cmd_path, &test) == 0)
 		{
-			found_command_location = 1;
+			*allocated = 1;
 			return (cmd_path);
 		}
 		free(cmd_path);
@@ -63,51 +64,45 @@ static char	execute_builtin(char **cmd_split)
 
 //Executes a command in a child process
 //Returns the child PID
-static int	execute_cmd(char *cmd, char **cmd_split)
+static void	execute_cmd(char **cmd_split, char **path_split)
 {
-	int	pid;
+	int		pid;
+	char	cmd_allocated;
+	char	*cmd;
 
-	pid = fork();
-	if (pid == -1)
+	cmd = find_command(cmd_split[0], path_split, &cmd_allocated);
+	if (cmd)
 	{
-		free(cmd);
-		error("FORK");
+		pid = fork();
+		if (pid == -1)
+			error("FORK");
+		if (pid == 0)
+		{
+			if (execve(cmd, cmd_split, NULL))
+				error("EXECVE");
+		}
+		g_child_pid = pid;
+		if (cmd_allocated)
+			free(cmd);
+		waitpid(pid, NULL, 0);
+		g_child_pid = 0;
 	}
-	if (pid == 0)
-	{
-		if (execve(cmd, cmd_split, NULL))
-			error("EXECVE");
-	}
-	g_child_pid = pid;
-	free(cmd);
-	return (pid);
 }
 
 //Executes a command or a builtin
 void	execute(char *line, char **path_split)
 {
-	char		*cmd;
-	int			pid;
 	t_list		*cmd_list;
 	t_list		*current_cmd;
 	t_command	*cmd_content;
 
 	cmd_list = parse_line(line);
-	free(line);
 	current_cmd = cmd_list;
 	while (current_cmd)
 	{
 		cmd_content = (t_command *)current_cmd->content;
 		if (execute_builtin(cmd_content->cmd_split) == 0)
-		{
-			cmd = find_command(cmd_content->cmd_split[0], path_split);
-			if (cmd)
-			{
-				pid = execute_cmd(cmd, cmd_content->cmd_split);
-				waitpid(pid, NULL, 0);
-				g_child_pid = 0;
-			}
-		}
+			execute_cmd(cmd_content->cmd_split, path_split);
 		current_cmd = current_cmd->next;
 	}
 	ft_lstclear(&cmd_list, clear_cmd_list);

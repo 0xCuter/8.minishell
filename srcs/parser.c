@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 09:16:23 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/23 10:55:58 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/23 14:28:38 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_list	*parse_line(char *line)
 			return (NULL);
 		cmd->cmd_split = ft_split(lines[i], ' ');
 		ft_lstadd_back(&cmd_list, ft_lstnew(cmd));
+		free(lines[i]);
 		++i;
 	}
 	free(lines);
