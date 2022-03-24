@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/24 12:21:17 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/24 17:04:17 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,24 +91,10 @@ static void	execute_cmd(char **cmd_split, char **path_split)
 			if (execve(cmd, cmd_split, NULL))
 				error("EXECVE");
 		}
-
-		setup_signals(1);
-		// struct sigaction	backslash;
-		// sigset_t			set;
-
-		// if (sigemptyset(&set))
-		// 	error("SIGEMPTYSET");
-		// backslash.sa_flags = 0;
-		// backslash.sa_mask = set;
-		// backslash.sa_sigaction = ctrl_backslash;
-		// if (sigaction(SIGQUIT, &backslash, NULL))
-		// 	error("SIGACTION");
-
 		g_child_pid = pid;
 		if (cmd_allocated)
 			free(cmd);
 		waitpid(pid, NULL, 0);
-		setup_signals(0);
 		g_child_pid = 0;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/23 16:14:08 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/24 17:04:14 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,6 @@ int	main(void)
 	if (path_split == NULL)
 		error("MALLOC");
 	g_child_pid = 0;
-	setup_signals(0);
+	setup_signals();
 	loop_prompt(path_split);
 }
