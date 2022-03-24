@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/24 17:04:14 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/24 17:09:45 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static void	loop_prompt(char **path_split)
 	while (1)
 	{
 		line = readline(PROMPT);
+		add_history(line);
 		if (line == NULL)
 		{
 			printf("exit\n");
