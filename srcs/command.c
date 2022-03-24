@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/24 00:16:23 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/24 12:21:17 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,11 @@ static char	execute_builtin(char **cmd_split)
 	else if (!ft_strcmp(cmd_split[0], "cd"))
 	{
 		cd_cmd(cmd_split);
+		return (1);
+	}
+	else if (!ft_strcmp(cmd_split[0], "env"))
+	{
+		env_cmd();
 		return (1);
 	}
 	return (0);

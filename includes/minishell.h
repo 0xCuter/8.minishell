@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/24 00:18:25 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/24 12:21:17 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ typedef struct s_command {
 
 extern int	g_child_pid;
 
+extern char **environ;
+
 //utils.c
 void	error(const char *error);
 
@@ -59,5 +61,8 @@ int		pwd_cmd(void);
 
 //cd.c
 void	cd_cmd(char **argv);
+
+//env.c
+void	env_cmd(void);
 
 #endif

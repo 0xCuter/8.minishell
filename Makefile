@@ -6,7 +6,7 @@
 #    By: scuter <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/22 08:53:40 by vvandenb          #+#    #+#              #
-#    Updated: 2022/03/24 00:18:25 by scuter           ###   ########.fr        #
+#    Updated: 2022/03/24 12:16:30 by scuter           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ HEADERS_DIR = includes/
 HEADERS = $(HEADERS_DIR)minishell.h
 NAME = minishell
 SRCS = $(SRCS_DIR)main.c $(SRCS_DIR)signals.c $(SRCS_DIR)parser.c $(SRCS_DIR)command.c $(SRCS_DIR)utils.c	\
-		$(SRCS_DIR)builtins/echo.c $(SRCS_DIR)builtins/exit.c $(SRCS_DIR)builtins/pwd.c $(SRCS_DIR)builtins/cd.c
+		$(SRCS_DIR)builtins/echo.c $(SRCS_DIR)builtins/exit.c $(SRCS_DIR)builtins/pwd.c $(SRCS_DIR)builtins/cd.c	\
+		$(SRCS_DIR)builtins/env.c
 OBJS = $(SRCS:c=o)
 
 #LIBFT
