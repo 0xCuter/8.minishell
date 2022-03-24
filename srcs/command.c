@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/23 16:36:00 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/24 00:16:23 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,11 @@ static char	execute_builtin(char **cmd_split)
 	else if (!ft_strcmp(cmd_split[0], "pwd"))
 	{
 		pwd_cmd();
+		return (1);
+	}
+	else if (!ft_strcmp(cmd_split[0], "cd"))
+	{
+		cd_cmd(cmd_split);
 		return (1);
 	}
 	return (0);

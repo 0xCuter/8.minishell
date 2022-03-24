@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 22:27:15 by scuter            #+#    #+#             */
-/*   Updated: 2022/03/23 11:04:30 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/23 22:10:53 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,19 @@ void	exit_cmd(char **argv)
 		i++;
 	if (i == 1)
 	{
-		printf("exit\n");
+		ft_putendl_fd("exit", 1);
 		exit(0);
 	}
 	else if (i == 2 && str_is_numeric(argv[1]))
 	{
-		printf("exit\n");
+		ft_putendl_fd("exit", 1);
 		exit(ft_atoi(argv[1]));
 	}
 	else if (i > 2 && str_is_numeric(argv[1]))
-		printf("exit: too many arguments\n");
+		ft_putendl_fd("exit: too many arguments", 2);
 	else
 	{
-		printf("exit: numeric argument required\n");
+		ft_putendl_fd("exit: numeric argument required", 2);
 		exit(255);
 	}
 }

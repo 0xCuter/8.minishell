@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/23 17:12:03 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/24 00:18:25 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,8 @@ void	exit_cmd(char **argv);
 
 //pwd.c
 int		pwd_cmd(void);
+
+//cd.c
+void	cd_cmd(char **argv);
 
 #endif

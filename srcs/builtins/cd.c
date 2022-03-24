@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/22 12:14:15 by scuter            #+#    #+#             */
-/*   Updated: 2022/03/23 22:13:54 by scuter           ###   ########.fr       */
+/*   Created: 2022/03/22 22:09:02 by scuter            #+#    #+#             */
+/*   Updated: 2022/03/24 00:32:45 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// Print the full filename of the current working directory.
-int	pwd_cmd(void)
+void	cd_cmd(char **argv)
 {
-	char	*pwd;
+	char	*path;
 
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-	{
-		free(pwd);
-		return (1);
-	}
-	ft_putendl_fd(pwd, 1);
-	free(pwd);
-	return (0);
+	path = NULL;
+	if (!argv[1] || (argv[1] && !ft_strcmp(argv[1], "~")))
+		path = getenv("HOME");
+	else if (*argv[1] == '$')
+		path = getenv(argv[1] + 1);
+	else
+		path = argv[1];
+	if (chdir(path) == -1)
+		ft_putendl_fd(strerror(errno), 2);
 }
