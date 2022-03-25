@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/25 01:54:04 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/25 18:41:10 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	g_child_pid;
 //Reads line indefinitely
 static void	loop_prompt(t_data *data)
 {
-	char		*line;
+	char	*line;
 
 	while (1)
 	{
@@ -28,6 +28,7 @@ static void	loop_prompt(t_data *data)
 			printf("exit\n");
 			exit(0);
 		}
+		check_syntax(line);
 		execute(data, line);
 		free(line);
 	}
@@ -43,6 +44,6 @@ int	main(int argc, char **argv, char **envp)
 	// init_envs_export(&data);
 	init_path_split(&data);
 	g_child_pid = 0;
-	setup_signals(0);
+	setup_signals();
 	loop_prompt(&data);
 }

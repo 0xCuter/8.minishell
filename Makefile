@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: scuter <marvin@42.fr>                      +#+  +:+       +#+         #
+#    By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/22 08:53:40 by vvandenb          #+#    #+#              #
-#    Updated: 2022/03/25 01:31:00 by scuter           ###   ########.fr        #
+#    Updated: 2022/03/25 18:38:42 by vvandenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ HEADERS_DIR = includes/
 HEADERS = $(HEADERS_DIR)minishell.h
 NAME = minishell
 SRCS =	$(SRCS_DIR)main.c $(SRCS_DIR)signals.c $(SRCS_DIR)parser.c $(SRCS_DIR)command.c $(SRCS_DIR)utils.c	\
-		$(SRCS_DIR)init.c	\
+		$(SRCS_DIR)init.c $(SRCS_DIR)syntax.c	\
 		$(SRCS_DIR)builtins/echo.c $(SRCS_DIR)builtins/exit.c $(SRCS_DIR)builtins/pwd.c $(SRCS_DIR)builtins/cd.c	\
 		$(SRCS_DIR)builtins/env.c $(SRCS_DIR)builtins/unset.c
 OBJS = $(SRCS:c=o)

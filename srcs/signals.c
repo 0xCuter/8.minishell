@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:07:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/24 17:04:03 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/25 18:41:07 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ static void	ctrl_c()
 	}
 }
 
-void	setup_signals()
+void	setup_signals(void)
 {
-	struct sigaction		c;
-	struct sigaction		backslash;
-	sigset_t				set;
+	struct sigaction	c;
+	struct sigaction	backslash;
+	sigset_t			set;
 
 	if (sigemptyset(&set))
 		error("SIGEMPTYSET");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/25 01:54:04 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/25 18:38:21 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@
 # include "libft.h"
 
 # define PROMPT "Minishell$ "
+# define WAIT_PROMPT "> "
+
+# define METACHARACTERS " \t\n\v\f\r|<>"
+# define METACHARACTERS_WHITE_SPACES " \t\n\v\f\r"
+# define METACHARACTERS_NO_WHITE_SPACES "|<>"
 
 typedef struct s_command {
 	char	**cmd_split;
@@ -52,13 +57,16 @@ void	init_envs(t_data *data, char **envp);
 void	init_path_split(t_data *data);
 
 //signals.c
-void	setup_signals();
+void	setup_signals(void);
 
 //parser.c
 t_list	*parse_line(char *line);
 
 //command.c
 void	execute(t_data *data, char *line);
+
+//syntax.c
+void	check_syntax(char *line);
 
 //---BUILTINS
 //echo.c
