@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/24 12:21:17 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/25 01:37:35 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,23 @@ typedef struct s_command {
 	char	**cmd_split;
 }	t_command;
 
-extern int	g_child_pid;
+typedef struct s_data {
+	char	**envs;
+	// char	**envs_export;
+	char	**path_split;
+	char	*line;
+}	t_data;
 
-extern char **environ;
+extern int	g_child_pid;
 
 //utils.c
 void	error(const char *error);
+void	free_tab(char **tab);
+
+//init.c
+void	init_envs(t_data *data, char **envp);
+// void	init_envs_export(t_data *data);
+void	init_path_split(t_data *data);
 
 //signals.c
 void	setup_signals(char child);
@@ -47,7 +58,7 @@ void	setup_signals(char child);
 t_list	*parse_line(char *line);
 
 //command.c
-void	execute(char *line, char **path_split);
+void	execute(t_data *data, char *line);
 
 //---BUILTINS
 //echo.c
@@ -63,6 +74,9 @@ int		pwd_cmd(void);
 void	cd_cmd(char **argv);
 
 //env.c
-void	env_cmd(void);
+void	env_cmd(t_data *data);
+
+//unset.c
+void	unset_cmd(char **argv, t_data *data);
 
 #endif

@@ -6,20 +6,20 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:23:35 by scuter            #+#    #+#             */
-/*   Updated: 2022/03/24 12:22:08 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/24 22:39:12 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	env_cmd(void)
+void	env_cmd(t_data *data)
 {
 	int i;
 
 	i = 0;
-	while (environ[i])
+	while (data->envs[i])
 	{
-		ft_putendl_fd(environ[i], 1);
+		ft_putendl_fd(data->envs[i], 1);
 		i++;
 	}
 }

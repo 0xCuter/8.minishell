@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/23 16:14:08 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/25 01:36:34 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	g_child_pid;
 
 //Reads line indefinitely
-static void	loop_prompt(char **path_split)
+static void	loop_prompt(t_data *data)
 {
 	char		*line;
 
@@ -27,23 +27,21 @@ static void	loop_prompt(char **path_split)
 			printf("exit\n");
 			exit(0);
 		}
-		execute(line, path_split);
+		execute(data, line);
 		free(line);
 	}
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
-	char	*path;
-	char	**path_split;
+	t_data	data;
 
-	path = getenv("PATH");
-	if (path == NULL)
-		return (1);
-	path_split = ft_split(path, ':');
-	if (path_split == NULL)
-		error("MALLOC");
+	if (argc != 1 || argv[1])
+		error("ARGUMENTS");
+	init_envs(&data, envp);
+	// init_envs_export(&data);
+	init_path_split(&data);
 	g_child_pid = 0;
 	setup_signals(0);
-	loop_prompt(path_split);
+	loop_prompt(&data);
 }

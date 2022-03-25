@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/24 12:21:17 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/25 01:38:35 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static char	*find_command(char *cmd, char **path_split, char *allocated)
 
 //Searches a match for a buitlin
 //Returns 1 if it finds one, else 0
-static char	execute_builtin(char **cmd_split)
+static char	execute_builtin(char **cmd_split, t_data *data)
 {
 	if (!ft_strcmp(cmd_split[0], "echo"))
 	{
@@ -66,7 +66,12 @@ static char	execute_builtin(char **cmd_split)
 	}
 	else if (!ft_strcmp(cmd_split[0], "env"))
 	{
-		env_cmd();
+		env_cmd(data);
+		return (1);
+	}
+	else if (!ft_strcmp(cmd_split[0], "unset"))
+	{
+		unset_cmd(cmd_split, data);
 		return (1);
 	}
 	return (0);
@@ -129,7 +134,7 @@ static void	clear_cmd_list(void *cmd_void)
 }
 
 //Executes a command or a builtin
-void	execute(char *line, char **path_split)
+void	execute(t_data *data, char *line)
 {
 	t_list		*cmd_list;
 	t_list		*current_cmd;
@@ -140,8 +145,8 @@ void	execute(char *line, char **path_split)
 	while (current_cmd)
 	{
 		cmd_content = (t_command *)current_cmd->content;
-		if (execute_builtin(cmd_content->cmd_split) == 0)
-			execute_cmd(cmd_content->cmd_split, path_split);
+		if (execute_builtin(cmd_content->cmd_split, data) == 0)
+			execute_cmd(cmd_content->cmd_split, data->path_split);
 		current_cmd = current_cmd->next;
 	}
 	if (cmd_list)
