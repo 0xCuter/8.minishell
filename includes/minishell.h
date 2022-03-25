@@ -6,24 +6,24 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/25 01:37:35 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/25 01:54:04 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <errno.h>
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <signal.h>
 # include <readline/readline.h>
-# include <sys/types.h>
+# include <readline/history.h>
 # include <dirent.h>
-# include <errno.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
-# include <readline/history.h>
-# include <signal.h>
+# include <sys/types.h>
 
 # include "libft.h"
 
@@ -52,7 +52,7 @@ void	init_envs(t_data *data, char **envp);
 void	init_path_split(t_data *data);
 
 //signals.c
-void	setup_signals(char child);
+void	setup_signals();
 
 //parser.c
 t_list	*parse_line(char *line);

@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/25 01:36:34 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/25 01:54:04 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static void	loop_prompt(t_data *data)
 	while (1)
 	{
 		line = readline(PROMPT);
+		add_history(line);
 		if (line == NULL)
 		{
 			printf("exit\n");

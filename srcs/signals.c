@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:07:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/23 17:12:00 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/24 17:04:03 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,10 @@ static void	ctrl_c()
 	}
 }
 
-//If a child process exists, redirects the signal to the child
-static void	ctrl_backslash()
-{
-	kill(g_child_pid, SIGQUIT);
-	printf("\n");
-}
-
-void	setup_signals(char child)
+void	setup_signals()
 {
 	struct sigaction		c;
 	struct sigaction		backslash;
-	static struct sigaction	old_backslash;
 	sigset_t				set;
 
 	if (sigemptyset(&set))
@@ -49,18 +41,9 @@ void	setup_signals(char child)
 	c.sa_sigaction = ctrl_c;
 	if (sigaction(SIGINT, &c, NULL))
 		error("SIGACTION");
-	if (child)
-	{
-		old_backslash.sa_sigaction = ctrl_backslash;
-		if (sigaction(SIGQUIT, &old_backslash, NULL))
-			error("SIGACTION");
-	}
-	else
-	{
-		backslash.sa_flags = 0;
-		backslash.sa_mask = set;
-		backslash.sa_handler = SIG_IGN;
-		if (sigaction(SIGQUIT, &backslash, &old_backslash))
-			error("SIGACTION");
-	}
+	backslash.sa_flags = 0;
+	backslash.sa_mask = set;
+	backslash.sa_sigaction = ctrl_c;
+	if (sigaction(SIGQUIT, &backslash, NULL))
+		error("SIGACTION");
 }
