@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/25 18:41:10 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/26 16:05:10 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	loop_prompt(t_data *data)
 			printf("exit\n");
 			exit(0);
 		}
-		check_syntax(line);
+		line = check_syntax(line, data);
 		execute(data, line);
 		free(line);
 	}

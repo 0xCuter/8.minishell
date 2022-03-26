@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/25 18:38:21 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/26 16:05:50 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,6 @@
 # include "libft.h"
 
 # define PROMPT "Minishell$ "
-# define WAIT_PROMPT "> "
-
-# define METACHARACTERS " \t\n\v\f\r|<>"
-# define METACHARACTERS_WHITE_SPACES " \t\n\v\f\r"
-# define METACHARACTERS_NO_WHITE_SPACES "|<>"
 
 typedef struct s_command {
 	char	**cmd_split;
@@ -50,6 +45,7 @@ extern int	g_child_pid;
 //utils.c
 void	error(const char *error);
 void	free_tab(char **tab);
+char	*ft_str_replace(char *s, int start, int end, char *fit);
 
 //init.c
 void	init_envs(t_data *data, char **envp);
@@ -66,7 +62,7 @@ t_list	*parse_line(char *line);
 void	execute(t_data *data, char *line);
 
 //syntax.c
-void	check_syntax(char *line);
+char	*check_syntax(char *line, t_data *data);
 
 //---BUILTINS
 //echo.c
@@ -86,5 +82,8 @@ void	env_cmd(t_data *data);
 
 //unset.c
 void	unset_cmd(char **argv, t_data *data);
+
+//var.c
+char	*find_envar(t_data *data, char *var_name);
 
 #endif

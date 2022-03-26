@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:38:16 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/25 01:26:42 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/26 16:05:20 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,25 @@ void	free_tab(char **tab)
 		i++;
 	}
 	free(tab);
+}
+
+//Removes a string part between `start` and `end` by replacing it with `fit`
+//Returns a newly malloc'd string
+char	*ft_str_replace(char *s, int start, int end, char *fit)
+{
+	char	*r;
+	char	*part;
+	char	*temp;
+
+	if (s == NULL)
+		return (NULL);
+	part = ft_substr(s, 0, start);
+	r = ft_strjoin(part, fit);
+	free(part);
+	part = ft_substr(s, end, ft_strlen(s));
+	temp = r;
+	r = ft_strjoin(r, part);
+	free(temp);
+	free(part);
+	return (r);
 }
