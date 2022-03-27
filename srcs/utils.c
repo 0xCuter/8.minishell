@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:38:16 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/26 16:05:20 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/27 16:20:10 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,26 @@ char	*ft_str_replace(char *s, int start, int end, char *fit)
 	free(temp);
 	free(part);
 	return (r);
+}
+
+//Returns index of the first appearing char in `line` from `set`
+//End of `line` if none
+char	*ft_str_chrset(const char *line, const char *set)
+{
+	int		i;
+	char	*r;
+	char	*last_r;
+
+	if (*line == 0)
+		return ((char *)line);
+	last_r = (char *)line + ft_strlen(line);
+	i = 0;
+	while (i < (int)ft_strlen(set))
+	{
+		r = ft_strchr(line, set[i]);
+		if (r && r < last_r)
+			last_r = r;
+		++i;
+	}
+	return (last_r);
 }

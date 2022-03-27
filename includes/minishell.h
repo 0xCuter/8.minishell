@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/26 16:05:50 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/27 16:10:13 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ extern int	g_child_pid;
 void	error(const char *error);
 void	free_tab(char **tab);
 char	*ft_str_replace(char *s, int start, int end, char *fit);
+char	*ft_str_chrset(const char *line, const char *set);
 
 //init.c
 void	init_envs(t_data *data, char **envp);
