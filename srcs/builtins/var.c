@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/26 15:32:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/27 16:26:51 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/28 09:24:27 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,11 @@ char	*find_envar(t_data *data, char *var_name)
 		{
 			envar = ft_substr(*env, 0, envar_equal - *env);
 			if (!ft_strcmp(var_name, envar))
+			{
+				free(envar);
 				return (*env);
+			}
+			free(envar);
 		}
 		++env;
 	}
