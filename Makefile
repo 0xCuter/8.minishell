@@ -6,7 +6,7 @@
 #    By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/22 08:53:40 by vvandenb          #+#    #+#              #
-#    Updated: 2022/03/26 15:35:12 by vvandenb         ###   ########.fr        #
+#    Updated: 2022/03/28 18:36:47 by vvandenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,8 +24,8 @@ SRCS_DIR = srcs/
 HEADERS_DIR = includes/
 HEADERS = $(HEADERS_DIR)minishell.h
 NAME = minishell
-SRCS =	$(SRCS_DIR)main.c $(SRCS_DIR)signals.c $(SRCS_DIR)parser.c $(SRCS_DIR)command.c $(SRCS_DIR)utils.c	\
-		$(SRCS_DIR)init.c $(SRCS_DIR)syntax.c	\
+SRCS =	$(SRCS_DIR)main.c $(SRCS_DIR)signals.c $(SRCS_DIR)command.c $(SRCS_DIR)utils.c	\
+		$(SRCS_DIR)init.c $(SRCS_DIR)syntax.c $(SRCS_DIR)quotes.c $(SRCS_DIR)tokenize.c	\
 		$(SRCS_DIR)builtins/echo.c $(SRCS_DIR)builtins/exit.c $(SRCS_DIR)builtins/pwd.c $(SRCS_DIR)builtins/cd.c	\
 		$(SRCS_DIR)builtins/env.c $(SRCS_DIR)builtins/unset.c $(SRCS_DIR)builtins/var.c
 OBJS = $(SRCS:c=o)

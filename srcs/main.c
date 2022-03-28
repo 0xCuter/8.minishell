@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/26 16:05:10 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/28 18:16:57 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	g_child_pid;
 static void	loop_prompt(t_data *data)
 {
 	char	*line;
+	char	*syntax_error;
+	t_list	*c_list;
 
 	while (1)
 	{
@@ -28,8 +30,9 @@ static void	loop_prompt(t_data *data)
 			printf("exit\n");
 			exit(0);
 		}
-		line = check_syntax(line, data);
-		execute(data, line);
+		syntax_error = check_syntax(line, data);
+		c_list = tokenize(line, data, syntax_error);
+		execute_cmd_list(c_list, data);
 		free(line);
 	}
 }

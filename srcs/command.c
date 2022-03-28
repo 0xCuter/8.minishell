@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/25 01:54:04 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/28 18:35:22 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,52 +40,102 @@ static char	*find_command(char *cmd, char **path_split, char *allocated)
 	return (NULL);
 }
 
-//Searches a match for a buitlin
-//Returns 1 if it finds one, else 0
-static char	execute_builtin(char **cmd_split, t_data *data)
+static void	setup_pipes(t_command *cmd)
 {
-	if (!ft_strcmp(cmd_split[0], "echo"))
+	static int	call_count = 0;
+	static int	old_stdin = 0;
+	static int	old_stdout = 0;
+
+	if (call_count == 0)
 	{
-		echo_cmd(cmd_split);
-		return (1);
+		if (cmd->read_pipe)
+		{
+			old_stdin = dup(STDIN_FILENO);
+			// printf("CMD %i reading fd %i\n", cmd->id, cmd->read_pipe[0]);
+			dup2(cmd->read_pipe[0], STDIN_FILENO);
+			close(cmd->read_pipe[0]);
+		}
+		else if (cmd->write_pipe)
+		{
+			old_stdout = dup(STDOUT_FILENO);
+			// printf("CMD %i writing fd %i\n", cmd->id, cmd->write_pipe[1]);
+			dup2(cmd->write_pipe[1], STDOUT_FILENO);
+			close(cmd->write_pipe[1]);
+		}
+		call_count = 1;
 	}
-	else if (!ft_strcmp(cmd_split[0], "exit"))
+	else
 	{
-		exit_cmd(cmd_split);
-		return (1);
+		if (old_stdin)
+		{
+			dup2(old_stdin, STDIN_FILENO);
+			close(old_stdin);
+			old_stdin = 0;
+		}
+		if (old_stdout)
+		{
+			dup2(old_stdout, STDOUT_FILENO);
+			close(old_stdout);
+			old_stdout = 0;
+		}
+		call_count = 0;
 	}
-	else if (!ft_strcmp(cmd_split[0], "pwd"))
-	{
-		pwd_cmd();
+}
+
+//Returns 1 if `cmd_name` is a builtin, else 0
+static char	is_builtin(char *cmd_name)
+{
+	if (ft_strnstr(BUILTINS, cmd_name, ft_strlen(BUILTINS)))
 		return (1);
-	}
-	else if (!ft_strcmp(cmd_split[0], "cd"))
-	{
-		cd_cmd(cmd_split);
-		return (1);
-	}
-	else if (!ft_strcmp(cmd_split[0], "env"))
-	{
-		env_cmd(data);
-		return (1);
-	}
-	else if (!ft_strcmp(cmd_split[0], "unset"))
-	{
-		unset_cmd(cmd_split, data);
-		return (1);
-	}
 	return (0);
+}
+
+//Executes a builtin
+static void	execute_builtin(t_list *cmd_elem, t_data *data, char **argv)
+{
+	setup_pipes(cmd_elem->content);
+	// init_redirections(cmd_elem);
+	if (argv)
+	{
+		if (!ft_strcmp(argv[0], "echo"))
+			echo_cmd(argv);
+		else if (!ft_strcmp(argv[0], "exit"))
+			exit_cmd(argv);
+		else if (!ft_strcmp(argv[0], "pwd"))
+			pwd_cmd();
+		else if (!ft_strcmp(argv[0], "cd"))
+			cd_cmd(argv);
+		else if (!ft_strcmp(argv[0], "env"))
+			env_cmd(data);
+		else if (!ft_strcmp(argv[0], "unset"))
+			unset_cmd(argv, data);
+	}
+	setup_pipes(cmd_elem->content);
+}
+
+//Frees the commands list
+static void	clear_cmd(void *cmd_void)
+{
+	t_command	*cmd;
+
+	cmd = (t_command *)cmd_void;
+	if (cmd->read_pipe)
+		free(cmd->read_pipe);
+	if (cmd->args)
+		free(cmd->args);
+	free(cmd);
 }
 
 //Executes a command in a child process
 //Returns the child PID
-static void	execute_cmd(char **cmd_split, char **path_split)
+static void	execute_cmd(t_list *cmd_elem, char **path_split, char **argv)
 {
 	int		pid;
 	char	cmd_allocated;
 	char	*cmd;
 
-	cmd = find_command(cmd_split[0], path_split, &cmd_allocated);
+	setup_pipes(cmd_elem->content);
+	cmd = find_command(argv[0], path_split, &cmd_allocated);
 	if (cmd)
 	{
 		pid = fork();
@@ -93,48 +143,35 @@ static void	execute_cmd(char **cmd_split, char **path_split)
 			error("FORK");
 		if (pid == 0)
 		{
-			if (execve(cmd, cmd_split, NULL))
+			if (execve(cmd, argv, NULL))
 				error("EXECVE");
 		}
 		g_child_pid = pid;
+		waitpid(pid, NULL, 0);
 		if (cmd_allocated)
 			free(cmd);
-		waitpid(pid, NULL, 0);
 		g_child_pid = 0;
 	}
+	setup_pipes(cmd_elem->content);
 }
 
-//Frees the commands list
-static void	clear_cmd_list(void *cmd_void)
+//Executes the commands or builtins
+void	execute_cmd_list(t_list *c_list, t_data *data)
 {
-	t_command	*cmd;
-	char		**cmd_split;
+	t_list	*cmd_elem;
+	char	**argv;
 
-	cmd = (t_command *)cmd_void;
-	cmd_split = cmd->cmd_split;
-	--cmd_split;
-	while (*++cmd_split)
-		free(*cmd_split);
-	free(cmd->cmd_split);
-	free(cmd);
-}
-
-//Executes a command or a builtin
-void	execute(t_data *data, char *line)
-{
-	t_list		*cmd_list;
-	t_list		*current_cmd;
-	t_command	*cmd_content;
-
-	cmd_list = parse_line(line);
-	current_cmd = cmd_list;
-	while (current_cmd)
+	cmd_elem = c_list;
+	while (cmd_elem)
 	{
-		cmd_content = (t_command *)current_cmd->content;
-		if (execute_builtin(cmd_content->cmd_split, data) == 0)
-			execute_cmd(cmd_content->cmd_split, data->path_split);
-		current_cmd = current_cmd->next;
+		argv = ft_split(((t_command *)cmd_elem->content)->args, ' ');
+		if (is_builtin(argv[0]))
+			execute_builtin(cmd_elem, data, argv);
+		else
+			execute_cmd(cmd_elem, data->path_split, argv);
+		ft_free_split(argv);
+		cmd_elem = cmd_elem->next;
 	}
-	if (cmd_list)
-		ft_lstclear(&cmd_list, clear_cmd_list);
+	if (c_list)
+		ft_lstclear(&c_list, clear_cmd);
 }
