@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/28 18:16:50 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/29 11:11:21 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ char	*ft_str_replace(char *s, int start, int end, char *fit);
 char	*ft_str_chrset(const char *line, const char *set);
 char	*ft_str_chrset_rev(const char *line, const char *set);
 void	ft_free_split(char **s);
+void	free_null(void **elem);
 
 //init.c
 void	init_envs(t_data *data, char **envp);
@@ -76,13 +77,20 @@ void	replace_quotes(char **meta, char **line, t_data *data);
 //tokenize.c
 t_list	*tokenize(char *line, t_data *data, char *syntax_error);
 
-//command.c
+//exec.c
 void	execute(t_data *data, char *line);
-void	execute_cmd_list(t_list *cmds, t_data *data);
+void	exec_cmd_list(t_list *cmds, t_data *data);
+
+//exec_builtin.c
+char	is_builtin(char *cmd_name);
+void	exec_builtin(t_list *cmd_elem, t_data *data, char **argv);
+
+//exec_cmd.c
+void	exec_cmd(t_list *cmd_elem, char **path_split, char **argv);
 
 //syntax.c
-char	*check_syntax(char *line, t_data *data);
-char	*get_meta_arg(char *meta);
+char	*check_syntax(char *line);
+char	*get_meta_arg(char *meta, int *meta_sub_size);
 
 //---BUILTINS
 # define BUILTINS "echo exit pwd cd env unset"

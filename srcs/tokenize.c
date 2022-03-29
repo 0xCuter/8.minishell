@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/28 18:06:40 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/29 11:11:04 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,10 @@ static void	init_pipe(t_command *cmd, char **current_token, int **last_pipe)
 		*last_pipe = cmd->write_pipe;
 		if (pipe(cmd->write_pipe))
 			error("PIPE");
-		// printf("CMD %i writing fd %i\n", cmd->id, cmd->write_pipe[1]);
 	}
 	else
 	{
 		cmd->read_pipe = *last_pipe;
-		// printf("CMD %i readin fd %i\n", cmd->id, cmd->read_pipe[0]);
 		++*current_token;
 		*last_pipe = NULL;
 	}
@@ -33,14 +31,29 @@ static void	init_pipe(t_command *cmd, char **current_token, int **last_pipe)
 
 static void	init_heredoc(t_command *cmd, char **current_token)
 {
-	(void)cmd;
-	(void)current_token;
-	// while ()
-	// {
+	char	*l;
+	char	*meta_arg;
+	int		meta_length;
 
-	// }
 	++*current_token;
-	++*current_token;
+	meta_arg = get_meta_arg(*current_token, &meta_length);
+	if (meta_arg == NULL)
+		return ;
+	cmd->redir_stdin = malloc(2 * sizeof(int));
+	if (pipe(cmd->redir_stdin) == -1)
+		error("PIPE");
+	while (1)
+	{
+		l = readline(WAIT_PROMPT);
+		if (l == NULL || !ft_strcmp(l, meta_arg))
+			break ;
+		ft_putendl_fd(l, cmd->redir_stdin[1]);
+		free(l);
+	}
+	free(l);
+	free(meta_arg);
+	close(cmd->redir_stdin[1]);
+	*current_token += meta_length;
 }
 
 static void	init_append(t_command *cmd, char **current_token)
@@ -108,19 +121,19 @@ static t_command	*init_cmd(int id, char **current_token, t_data *data, int **las
 	cmd->id = id;
 	while (**current_token)
 	{
-		if (*current_token[0] == '|')
+		if ((*current_token)[0] == '|')
 		{
 			init_pipe(cmd, current_token, last_pipe);
 			if (*last_pipe)
 				break ;
 		}
-		else if (*current_token[0] == '<' && *current_token[1] == '<')
+		else if ((*current_token)[0] == '<' && (*current_token)[1] == '<')
 			init_heredoc(cmd, current_token);
-		else if (*current_token[0] == '>' && *current_token[1] == '>')
+		else if ((*current_token)[0] == '>' && (*current_token)[1] == '>')
 			init_append(cmd, current_token);
-		else if (*current_token[0] == '<')
+		else if ((*current_token)[0] == '<')
 			init_redir_stdin(cmd, current_token);
-		else if (*current_token[0] == '>')
+		else if ((*current_token)[0] == '>')
 			init_redir_stdout(cmd, current_token);
 		else
 			add_argv(cmd, current_token);
