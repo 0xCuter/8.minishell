@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/29 11:08:06 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/29 12:53:24 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ static void	clear_cmd(void *cmd_void)
 	{
 		close(cmd->redir_stdin[0]);
 		free(cmd->redir_stdin);
+	}
+	if (cmd->redir_stdout)
+	{
+		close(*cmd->redir_stdout);
+		free(cmd->redir_stdout);
 	}
 	if (cmd->args)
 		free(cmd->args);

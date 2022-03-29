@@ -6,12 +6,13 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/29 11:11:04 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/29 13:43:17 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//|
 static void	init_pipe(t_command *cmd, char **current_token, int **last_pipe)
 {
 	if (*last_pipe == NULL)
@@ -29,6 +30,7 @@ static void	init_pipe(t_command *cmd, char **current_token, int **last_pipe)
 	}
 }
 
+//<<
 static void	init_heredoc(t_command *cmd, char **current_token)
 {
 	char	*l;
@@ -56,18 +58,25 @@ static void	init_heredoc(t_command *cmd, char **current_token)
 	*current_token += meta_length;
 }
 
+//>>
 static void	init_append(t_command *cmd, char **current_token)
 {
-	(void)cmd;
-	(void)current_token;
-	// while ()
-	// {
+	char	*meta_arg;
+	int		meta_length;
 
-	// }
 	++*current_token;
-	++*current_token;
+	meta_arg = get_meta_arg(*current_token, &meta_length);
+	if (meta_arg == NULL)
+		return ;
+	cmd->redir_stdout = malloc(sizeof(int));
+	*cmd->redir_stdout = open(meta_arg, O_CREAT | O_APPEND | O_WRONLY, 0777);
+	if (*cmd->redir_stdout == -1)
+		error("OPEN");
+	free(meta_arg);
+	*current_token += meta_length;
 }
 
+//<
 static void	init_redir_stdin(t_command *cmd, char **current_token)
 {
 	(void)cmd;
@@ -79,6 +88,7 @@ static void	init_redir_stdin(t_command *cmd, char **current_token)
 	++*current_token;
 }
 
+//>
 static void	init_redir_stdout(t_command *cmd, char **current_token)
 {
 	(void)cmd;

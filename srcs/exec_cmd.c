@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/29 11:04:46 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/29 12:50:41 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ static void	init_redirs(t_command *cmd)
 	}
 	if (cmd->redir_stdout)
 	{
-		dup2(cmd->redir_stdout[1], STDOUT_FILENO);
-		close(cmd->redir_stdout[1]);
+		dup2(*cmd->redir_stdout, STDOUT_FILENO);
+		close(*cmd->redir_stdout);
 		free_null((void **)&cmd->redir_stdout);
 	}
 }
