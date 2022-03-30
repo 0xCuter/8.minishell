@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/30 12:04:56 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/30 13:54:07 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@
 # define METACHARS_NO_WHITE_SPACES "|<>\"'"
 
 typedef struct s_command {
-	int		id;
-	char	*args;
+	char	**argv;
 	int		*read_pipe;
 	int		*write_pipe;
 	int		*redir_stdin;
@@ -78,7 +77,8 @@ void	setup_signals(void);
 t_list	*parse_line(char *line);
 
 //quotes.c
-void	replace_quotes(char **meta, char **line, t_data *data);
+char	*replace_var(char *s, t_data *data, int *i);
+void	replace_quotes(char **line, t_data *data);
 
 //tokenize.c
 t_list	*tokenize(char *line, t_data *data, char *syntax_error);

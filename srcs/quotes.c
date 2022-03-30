@@ -6,14 +6,15 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:35:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/28 10:59:16 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/30 13:42:52 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//Returns a new string with the variable replaced
-static char	*replace_var(char *s, t_data *data, int *i)
+//Returns a new string with the variable replaced in `s`
+//`i` is set to the length of the var
+char	*replace_var(char *s, t_data *data, int *i)
 {
 	char	*var;
 	char	*var_name_end;
@@ -78,27 +79,19 @@ static char	*get_quotes_content(char *quote_1, char *quote_2, t_data *data)
 	return (r);
 }
 
-//Replaces quotes in a line with their literal value
-//Also replaces the variables inside if the quotes are double
-void	replace_quotes(char **meta, char **line, t_data *data)
+//Replaces quotes in the string `s` with their literal value
+//`s` has to start with a quote
+//If the quotes are double, also replaces the environment variables inside
+void	replace_quotes(char **s, t_data *data)
 {
 	char	*next_quote;
 	char	*add_line;
 	char	*new_line;
 
-	next_quote = ft_strchr(*meta + 1, *meta[0]);
-	// if (next_quote == NULL)
-	// {
-	// 	print_error(*meta, *line);
-	// 	*meta = next_quote;
-	// }
-	// else
-	{
-		add_line = get_quotes_content(*meta, next_quote, data);
-		new_line = ft_str_replace(*line, *meta - *line, next_quote - *line + 1, add_line);
-		*meta = *meta - *line + new_line + ft_strlen(add_line);
-		free(*line);
-		free(add_line);
-		*line = new_line;
-	}
+	next_quote = ft_strchr(*s + 1, *s[0]);
+	add_line = get_quotes_content(*s, next_quote, data);
+	new_line = ft_str_replace(*s, 0, next_quote - *s + 1, add_line);
+	free(*s);
+	free(add_line);
+	*s = new_line;
 }
