@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/30 02:36:59 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/30 12:04:56 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	error(const char *error);
 char	*ft_str_replace(char *s, int start, int end, char *fit);
 char	*ft_str_chrset(const char *line, const char *set);
 char	*ft_str_chrset_rev(const char *line, const char *set);
-void	ft_free_split(char **s);
 void	free_null(void **elem);
 
 //tab_utils.c
