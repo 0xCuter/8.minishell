@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:45 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/30 02:42:50 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/30 09:47:38 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ void	exec_builtin(t_list *cmd_elem, t_data *data, char **argv)
 			unset_cmd(argv, data);
 		else if (!ft_strcmp(argv[0], "export"))
 			export_cmd(argv, data);
-	}
 	}
 	reset_pipes(old_stdin, old_stdout);
 }

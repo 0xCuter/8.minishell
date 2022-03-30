@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/29 12:53:24 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/30 13:17:32 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ static void	clear_cmd(void *cmd_void)
 		close(*cmd->redir_stdout);
 		free(cmd->redir_stdout);
 	}
-	if (cmd->args)
-		free(cmd->args);
+	if (cmd->argv)
+		free_tab(cmd->argv);
 	free(cmd);
 }
 
@@ -43,17 +43,14 @@ static void	clear_cmd(void *cmd_void)
 void	exec_cmd_list(t_list *c_list, t_data *data)
 {
 	t_list	*cmd_elem;
-	char	**argv;
 
 	cmd_elem = c_list;
 	while (cmd_elem)
 	{
-		argv = ft_split(((t_command *)cmd_elem->content)->args, ' ');
-		if (is_builtin(argv[0]))
-			exec_builtin(cmd_elem, data, argv);
+		if (is_builtin(((t_command *)cmd_elem->content)->argv[0]))
+			exec_builtin(cmd_elem, data, ((t_command *)cmd_elem->content)->argv);
 		else
-			exec_cmd(cmd_elem, data->path_split, argv);
-		ft_free_split(argv);
+			exec_cmd(cmd_elem, data->path_split, ((t_command *)cmd_elem->content)->argv);
 		cmd_elem = cmd_elem->next;
 	}
 	if (c_list)

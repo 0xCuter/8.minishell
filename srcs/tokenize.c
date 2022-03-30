@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/29 16:03:18 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/30 13:50:03 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,36 +110,57 @@ static void	init_redir_stdout(t_command *cmd, char **current_token)
 	*current_token += meta_length;
 }
 
-static void	add_argv(t_command *cmd, char **current_token)
+static char	*get_arg(char **current_token, t_data *data)
 {
+	char	*arg;
 	int		arg_size;
-	char	*temp;
-	char	*temp_bis;
+	int		i = 0;
 
-	arg_size = ft_str_chrset(*current_token, METACHARS) - *current_token;
-	if (cmd->args == NULL)
-		cmd->args = ft_substr(*current_token, 0, arg_size);
+	if ((*current_token)[0] == '$' && ft_strchr(METACHARS_WHITE_SPACES, (*current_token)[1]) == NULL)
+	{
+		arg_size = ft_str_chrset(*current_token + 1, METACHARS) - *current_token;
+		arg = ft_substr(*current_token, 0, arg_size);
+		arg = replace_var(arg, data, &i);
+	}
+	else if ((*current_token)[0] == '"' || (*current_token)[0] == '\'')
+	{
+		arg_size = ft_strchr(*current_token + 1, (*current_token)[0]) - *current_token + 1;
+		arg = ft_substr(*current_token, 0, arg_size);
+		replace_quotes(&arg, data);
+	}
 	else
 	{
-		temp = ft_substr(*current_token, 0, arg_size);
-		temp_bis = ft_strjoin(" ", temp);
-		free(temp);
-		temp = cmd->args;
-		cmd->args = ft_strjoin(cmd->args, temp_bis);
-		free(temp);
-		free(temp_bis);
+		arg_size = ft_str_chrset(*current_token, METACHARS) - *current_token;
+		arg = ft_substr(*current_token, 0, arg_size);
 	}
 	*current_token += arg_size;
+	return (arg);
 }
 
-static t_command	*init_cmd(int id, char **current_token, t_data *data, int **last_pipe)
+//Inits the argument list, or adds an argument
+static void	add_argv(t_command *cmd, char **current_token, t_data *data)
 {
-	(void)data;
+	char	*arg;
+
+	arg = get_arg(current_token, data);
+	if (cmd->argv == NULL)
+	{
+		cmd->argv = ft_calloc(2, sizeof(char *));
+		cmd->argv[0] = arg;
+	}
+	else
+	{
+		cmd->argv = add_line(arg, cmd->argv);
+		free(arg);
+	}
+}
+
+static t_command	*init_cmd(char *syntax_error, char **current_token, t_data *data, int **last_pipe)
+{
 	t_command	*cmd;
 
 	cmd = ft_calloc(1, sizeof(t_command));
-	cmd->id = id;
-	while (**current_token)
+	while (**current_token && *current_token < syntax_error)
 	{
 		if ((*current_token)[0] == '|')
 		{
@@ -156,7 +177,7 @@ static t_command	*init_cmd(int id, char **current_token, t_data *data, int **las
 		else if ((*current_token)[0] == '>')
 			init_redir_stdout(cmd, current_token);
 		else
-			add_argv(cmd, current_token);
+			add_argv(cmd, current_token, data);
 		if (*current_token)
 			*current_token = ft_str_chrset_rev(*current_token, METACHARS_WHITE_SPACES);
 	}
@@ -169,18 +190,15 @@ t_list	*tokenize(char *line, t_data *data, char *syntax_error)
 	char	*current_token;
 	t_list	*c_list;
 	int		*last_pipe;
-	int		id;
 
 	c_list = NULL;
 	last_pipe = NULL;
-	id = 0;
 	current_token = ft_str_chrset_rev(line, METACHARS);
 	while (current_token && current_token < syntax_error)
 	{
-		ft_lstadd_back(&c_list, ft_lstnew(init_cmd(id, &current_token, data, &last_pipe)));
+		ft_lstadd_back(&c_list, ft_lstnew(init_cmd(syntax_error, &current_token, data, &last_pipe)));
 		if (current_token)
 			current_token = ft_str_chrset_rev(current_token, METACHARS_WHITE_SPACES);
-		++id;
 	}
 	return (c_list);
 }
