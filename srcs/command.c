@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/25 01:54:04 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/30 01:58:46 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,11 @@ static char	execute_builtin(char **cmd_split, t_data *data)
 	else if (!ft_strcmp(cmd_split[0], "unset"))
 	{
 		unset_cmd(cmd_split, data);
+		return (1);
+	}
+	else if (!ft_strcmp(cmd_split[0], "export"))
+	{
+		export_cmd(cmd_split, data);
 		return (1);
 	}
 	return (0);

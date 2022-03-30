@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/27 16:10:13 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/30 02:00:09 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_command {
 
 typedef struct s_data {
 	char	**envs;
-	// char	**envs_export;
+	// char	**env_export;
 	char	**path_split;
 	char	*line;
 }	t_data;
@@ -44,13 +44,19 @@ extern int	g_child_pid;
 
 //utils.c
 void	error(const char *error);
-void	free_tab(char **tab);
 char	*ft_str_replace(char *s, int start, int end, char *fit);
 char	*ft_str_chrset(const char *line, const char *set);
 
+//tab_utils.c
+char	**duplicate_tab(char **tab);
+void	sort_tab(char **tab);
+char	**add_line(char *line, char **tab);
+char	**remove_line(char *line, char **tab);
+void	free_tab(char **tab);
+
 //init.c
 void	init_envs(t_data *data, char **envp);
-// void	init_envs_export(t_data *data);
+// void	init_export(t_data *data);
 void	init_path_split(t_data *data);
 
 //signals.c
@@ -83,6 +89,9 @@ void	env_cmd(t_data *data);
 
 //unset.c
 void	unset_cmd(char **argv, t_data *data);
+
+//export.c
+void	export_cmd(char **argv, t_data *data);
 
 //var.c
 char	*find_envar(t_data *data, char *var_name);

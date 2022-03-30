@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:23:35 by scuter            #+#    #+#             */
-/*   Updated: 2022/03/24 22:39:12 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/30 02:01:04 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	env_cmd(t_data *data)
 	i = 0;
 	while (data->envs[i])
 	{
-		ft_putendl_fd(data->envs[i], 1);
+		if (ft_strchr(data->envs[i], '='))
+			ft_putendl_fd(data->envs[i], 1);
 		i++;
 	}
 }
