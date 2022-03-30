@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/29 12:50:41 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/30 15:55:22 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,31 @@ static char	*find_command(char *cmd, char **path_split, char *allocated)
 	char		*cmd_path;
 
 	*allocated = 0;
-	if (stat(cmd, &test) == 0)
-		return (cmd);
-	while (*path_split != NULL)
+	if (cmd[0] == '/' || cmd[0] == '.')
 	{
-		size = ft_strlen(*path_split) + ft_strlen(cmd) + 2;
-		cmd_path = malloc(size * sizeof(char));
-		ft_strlcpy(cmd_path, *path_split, size);
-		ft_strlcat(cmd_path, "/", size);
-		ft_strlcat(cmd_path, cmd, size);
-		if (stat(cmd_path, &test) == 0)
-		{
-			*allocated = 1;
-			return (cmd_path);
-		}
-		free(cmd_path);
-		++path_split;
+		if (stat(cmd, &test) == 0)
+			return (cmd);
 	}
+	else
+	{
+		while (*path_split != NULL)
+		{
+			size = ft_strlen(*path_split) + ft_strlen(cmd) + 2;
+			cmd_path = malloc(size * sizeof(char));
+			ft_strlcpy(cmd_path, *path_split, size);
+			ft_strlcat(cmd_path, "/", size);
+			ft_strlcat(cmd_path, cmd, size);
+			if (stat(cmd_path, &test) == 0)
+			{
+				*allocated = 1;
+				return (cmd_path);
+			}
+			free(cmd_path);
+			++path_split;
+		}
+	}
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putendl_fd(": command not found", STDERR_FILENO);
 	return (NULL);
 }
 
@@ -76,7 +84,7 @@ static void	init_redirs(t_command *cmd)
 
 //Executes a command in a child process
 //Returns the child PID
-void	exec_cmd(t_list *cmd_elem, char **path_split, char **argv)
+void	exec_cmd(t_list *cmd_elem, char **path_split, char **argv, t_data *data)
 {
 	int		pid;
 	char	cmd_allocated;
@@ -92,7 +100,7 @@ void	exec_cmd(t_list *cmd_elem, char **path_split, char **argv)
 		{
 			setup_pipes(cmd_elem->content, 1);
 			init_redirs(cmd_elem->content);
-			if (execve(cmd, argv, NULL))
+			if (execve(cmd, argv, data->envs))
 				error("EXECVE");
 		}
 		setup_pipes(cmd_elem->content, 0);
