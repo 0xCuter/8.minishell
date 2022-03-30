@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:38:16 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/29 22:47:47 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/30 02:36:59 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,47 @@ char	*ft_str_chrset(const char *line, const char *set)
 		++i;
 	}
 	return (last_r);
+}
+
+//Returns index of the first appearing char in `line` that is *not* from `set`
+//End of `line` if none
+char	*ft_str_chrset_rev(const char *line, const char *set)
+{
+	int		i;
+	char	*r;
+	char	*last_r;
+
+	if (*line == 0)
+		return ((char *)line + ft_strlen(line));
+	last_r = (char *)line;
+	i = 0;
+	while (i < (int)ft_strlen(set))
+	{
+		r = ft_strchr(line, set[i]);
+		if (r && r <= last_r)
+			last_r = r + 1;
+		++i;
+	}
+	return (last_r);
+}
+
+//Frees a split string
+void	ft_free_split(char **s)
+{
+	char	**s_start;
+
+	if (s)
+	{
+		s_start = s;
+		while (*s)
+			free(*s++);
+		free(s_start);
+	}
+}
+
+//Frees a pointer and sets it to `NULL`
+void	free_null(void **elem)
+{
+	free(*elem);
+	*elem = NULL;
 }
