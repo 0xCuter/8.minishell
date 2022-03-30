@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:38:16 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/30 02:36:59 by scuter           ###   ########.fr       */
+/*   Updated: 2022/03/30 12:04:56 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,20 +82,6 @@ char	*ft_str_chrset_rev(const char *line, const char *set)
 		++i;
 	}
 	return (last_r);
-}
-
-//Frees a split string
-void	ft_free_split(char **s)
-{
-	char	**s_start;
-
-	if (s)
-	{
-		s_start = s;
-		while (*s)
-			free(*s++);
-		free(s_start);
-	}
 }
 
 //Frees a pointer and sets it to `NULL`
