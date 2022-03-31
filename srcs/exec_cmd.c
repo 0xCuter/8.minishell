@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/30 15:55:22 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/31 11:44:51 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,16 @@
 //Searches for the `cmd` path
 static char	*find_command(char *cmd, char **path_split, char *allocated)
 {
-	struct stat	test;
+	struct stat	s;
 	int			size;
 	char		*cmd_path;
 
 	*allocated = 0;
-	if (cmd[0] == '/' || cmd[0] == '.')
+	cmd_path = NULL;
+	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
 	{
-		if (stat(cmd, &test) == 0)
-			return (cmd);
+		if (stat(cmd, &s) == 0 && !(s.st_mode & S_IFDIR))
+			cmd_path = cmd;
 	}
 	else
 	{
@@ -34,18 +35,31 @@ static char	*find_command(char *cmd, char **path_split, char *allocated)
 			ft_strlcpy(cmd_path, *path_split, size);
 			ft_strlcat(cmd_path, "/", size);
 			ft_strlcat(cmd_path, cmd, size);
-			if (stat(cmd_path, &test) == 0)
+			if (stat(cmd_path, &s) == 0 && !(s.st_mode & S_IFDIR))
 			{
 				*allocated = 1;
-				return (cmd_path);
+				break ;
 			}
 			free(cmd_path);
+			cmd_path = NULL;
 			++path_split;
 		}
 	}
-	ft_putstr_fd(cmd, STDERR_FILENO);
-	ft_putendl_fd(": command not found", STDERR_FILENO);
-	return (NULL);
+	if (cmd_path == NULL)
+	{
+		ft_putstr_fd(cmd, STDERR_FILENO);
+		ft_putendl_fd(": command not found", STDERR_FILENO);
+	}
+	else if (!(s.st_mode & S_IXUSR))
+	{
+		if (*allocated)
+			free(cmd_path);
+		cmd_path = NULL;
+		ft_putstr_fd("-minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putendl_fd(": Permission denied", 2);
+	}
+	return (cmd_path);
 }
 
 //Sets the pipes if `is_command`, closes them and frees the read pipe

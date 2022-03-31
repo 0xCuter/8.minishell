@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/30 16:23:38 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/31 11:52:43 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ char	*check_syntax(char *line);
 char	*get_meta_arg(char *meta, int *meta_sub_size);
 
 //---BUILTINS
-# define BUILTINS "echo exit pwd cd env unset"
+# define BUILTINS "echo exit pwd cd env unset export"
 //echo.c
 void	echo_cmd(char **argv);
 
