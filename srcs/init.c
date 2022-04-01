@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:01:52 by scuter            #+#    #+#             */
-/*   Updated: 2022/03/30 01:56:28 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/01 01:48:56 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,28 +31,11 @@ void	init_envs(t_data *data, char **envp)
 	data->envs[i] = NULL;
 }
 
-// void	init_export(t_data *data)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	while (data->envs[i])
-// 		i++;
-// 	data->envs_export = malloc(sizeof(char *) * (i + 1));
-// 	i = 0;
-// 	if (data->envs[i])
-// 	{
-
-// 		i++;
-// 	}
-// 	data->env_export[i] = NULL;
-// }
-
 void	init_path_split(t_data *data)
 {
 	char	*path;
 
-	path = getenv("PATH");
+	path = get_env(data, "PATH");
 	if (path == NULL)
 		error("GETENV");
 	data->path_split = ft_split(path, ':');

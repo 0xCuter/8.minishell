@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:26:38 by scuter            #+#    #+#             */
-/*   Updated: 2022/03/30 02:10:23 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/01 03:46:26 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,23 @@ static void	print_export(char **envs)
 	free(export);
 }
 
+static void	replace_env(t_data *data, char *envar, char *line)
+{
+	int	i;
+
+	i = 0;
+	while (data->envs[i])
+	{
+		if (data->envs[i] == envar)
+		{
+			free(data->envs[i]);
+			data->envs[i] = ft_strdup(line);
+			return ;
+		}
+		i++;
+	}
+}
+
 void	export_cmd(char **argv, t_data *data)
 {
 	char *envar;
@@ -82,14 +99,11 @@ void	export_cmd(char **argv, t_data *data)
 		}
 		else
 		{
-			envar = find_envar(data, argv[i]);
+			envar = find_key(data, argv[i]);
 			if (!envar)
 				data->envs = add_line(argv[i], data->envs);
 			else if (ft_strchr(argv[i], '='))
-			{
-				free(envar);
-				envar = ft_strdup(argv[i]);
-			}
+				replace_env(data, envar, argv[i]);
 		}
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:35:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/01 09:01:32 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/01 09:07:51 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,20 @@ char	*replace_var(char *s, t_data *data, int *i, int *j)
 {
 	char	*var;
 	char	*var_name_end;
-	char	*envar;
 	char	*envar_value;
 	char	*temp;
 
 	var_name_end = ft_str_chrset(s + *i + 1, METACHARS_DOLLAR_SIGN);
 	*j += var_name_end - (s + *i);
 	var = ft_substr(s + *i + 1, 0, var_name_end - (s + *i) - 1);
-	envar = find_envar(data, var);
-	if (envar)
+	envar_value = get_env(data, var);
+	if (envar_value)
 	{
 		free(var);
-		envar_value = ft_substr(envar, ft_strchr(envar, '=') + 1 - envar, ft_strlen(envar));
 		temp = s;
 		s = ft_str_replace(s, *i, var_name_end - s, envar_value);
 		free(temp);
 		*i += ft_strlen(envar_value);
-		free(envar_value);
 	}
 	else
 	{

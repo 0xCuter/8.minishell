@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:45 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/30 09:47:38 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/01 01:04:53 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	exec_builtin(t_list *cmd_elem, t_data *data, char **argv)
 		else if (!ft_strcmp(argv[0], "pwd"))
 			pwd_cmd();
 		else if (!ft_strcmp(argv[0], "cd"))
-			cd_cmd(argv);
+			cd_cmd(argv, data);
 		else if (!ft_strcmp(argv[0], "env"))
 			env_cmd(data);
 		else if (!ft_strcmp(argv[0], "unset"))

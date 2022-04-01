@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/30 09:51:31 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/01 02:49:00 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 int	g_child_pid;
 
-static void	prompt(void)
+static void	prompt(t_data *data)
 {
 	char	*tmp;
 	int		len;
 	int		slash;
 
-	tmp = getenv("USER");
+	tmp = get_env(data, "USER");
 	if (!tmp)
 		error("GETENV");
-	printf("%s@:", tmp);
+	printf("\e[1;31m%s\e[1;33m@42\e[1;32mNice\e[0m:", tmp);
 	tmp = getcwd(NULL, 0);
 	len = ft_strlen(tmp);
 	slash = 0;
@@ -33,7 +33,7 @@ static void	prompt(void)
 		if (tmp[len] == '/')
 			slash++;
 	}
-	printf("%s$ ", &tmp[len]);
+	printf("\e[1;36m%s\e[0m$ ", &tmp[len]);
 	free(tmp);
 }
 
@@ -46,7 +46,7 @@ static void	loop_prompt(t_data *data)
 
 	while (1)
 	{
-		prompt();
+		prompt(data);
 		line = readline(NULL);
 		add_history(line);
 		if (line == NULL)
@@ -68,7 +68,6 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 1 || argv[1])
 		error("ARGUMENTS");
 	init_envs(&data, envp);
-	// init_export(&data);
 	init_path_split(&data);
 	g_child_pid = 0;
 	setup_signals();
