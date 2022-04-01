@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/01 02:49:00 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/01 10:54:02 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ static void	prompt(t_data *data)
 	tmp = get_env(data, "USER");
 	if (!tmp)
 		error("GETENV");
-	printf("\e[1;31m%s\e[1;33m@42\e[1;32mNice\e[0m:", tmp);
+	ft_putstr_fd("\e[1;31m", 1);
+	ft_putstr_fd(tmp, 1);
+	ft_putstr_fd("\e[1;33m@42\e[1;32mNice\e[0m:", 1);
 	tmp = getcwd(NULL, 0);
 	len = ft_strlen(tmp);
 	slash = 0;
@@ -33,7 +35,9 @@ static void	prompt(t_data *data)
 		if (tmp[len] == '/')
 			slash++;
 	}
-	printf("\e[1;36m%s\e[0m$ ", &tmp[len]);
+	ft_putstr_fd("\e[1;36m", 1);
+	ft_putstr_fd(&tmp[len], 1);
+	ft_putstr_fd("\e[0m$ ", 1);
 	free(tmp);
 }
 
