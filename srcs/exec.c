@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/30 16:23:53 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/31 11:18:40 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	exec_cmd_list(t_list *c_list, t_data *data)
 		if (is_builtin(argv[0]))
 			exec_builtin(cmd_elem, data, argv);
 		else
-			exec_cmd(cmd_elem, data->path_split, argv, data);
+			exec_cmd(cmd_elem, argv, data);
 		cmd_elem = cmd_elem->next;
 	}
 	if (c_list)

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   var.c                                              :+:      :+:    :+:   */
+/*   envs_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/26 15:32:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/28 09:24:27 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/01 03:10:10 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,43 @@ char	*find_envar(t_data *data, char *var_name)
 			}
 			free(envar);
 		}
+		else if (!ft_strcmp(var_name, *env))
+			return (*env);
 		++env;
+	}
+	return (NULL);
+}
+
+//Returns the address of the var string if the key of 'str' is found
+//Else NULL
+char	*find_key(t_data *data, char *str)
+{
+	char	*key;
+	char	*equal;
+	char	*envar;
+
+	equal = ft_strchr(str, '=');
+	if (equal)
+	{
+		key = ft_substr(str, 0, equal - str);
+		envar = find_envar(data, key);
+		free(key);
+	}
+	else
+		envar = find_envar(data, str);
+	return (envar);
+}
+
+//Returns a pointer to the env value if the 'key' is found
+//Else NULL
+char	*get_env(t_data *data, char *key)
+{
+	char	*envar;
+
+	envar = find_envar(data, key);
+	if (envar)
+	{
+		return(ft_strchr(envar, '=') + 1);
 	}
 	return (NULL);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/30 16:23:38 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/01 01:29:00 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct s_command {
 
 typedef struct s_data {
 	char	**envs;
-	// char	**env_export;
 	char	**path_split;
 	char	*line;
 }	t_data;
@@ -65,9 +64,13 @@ char	**add_line(char *line, char **tab);
 char	**remove_line(char *line, char **tab);
 void	free_tab(char **tab);
 
+//env_utils.c
+char	*find_envar(t_data *data, char *var_name);
+char	*find_key(t_data *data, char *str);
+char	*get_env(t_data *data, char *key);
+
 //init.c
 void	init_envs(t_data *data, char **envp);
-// void	init_export(t_data *data);
 void	init_path_split(t_data *data);
 
 //signals.c
@@ -92,14 +95,14 @@ char	is_builtin(char *cmd_name);
 void	exec_builtin(t_list *cmd_elem, t_data *data, char **argv);
 
 //exec_cmd.c
-void	exec_cmd(t_list *cmd_elem, char **path_split, char **argv, t_data *data);
+void	exec_cmd(t_list *cmd_elem, char **argv, t_data *data);
 
 //syntax.c
 char	*check_syntax(char *line);
 char	*get_meta_arg(char *meta, int *meta_sub_size);
 
 //---BUILTINS
-# define BUILTINS "echo exit pwd cd env unset"
+# define BUILTINS "echo exit pwd cd env unset export"
 //echo.c
 void	echo_cmd(char **argv);
 
@@ -110,7 +113,7 @@ void	exit_cmd(char **argv);
 int		pwd_cmd(void);
 
 //cd.c
-void	cd_cmd(char **argv);
+void	cd_cmd(char **argv, t_data *data);
 
 //env.c
 void	env_cmd(t_data *data);
@@ -120,8 +123,5 @@ void	unset_cmd(char **argv, t_data *data);
 
 //export.c
 void	export_cmd(char **argv, t_data *data);
-
-//var.c
-char	*find_envar(t_data *data, char *var_name);
 
 #endif

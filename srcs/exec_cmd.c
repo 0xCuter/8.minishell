@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/30 15:55:22 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/31 11:18:40 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,13 @@ static void	init_redirs(t_command *cmd)
 
 //Executes a command in a child process
 //Returns the child PID
-void	exec_cmd(t_list *cmd_elem, char **path_split, char **argv, t_data *data)
+void	exec_cmd(t_list *cmd_elem, char **argv, t_data *data)
 {
 	int		pid;
 	char	cmd_allocated;
 	char	*cmd;
 
-	cmd = find_command(argv[0], path_split, &cmd_allocated);
+	cmd = find_command(argv[0], data->path_split, &cmd_allocated);
 	if (cmd)
 	{
 		pid = fork();
