@@ -6,143 +6,42 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/30 13:50:03 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/01 08:55:00 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//|
-static void	init_pipe(t_command *cmd, char **current_token, int **last_pipe)
-{
-	if (*last_pipe == NULL)
-	{
-		cmd->write_pipe = malloc(2 * sizeof(int));
-		*last_pipe = cmd->write_pipe;
-		if (pipe(cmd->write_pipe))
-			error("PIPE");
-	}
-	else
-	{
-		cmd->read_pipe = *last_pipe;
-		++*current_token;
-		*last_pipe = NULL;
-	}
-}
+// static char	*get_arg(char **current_token, t_data *data)
+// {
+// 	char	*arg;
+// 	int		arg_size;
+// 	int		i = 0;
 
-//<<
-static void	init_heredoc(t_command *cmd, char **current_token)
-{
-	char	*l;
-	char	*meta_arg;
-	int		meta_length;
-
-	++*current_token;
-	meta_arg = get_meta_arg(*current_token, &meta_length);
-	if (meta_arg == NULL)
-		return ;
-	cmd->redir_stdin = malloc(2 * sizeof(int));
-	if (pipe(cmd->redir_stdin) == -1)
-		error("PIPE");
-	while (1)
-	{
-		l = readline(WAIT_PROMPT);
-		if (l == NULL || !ft_strcmp(l, meta_arg))
-			break ;
-		ft_putendl_fd(l, cmd->redir_stdin[1]);
-		free(l);
-	}
-	free(l);
-	free(meta_arg);
-	close(cmd->redir_stdin[1]);
-	*current_token += meta_length;
-}
-
-//>>
-static void	init_append(t_command *cmd, char **current_token)
-{
-	char	*meta_arg;
-	int		meta_length;
-
-	++*current_token;
-	meta_arg = get_meta_arg(*current_token, &meta_length);
-	if (meta_arg == NULL)
-		return ;
-	cmd->redir_stdout = malloc(sizeof(int));
-	*cmd->redir_stdout = open(meta_arg, O_WRONLY | O_CREAT | O_APPEND, 0777);
-	if (*cmd->redir_stdout == -1)
-		error("OPEN");
-	free(meta_arg);
-	*current_token += meta_length;
-}
-
-//<
-static void	init_redir_stdin(t_command *cmd, char **current_token)
-{
-	char	*meta_arg;
-	int		meta_length;
-
-	meta_arg = get_meta_arg(*current_token, &meta_length);
-	if (meta_arg == NULL)
-		return ;
-	cmd->redir_stdin = malloc(sizeof(int));
-	*cmd->redir_stdin = open(meta_arg, O_RDONLY);
-	if (*cmd->redir_stdin == -1)
-		error("OPEN");
-	free(meta_arg);
-	*current_token += meta_length;
-}
-
-//>
-static void	init_redir_stdout(t_command *cmd, char **current_token)
-{
-	char	*meta_arg;
-	int		meta_length;
-
-	meta_arg = get_meta_arg(*current_token, &meta_length);
-	if (meta_arg == NULL)
-		return ;
-	cmd->redir_stdout = malloc(sizeof(int));
-	*cmd->redir_stdout = open(meta_arg, O_WRONLY | O_CREAT, 0777);
-	if (*cmd->redir_stdout == -1)
-		error("OPEN");
-	free(meta_arg);
-	*current_token += meta_length;
-}
-
-static char	*get_arg(char **current_token, t_data *data)
-{
-	char	*arg;
-	int		arg_size;
-	int		i = 0;
-
-	if ((*current_token)[0] == '$' && ft_strchr(METACHARS_WHITE_SPACES, (*current_token)[1]) == NULL)
-	{
-		arg_size = ft_str_chrset(*current_token + 1, METACHARS) - *current_token;
-		arg = ft_substr(*current_token, 0, arg_size);
-		arg = replace_var(arg, data, &i);
-	}
-	else if ((*current_token)[0] == '"' || (*current_token)[0] == '\'')
-	{
-		arg_size = ft_strchr(*current_token + 1, (*current_token)[0]) - *current_token + 1;
-		arg = ft_substr(*current_token, 0, arg_size);
-		replace_quotes(&arg, data);
-	}
-	else
-	{
-		arg_size = ft_str_chrset(*current_token, METACHARS) - *current_token;
-		arg = ft_substr(*current_token, 0, arg_size);
-	}
-	*current_token += arg_size;
-	return (arg);
-}
+// 	if ((*current_token)[0] == '$' && ft_strchr(METACHARS_WHITE_SPACES, (*current_token)[1]) == NULL)
+// 	{
+// 		arg_size = ft_str_chrset(*current_token + 1, METACHARS) - *current_token;
+// 		arg = ft_substr(*current_token, 0, arg_size);
+// 		arg = replace_var(arg, data, &i);
+// 	}
+// 	else if ((*current_token)[0] == '"' || (*current_token)[0] == '\'')
+// 	{
+// 		arg_size = ft_strchr(*current_token + 1, (*current_token)[0]) - *current_token + 1;
+// 		arg = ft_substr(*current_token, 0, arg_size);
+// 		replace_quotes(&arg, data);
+// 	}
+// 	else
+// 	{
+// 		arg_size = ft_str_chrset(*current_token, METACHARS) - *current_token;
+// 		arg = ft_substr(*current_token, 0, arg_size);
+// 	}
+// 	*current_token += arg_size;
+// 	return (arg);
+// }
 
 //Inits the argument list, or adds an argument
-static void	add_argv(t_command *cmd, char **current_token, t_data *data)
+static void	add_arg(t_command *cmd, char *arg)
 {
-	char	*arg;
-
-	arg = get_arg(current_token, data);
 	if (cmd->argv == NULL)
 	{
 		cmd->argv = ft_calloc(2, sizeof(char *));
@@ -155,6 +54,55 @@ static void	add_argv(t_command *cmd, char **current_token, t_data *data)
 	}
 }
 
+static char *get_arg(char *current_token)
+{
+	char	*r;
+	int		arg_len;
+
+	arg_len = ft_str_chrset(current_token, METACHARS) - current_token;
+	while (current_token[arg_len] == '\'' || current_token[arg_len] == '"')
+	{
+		arg_len += ft_strchr(current_token + arg_len + 1, current_token[arg_len]) - (current_token + arg_len);
+		++arg_len;
+		arg_len += ft_str_chrset(current_token + arg_len, METACHARS) - (current_token + arg_len);
+	}
+	r = ft_substr(current_token, 0, arg_len);
+	return (r);
+}
+
+//Adds the current token to the command argv list
+//Also replaces the environment variables and quotes in that token
+static void	add_argv(t_command *cmd, char **current_token, t_data *data)
+{
+	char	*arg;
+	int		i;
+	int		j;
+
+	arg = get_arg(*current_token);
+	i = 0;
+	j = 0;
+	while (arg && arg[i])
+	{
+		if (arg[i] == '\'' || arg[i] == '"')
+			replace_quotes(&arg, data, &i, &j);
+		else if (arg[i] == '$')
+			arg = replace_var(arg, data, &i, &j);
+		else
+		{
+			++i;
+			++j;
+		}
+	}
+	*current_token += j;
+	if (*arg == 0)
+	{
+		free(arg);
+		return ;
+	}
+	add_arg(cmd, arg);
+}
+
+//Inits a new structure representing a command to execute
 static t_command	*init_cmd(char *syntax_error, char **current_token, t_data *data, int **last_pipe)
 {
 	t_command	*cmd;
@@ -184,7 +132,7 @@ static t_command	*init_cmd(char *syntax_error, char **current_token, t_data *dat
 	return (cmd);
 }
 
-//Returns a list of commands (which are a list of tokens)
+//Returns a list of commands
 t_list	*tokenize(char *line, t_data *data, char *syntax_error)
 {
 	char	*current_token;

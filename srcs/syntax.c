@@ -6,13 +6,13 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:01:49 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/30 13:47:29 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/31 14:26:03 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	print_error(char *meta, char *line)
+static void	print_syntax_error(char *meta, char *line)
 {
 	ft_putstr_fd("-minishell: syntax error near unexpected token `", 2);
 	if (ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES) != line + ft_strlen(line))
@@ -46,7 +46,8 @@ char	*get_meta_arg(char *meta, int *meta_sub_size)
 }
 
 //Checks if the line has a correct syntax
-//Returns the position of the error
+//Returns the position of the error, so that execution
+// can stop before that point
 char	*check_syntax(char *line)
 {
 	char	*last_meta;
@@ -67,7 +68,7 @@ char	*check_syntax(char *line)
 			meta = ft_strchr(meta + 1, meta[0]);
 			if (meta == NULL)
 			{
-				print_error(last_meta, line);
+				print_syntax_error(last_meta, line);
 				return (last_meta);
 			}
 			meta = ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES);
@@ -79,7 +80,7 @@ char	*check_syntax(char *line)
 			if (meta_arg == NULL)
 			{
 				free(meta_arg);
-				print_error(meta, line);
+				print_syntax_error(meta, line);
 				return (last_meta);
 			}
 			free(meta_arg);

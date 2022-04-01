@@ -6,13 +6,16 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/31 11:44:51 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/03/31 14:28:48 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //Searches for the `cmd` path
+//Returns the command path if it is not a directory and
+// the user has the permission to execute it
+//Else returns `NULL`
 static char	*find_command(char *cmd, char **path_split, char *allocated)
 {
 	struct stat	s;
@@ -62,7 +65,8 @@ static char	*find_command(char *cmd, char **path_split, char *allocated)
 	return (cmd_path);
 }
 
-//Sets the pipes if `is_command`, closes them and frees the read pipe
+//Closes pipes and frees the read pipe
+//If `is_command`, also sets the pipes 
 static void	setup_pipes(t_command *cmd, char is_command)
 {
 	if (cmd->read_pipe)

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/31 11:52:43 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/01 08:49:13 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 # define PROMPT "Minishell$ "
 # define WAIT_PROMPT "> "
 # define METACHARS " \t\n\v\f\r|<>\"'"
+# define METACHARS_DOLLAR_SIGN " \t\n\v\f\r|<>\"'$"
+# define METACHARS_NO_QUOTES " \t\n\v\f\r|<>"
 # define METACHARS_WHITE_SPACES " \t\n\v\f\r"
 # define METACHARS_NO_WHITE_SPACES "|<>\"'"
 
@@ -77,11 +79,18 @@ void	setup_signals(void);
 t_list	*parse_line(char *line);
 
 //quotes.c
-char	*replace_var(char *s, t_data *data, int *i);
-void	replace_quotes(char **line, t_data *data);
+char	*replace_var(char *s, t_data *data, int *i, int *j);
+void	replace_quotes(char **s, t_data *data, int *pos, int *j);
 
 //tokenize.c
 t_list	*tokenize(char *line, t_data *data, char *syntax_error);
+
+//init_redirections.c
+void	init_pipe(t_command *cmd, char **current_token, int **last_pipe);
+void	init_heredoc(t_command *cmd, char **current_token);
+void	init_append(t_command *cmd, char **current_token);
+void	init_redir_stdin(t_command *cmd, char **current_token);
+void	init_redir_stdout(t_command *cmd, char **current_token);
 
 //exec.c
 void	execute(t_data *data, char *line);

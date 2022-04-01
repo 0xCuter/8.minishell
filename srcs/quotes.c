@@ -6,15 +6,15 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:35:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/30 13:42:52 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/01 09:01:32 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //Returns a new string with the variable replaced in `s`
-//`i` is set to the length of the var
-char	*replace_var(char *s, t_data *data, int *i)
+//The length of the var is added to `i`
+char	*replace_var(char *s, t_data *data, int *i, int *j)
 {
 	char	*var;
 	char	*var_name_end;
@@ -22,7 +22,8 @@ char	*replace_var(char *s, t_data *data, int *i)
 	char	*envar_value;
 	char	*temp;
 
-	var_name_end = ft_str_chrset(s + *i, METACHARS_WHITE_SPACES);
+	var_name_end = ft_str_chrset(s + *i + 1, METACHARS_DOLLAR_SIGN);
+	*j += var_name_end - (s + *i);
 	var = ft_substr(s + *i + 1, 0, var_name_end - (s + *i) - 1);
 	envar = find_envar(data, var);
 	if (envar)
@@ -48,13 +49,14 @@ char	*replace_var(char *s, t_data *data, int *i)
 //Returns a new string with all the `env` variables replaced
 static char	*replace_vars(char *s, t_data *data)
 {
-	int		i;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (s[i])
 	{
 		if (s[i] == '$')
-			s = replace_var(s, data, &i);
+			s = replace_var(s, data, &i, &j);
 		else
 			++i;
 	}
@@ -80,18 +82,21 @@ static char	*get_quotes_content(char *quote_1, char *quote_2, t_data *data)
 }
 
 //Replaces quotes in the string `s` with their literal value
-//`s` has to start with a quote
 //If the quotes are double, also replaces the environment variables inside
-void	replace_quotes(char **s, t_data *data)
+void	replace_quotes(char **s, t_data *data, int *pos, int *j)
 {
 	char	*next_quote;
 	char	*add_line;
 	char	*new_line;
+	int		size_before;
 
-	next_quote = ft_strchr(*s + 1, *s[0]);
-	add_line = get_quotes_content(*s, next_quote, data);
-	new_line = ft_str_replace(*s, 0, next_quote - *s + 1, add_line);
+	next_quote = ft_strchr(*s + *pos + 1, (*s)[*pos]);
+	size_before = next_quote - 1 - (*s + *pos);
+	*j += size_before + 2;
+	add_line = get_quotes_content(*s + *pos, next_quote, data);
+	new_line = ft_str_replace(*s, *s + *pos - *s, next_quote - *s + 1, add_line);
 	free(*s);
+	*pos += size_before + (ft_strlen(add_line) - size_before);
 	free(add_line);
 	*s = new_line;
 }

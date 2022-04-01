@@ -9,7 +9,7 @@ case $1 in
    ;;
    5) TEST='env  	| 	grep SHELL'
    ;;
-   6) TEST='echo \$a SHELL|cat -e'
+   6) TEST='echo $a SHELL|cat -e'
    ;;
    7) TEST='echo $ SHELL|cat -e'
    ;;
@@ -28,6 +28,8 @@ case $1 in
    14) TEST='echo "	a	$SHELL"'
    ;;
    15) TEST='echo "a$SHELL"'
+   ;;
+   16) TEST='echo YOLO$THISISALONGVAR"+astring here yep $SHELL $e$SHELL"$LANG'
    ;;
    *) echo Bad argument
    ;;
