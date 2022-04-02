@@ -6,38 +6,11 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/01 08:55:00 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/02 15:40:55 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// static char	*get_arg(char **current_token, t_data *data)
-// {
-// 	char	*arg;
-// 	int		arg_size;
-// 	int		i = 0;
-
-// 	if ((*current_token)[0] == '$' && ft_strchr(METACHARS_WHITE_SPACES, (*current_token)[1]) == NULL)
-// 	{
-// 		arg_size = ft_str_chrset(*current_token + 1, METACHARS) - *current_token;
-// 		arg = ft_substr(*current_token, 0, arg_size);
-// 		arg = replace_var(arg, data, &i);
-// 	}
-// 	else if ((*current_token)[0] == '"' || (*current_token)[0] == '\'')
-// 	{
-// 		arg_size = ft_strchr(*current_token + 1, (*current_token)[0]) - *current_token + 1;
-// 		arg = ft_substr(*current_token, 0, arg_size);
-// 		replace_quotes(&arg, data);
-// 	}
-// 	else
-// 	{
-// 		arg_size = ft_str_chrset(*current_token, METACHARS) - *current_token;
-// 		arg = ft_substr(*current_token, 0, arg_size);
-// 	}
-// 	*current_token += arg_size;
-// 	return (arg);
-// }
 
 //Inits the argument list, or adds an argument
 static void	add_arg(t_command *cmd, char *arg)
@@ -54,52 +27,29 @@ static void	add_arg(t_command *cmd, char *arg)
 	}
 }
 
-static char *get_arg(char *current_token)
-{
-	char	*r;
-	int		arg_len;
-
-	arg_len = ft_str_chrset(current_token, METACHARS) - current_token;
-	while (current_token[arg_len] == '\'' || current_token[arg_len] == '"')
-	{
-		arg_len += ft_strchr(current_token + arg_len + 1, current_token[arg_len]) - (current_token + arg_len);
-		++arg_len;
-		arg_len += ft_str_chrset(current_token + arg_len, METACHARS) - (current_token + arg_len);
-	}
-	r = ft_substr(current_token, 0, arg_len);
-	return (r);
-}
-
 //Adds the current token to the command argv list
 //Also replaces the environment variables and quotes in that token
 static void	add_argv(t_command *cmd, char **current_token, t_data *data)
 {
 	char	*arg;
 	int		i;
-	int		j;
+	int		arg_len;
 
-	arg = get_arg(*current_token);
+	arg_len = ft_str_chrset_ign_quotes(*current_token, METACHARS_NO_QUOTES) - (*current_token);
+	arg = ft_substr(*current_token, 0, arg_len);
+	*current_token += arg_len;
 	i = 0;
-	j = 0;
 	while (arg && arg[i])
 	{
 		if (arg[i] == '\'' || arg[i] == '"')
-			replace_quotes(&arg, data, &i, &j);
-		else if (arg[i] == '$')
-			arg = replace_var(arg, data, &i, &j);
+			replace_quotes(&arg, data, &i);
 		else
-		{
 			++i;
-			++j;
-		}
 	}
-	*current_token += j;
-	if (*arg == 0)
-	{
+	if (arg[0] == 0)
 		free(arg);
-		return ;
-	}
-	add_arg(cmd, arg);
+	else
+		add_arg(cmd, arg);
 }
 
 //Inits a new structure representing a command to execute

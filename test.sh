@@ -1,4 +1,6 @@
 case $1 in
+   0) TEST='echo $'
+   ;;
    1) TEST='ls'
    ;;
    2) TEST='echo Test| cat -e |wc -c'
@@ -17,7 +19,7 @@ case $1 in
    ;;
    9) TEST="echo '\$SHELL'"
    ;;
-   10) TEST="echo '\$SHELL'"
+   10) TEST=
    ;;
    11) TEST="echo ' \$SHELL'"
    ;;
@@ -30,6 +32,8 @@ case $1 in
    15) TEST='echo "a$SHELL"'
    ;;
    16) TEST='echo YOLO$THISISALONGVAR"+astring here yep $SHELL $e$SHELL"$LANG'
+   ;;
+   17) TEST="./a.out \$t\"     this 'test' \$SHELL\"LOL' another one \"\$SHELL\""
    ;;
    *) echo Bad argument
    ;;

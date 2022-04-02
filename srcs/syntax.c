@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:01:49 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/31 14:26:03 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/02 15:27:32 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,9 @@ char	*check_syntax(char *line)
 			last_meta = meta;
 			meta = ft_strchr(meta + 1, meta[0]);
 			if (meta == NULL)
-			{
-				print_syntax_error(last_meta, line);
-				return (last_meta);
-			}
-			meta = ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES);
+				meta = last_meta + 1;
+			else
+				meta = ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES);
 		}
 		else
 		{

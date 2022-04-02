@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/01 10:54:02 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/02 14:53:12 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,11 @@ static void	loop_prompt(t_data *data)
 			ft_putstr_fd("exit\n", STDERR_FILENO);
 			exit(0);
 		}
+		line = replace_vars(line, data);
 		syntax_error = check_syntax(line);
 		c_list = tokenize(line, data, syntax_error);
-		exec_cmd_list(c_list, data);
 		free(line);
+		exec_cmd_list(c_list, data);
 	}
 }
 

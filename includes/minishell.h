@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/01 09:07:44 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/02 14:50:09 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define WAIT_PROMPT "> "
 # define METACHARS " \t\n\v\f\r|<>\"'"
 # define METACHARS_DOLLAR_SIGN " \t\n\v\f\r|<>\"'$"
+# define METACHARS_QUOTES "\"'"
 # define METACHARS_NO_QUOTES " \t\n\v\f\r|<>"
 # define METACHARS_WHITE_SPACES " \t\n\v\f\r"
 # define METACHARS_NO_WHITE_SPACES "|<>\"'"
@@ -58,6 +59,8 @@ char	*ft_str_replace(char *s, int start, int end, char *fit);
 char	*ft_str_chrset(const char *line, const char *set);
 char	*ft_str_chrset_rev(const char *line, const char *set);
 void	free_null(void **elem);
+char	*ft_str_chrset_ign_quotes(const char *line, const char *set);
+char	in_quotes(const char *s, char *r);
 
 //tab_utils.c
 char	**duplicate_tab(char **tab);
@@ -82,8 +85,8 @@ void	setup_signals(void);
 t_list	*parse_line(char *line);
 
 //quotes.c
-char	*replace_var(char *s, t_data *data, int *i, int *j);
-void	replace_quotes(char **s, t_data *data, int *pos, int *j);
+char	*replace_vars(char *s, t_data *data);
+void	replace_quotes(char **s, t_data *data, int *pos);
 
 //tokenize.c
 t_list	*tokenize(char *line, t_data *data, char *syntax_error);
