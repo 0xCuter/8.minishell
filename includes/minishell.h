@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/02 14:50:09 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/03 15:04:15 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,14 @@ extern int	g_child_pid;
 
 //utils.c
 void	error(const char *error);
-char	*ft_str_replace(char *s, int start, int end, char *fit);
-char	*ft_str_chrset(const char *line, const char *set);
-char	*ft_str_chrset_rev(const char *line, const char *set);
 void	free_null(void **elem);
-char	*ft_str_chrset_ign_quotes(const char *line, const char *set);
 char	in_quotes(const char *s, char *r);
+
+//str_utils.c
+char	*ft_str_replace(char *s, int start, int end, char *fit);
+char	*ft_str_chrset_ign_quotes(const char *s, const char *set);
+char	*ft_str_chrset(const char *s, const char *set);
+char	*ft_str_chrset_rev(const char *s, const char *set);
 
 //tab_utils.c
 char	**duplicate_tab(char **tab);
@@ -81,15 +83,12 @@ void	init_path_split(t_data *data);
 //signals.c
 void	setup_signals(void);
 
-//parser.c
-t_list	*parse_line(char *line);
-
-//quotes.c
+//replace_input.c
 char	*replace_vars(char *s, t_data *data);
 void	replace_quotes(char **s, t_data *data, int *pos);
 
-//tokenize.c
-t_list	*tokenize(char *line, t_data *data, char *syntax_error);
+//init_cmds.c
+t_list	*init_cmds(char *line, t_data *data, char *syntax_error);
 
 //init_redirections.c
 void	init_pipe(t_command *cmd, char **current_token, int **last_pipe);
