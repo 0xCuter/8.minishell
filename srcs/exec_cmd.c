@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/01 09:07:57 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/04 16:46:37 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,26 +65,25 @@ static char	*find_command(char *cmd, char **path_split, char *allocated)
 	return (cmd_path);
 }
 
-//Closes pipes and frees the read pipe
-//If `is_command`, also sets the pipes 
-static void	setup_pipes(t_command *cmd, char is_command)
+//Sets the pipes if needed
+static void	setup_pipes(t_command *cmd)
 {
-	if (cmd->read_pipe)
+	if (cmd->stdin_piped)
 	{
-		if (is_command)
-			dup2(cmd->read_pipe[0], STDIN_FILENO);
-		close(cmd->read_pipe[0]);
-		free_null((void **)&cmd->read_pipe);
+		dup2(cmd->stdin_pipe[0], STDIN_FILENO);
+		close(cmd->stdin_pipe[0]);
+		close(cmd->stdin_pipe[1]);
 	}
-	if (cmd->write_pipe)
+	if (cmd->stdout_piped)
 	{
-		if (is_command)
-			dup2(cmd->write_pipe[1], STDOUT_FILENO);
-		close(cmd->write_pipe[1]);
+		dup2(cmd->stdout_pipe[1], STDOUT_FILENO);
+		close(cmd->stdout_pipe[0]);
+		close(cmd->stdout_pipe[1]);
 	}
 }
 
-static void	init_redirs(t_command *cmd)
+//Redirects stdin or stdout
+static void	setup_redirs(t_command *cmd)
 {
 	if (cmd->redir_stdin)
 	{
@@ -116,16 +115,12 @@ void	exec_cmd(t_list *cmd_elem, char **argv, t_data *data)
 			error("FORK");
 		if (pid == 0)
 		{
-			setup_pipes(cmd_elem->content, 1);
-			init_redirs(cmd_elem->content);
+			setup_pipes(cmd_elem->content);
+			setup_redirs(cmd_elem->content);
 			if (execve(cmd, argv, data->envs))
 				error("EXECVE");
 		}
-		setup_pipes(cmd_elem->content, 0);
-		g_child_pid = pid;
-		waitpid(pid, NULL, 0);
 		if (cmd_allocated)
 			free(cmd);
-		g_child_pid = 0;
 	}
 }

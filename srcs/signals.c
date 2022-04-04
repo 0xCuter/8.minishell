@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:07:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/01 10:55:26 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/04 16:10:44 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ static void	signal_prompt(void)
 //Else prints a new line
 static void	ctrl_c()
 {
-	if (g_child_pid)
-	{
-		write(1, "\n", 1);
-		kill(g_child_pid, SIGINT);
-	}
-	else
+	// if (g_child_pid)
+	// {
+	// 	write(1, "\n", 1);
+	// 	kill(g_child_pid, SIGINT);
+	// }
+	// else
 	{
 		write(1, "\n", 1);
 		signal_prompt();

@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirections.c                                     :+:      :+:    :+:   */
+/*   init_redirections.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 14:35:46 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/03/31 14:37:02 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/04 16:06:00 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //|
-void	init_pipe(t_command *cmd, char **current_token, int **last_pipe)
+char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char)
 {
-	if (*last_pipe == NULL)
+	if (*stdout_pipe)
 	{
-		cmd->write_pipe = malloc(2 * sizeof(int));
-		*last_pipe = cmd->write_pipe;
-		if (pipe(cmd->write_pipe))
-			error("PIPE");
+		cmd->stdout_piped = 1;
+		*stdout_pipe = 0;
+		return (1);
 	}
 	else
 	{
-		cmd->read_pipe = *last_pipe;
-		++*current_token;
-		*last_pipe = NULL;
+		cmd->stdin_piped = 1;
+		*stdout_pipe = 1;
+		++*cur_char;
 	}
+	return (0);
 }
 
 //<<

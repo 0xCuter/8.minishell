@@ -6,13 +6,11 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/03 15:05:08 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/04 16:10:18 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	g_child_pid;
 
 static void	prompt(t_data *data)
 {
@@ -74,7 +72,6 @@ int	main(int argc, char **argv, char **envp)
 		error("ARGUMENTS");
 	init_envs(&data, envp);
 	init_path_split(&data);
-	g_child_pid = 0;
 	setup_signals();
 	loop_prompt(&data);
 }

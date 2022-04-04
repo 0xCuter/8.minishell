@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/03 15:13:14 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/04 16:05:47 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	add_argv(t_command *cmd, char **cur_char, t_data *data)
 }
 
 //Inits a new `t_command` structure
-static t_command	*init_cmd(char *syntax_error, char **cur_char, t_data *data, int **last_pipe)
+static t_command	*init_cmd(char *syntax_error, char **cur_char, t_data *data, char *stdout_pipe)
 {
 	t_command	*cmd;
 
@@ -63,8 +63,7 @@ static t_command	*init_cmd(char *syntax_error, char **cur_char, t_data *data, in
 	{
 		if ((*cur_char)[0] == '|')
 		{
-			init_pipe(cmd, cur_char, last_pipe);
-			if (*last_pipe)
+			if (init_pipe(cmd, stdout_pipe, cur_char))
 				break ;
 		}
 		else if ((*cur_char)[0] == '<' && (*cur_char)[1] == '<')
@@ -86,16 +85,21 @@ static t_command	*init_cmd(char *syntax_error, char **cur_char, t_data *data, in
 //Returns a list of struct representing commands to execute
 t_list	*init_cmds(char *line, t_data *data, char *syntax_error)
 {
-	char	*cur_char;
-	t_list	*c_list;
-	int		*last_pipe;
+	char		*cur_char;
+	t_command	*cmd;
+	t_list		*c_list;
+	char		stdout_pipe;
+	int			cmd_id;
 
 	c_list = NULL;
-	last_pipe = NULL;
+	stdout_pipe = 1;
+	cmd_id = 0;
 	cur_char = ft_str_chrset_rev(line, METACHARS);
 	while (cur_char && cur_char < syntax_error)
 	{
-		ft_lstadd_back(&c_list, ft_lstnew(init_cmd(syntax_error, &cur_char, data, &last_pipe)));
+		cmd = init_cmd(syntax_error, &cur_char, data, &stdout_pipe);
+		cmd->id = cmd_id++;
+		ft_lstadd_back(&c_list, ft_lstnew(cmd));
 		if (cur_char)
 			cur_char = ft_str_chrset_rev(cur_char, METACHARS_WHITE_SPACES);
 	}

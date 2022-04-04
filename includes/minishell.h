@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/03 15:04:15 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/04 17:01:42 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,12 @@
 # define METACHARS_NO_WHITE_SPACES "|<>\"'"
 
 typedef struct s_command {
+	int		id;
 	char	**argv;
-	int		*read_pipe;
-	int		*write_pipe;
+	char	stdin_piped;
+	char	stdout_piped;
+	int		*stdin_pipe;
+	int		*stdout_pipe;
 	int		*redir_stdin;
 	int		*redir_stdout;
 }	t_command;
@@ -50,8 +53,6 @@ typedef struct s_data {
 	char	**path_split;
 	char	*line;
 }	t_data;
-
-extern int	g_child_pid;
 
 //utils.c
 void	error(const char *error);
@@ -91,7 +92,7 @@ void	replace_quotes(char **s, t_data *data, int *pos);
 t_list	*init_cmds(char *line, t_data *data, char *syntax_error);
 
 //init_redirections.c
-void	init_pipe(t_command *cmd, char **current_token, int **last_pipe);
+char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char);
 void	init_heredoc(t_command *cmd, char **current_token);
 void	init_append(t_command *cmd, char **current_token);
 void	init_redir_stdin(t_command *cmd, char **current_token);
@@ -113,7 +114,6 @@ char	*check_syntax(char *line);
 char	*get_meta_arg(char *meta, int *meta_sub_size);
 
 //---BUILTINS
-# define BUILTINS "echo exit pwd cd env unset export"
 //echo.c
 void	echo_cmd(char **argv);
 
