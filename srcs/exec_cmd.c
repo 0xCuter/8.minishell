@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 12:23:25 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 16:34:50 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,26 +101,28 @@ static void	setup_redirs(t_command *cmd)
 
 //Executes a command in a child process
 //Returns the child PID
-void	exec_cmd(t_list *cmd_elem, char **argv, t_data *data)
+int	exec_cmd(t_command *cmd, char **argv, t_data *data)
 {
 	int		pid;
-	char	cmd_allocated;
-	char	*cmd;
+	char	cmd_path_allocated;
+	char	*cmd_path;
 
-	cmd = find_command(argv[0], data->path_split, &cmd_allocated);
-	if (cmd)
+	pid = -1;
+	cmd_path = find_command(argv[0], data->path_split, &cmd_path_allocated);
+	if (cmd_path)
 	{
 		pid = fork();
 		if (pid == -1)
 			error("FORK");
 		if (pid == 0)
 		{
-			setup_pipes(cmd_elem->content);
-			setup_redirs(cmd_elem->content);
-			if (execve(cmd, argv, data->envs))
+			setup_pipes(cmd);
+			setup_redirs(cmd);
+			if (execve(cmd_path, argv, data->envs))
 				error("EXECVE");
 		}
-		if (cmd_allocated)
-			free(cmd);
+		if (cmd_path_allocated)
+			free(cmd_path);
 	}
+	return (pid);
 }

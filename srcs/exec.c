@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 13:32:05 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 16:36:42 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,35 +88,64 @@ static void	close_pipes(int cmd_id, int *pipes[2], char end)
 		close_pipe(&pipes[0]);
 }
 
+//Waits for all children
+//If `last_pid != -1`, saves the last one's exit status to `data`
+static void	wait_children(t_data *data, int last_pid)
+{
+	int	waited_pid;
+	int	waited_status;
+
+	waited_pid = wait(&waited_status);
+	if (last_pid != -1 && waited_pid == last_pid)
+		data->exit_status = WEXITSTATUS(waited_status);
+	while(waited_pid > 0)
+	{
+		waited_pid = wait(&waited_status);
+		if (last_pid != -1 && waited_pid == last_pid)
+			data->exit_status = WEXITSTATUS(waited_status);
+	}
+}
+
+//Executes a command or a builtin
+static int	exec_cmd_elem(t_command *cmd, t_data *data, int *pipes[2])
+{
+	char	**argv;
+	int		pid;
+
+	pid = -1;
+	argv = cmd->argv;
+	if (argv)
+	{
+		close_pipes(cmd->id, pipes, 0);
+		init_pipes(cmd, pipes);
+		if (is_builtin(argv[0]))
+		{
+			pid = -1;
+			exec_builtin(cmd, data, argv);
+		}
+		else
+			pid = exec_cmd(cmd, argv, data);
+	}
+	return (pid);
+}
+
 //Executes the commands or builtins
 void	exec_cmd_list(t_list *c_list, t_data *data)
 {
-	t_list		*cmd_elem;
-	t_command	*cmd;
-	char		**argv;
-	int			*pipes[2];
+	int		*pipes[2];
+	int		last_pid;
+	t_list	*cmd_elem;
 
-	pipes[0] = NULL;
-	pipes[1] = NULL;
+	ft_memset(pipes, 0, 2 * sizeof(int *));
+	last_pid = -1;
 	cmd_elem = c_list;
 	while (cmd_elem)
 	{
-		cmd = cmd_elem->content;
-		argv = cmd->argv;
-		if (argv)
-		{
-			close_pipes(cmd->id, pipes, 0);
-			init_pipes(cmd, pipes);
-			if (is_builtin(argv[0]))
-				exec_builtin(cmd_elem, data, argv);
-			else
-				exec_cmd(cmd_elem, argv, data);
-		}
+		last_pid = exec_cmd_elem(cmd_elem->content, data, pipes);
 		cmd_elem = cmd_elem->next;
 	}
 	close_pipes(0, pipes, 1);
-	while(wait(NULL) > 0)
-		;
+	wait_children(data, last_pid);
 	if (c_list)
 		ft_lstclear(&c_list, clear_cmd);
 }

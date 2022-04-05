@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 15:28:00 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 15:41:38 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	loop_prompt(t_data *data)
 		prompt(data, 0);
 		line = readline(NULL);
 		if (line == NULL)
-			exit_shell(0);
+			exit_shell(data->exit_status);
 		if (*line != 0)
 			add_history(line);
 		line = replace_vars(line, data);

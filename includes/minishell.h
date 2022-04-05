@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 15:34:59 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 16:04:11 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,10 +112,10 @@ void	exec_cmd_list(t_list *cmds, t_data *data);
 
 //exec_builtin.c
 char	is_builtin(char *cmd_name);
-void	exec_builtin(t_list *cmd_elem, t_data *data, char **argv);
+void	exec_builtin(t_command *cmd, t_data *data, char **argv);
 
 //exec_cmd.c
-void	exec_cmd(t_list *cmd_elem, char **argv, t_data *data);
+int		exec_cmd(t_command *cmd, char **argv, t_data *data);
 
 //syntax.c
 char	check_syntax(char *line);

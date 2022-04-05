@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:45 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/04 17:02:35 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 16:01:45 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,13 @@ static void	setup_redirs(t_command *cmd, int *old_stdin, int *old_stdout)
 }
 
 //Executes a builtin
-void	exec_builtin(t_list *cmd_elem, t_data *data, char **argv)
+void	exec_builtin(t_command *cmd, t_data *data, char **argv)
 {
 	int	old_stdin = -2;
 	int	old_stdout = -2;
 
-	setup_pipes(cmd_elem->content, &old_stdin, &old_stdout);
-	setup_redirs(cmd_elem->content, &old_stdin, &old_stdout);
+	setup_pipes(cmd, &old_stdin, &old_stdout);
+	setup_redirs(cmd, &old_stdin, &old_stdout);
 	if (argv)
 	{
 		if (!ft_strcmp(argv[0], "echo"))
