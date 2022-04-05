@@ -6,17 +6,28 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:38:16 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 11:11:51 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 13:34:16 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//Prints the error corresponding to `errno` and exits with `errno` value
+//Frees prompt & history, prints "exit" and exits with `status`
+void	exit_shell(int status)
+{
+	prompt(NULL, 1);
+	// rl_clear_history();
+	ft_putstr_fd("exit\n", STDERR_FILENO);
+	exit(status);
+}
+
+//Prints the error corresponding to `errno`, frees the prompt & history
+// and exits with `errno` value
 void	error(const char *error)
 {
 	perror(error);
 	prompt(NULL, 1);
+	// rl_clear_history();
 	exit(errno);
 }
 

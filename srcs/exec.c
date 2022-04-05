@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/04 17:19:10 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 13:32:05 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,15 @@ void	exec_cmd_list(t_list *c_list, t_data *data)
 	{
 		cmd = cmd_elem->content;
 		argv = cmd->argv;
-		close_pipes(cmd->id, pipes, 0);
-		init_pipes(cmd, pipes);
-		if (is_builtin(argv[0]))
-			exec_builtin(cmd_elem, data, argv);
-		else
-			exec_cmd(cmd_elem, argv, data);
+		if (argv)
+		{
+			close_pipes(cmd->id, pipes, 0);
+			init_pipes(cmd, pipes);
+			if (is_builtin(argv[0]))
+				exec_builtin(cmd_elem, data, argv);
+			else
+				exec_cmd(cmd_elem, argv, data);
+		}
 		cmd_elem = cmd_elem->next;
 	}
 	close_pipes(0, pipes, 1);

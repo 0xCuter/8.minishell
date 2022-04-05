@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envs_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/26 15:32:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 00:49:15 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/05 12:28:59 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,7 @@ char	*get_env(t_data *data, char *key)
 
 	envar = find_envar(data, key);
 	if (envar)
-	{
-		return(ft_strchr(envar, '=') + 1);
-	}
+		return (ft_strchr(envar, '=') + 1);
 	return (NULL);
 }
 

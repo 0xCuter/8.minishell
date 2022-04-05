@@ -6,7 +6,7 @@
 #    By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/22 08:53:40 by vvandenb          #+#    #+#              #
-#    Updated: 2022/04/03 15:04:43 by vvandenb         ###   ########.fr        #
+#    Updated: 2022/04/05 13:13:47 by vvandenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,6 @@ CFLAGS = -Wall -Wextra -Werror	\
 		-I $(HEADERS_DIR) -I $(LIBFT_DIR)
 ifdef DEBUG
 	CFLAGS += -g
-endif
-ifdef FSAN
-	CFLAGS += -fsanitize=address
 endif
 
 SRCS_DIR = srcs/

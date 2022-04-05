@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   str_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 14:49:25 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 01:19:37 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/05 12:19:53 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,8 @@ char	*ft_str_chrset_rev(const char *s, const char *set)
 	return (last_r);
 }
 
-//Modified strjoin for prompt that returns a copy of's2' if 's1' is NULL.
-//Frees 's1' after 'ft_strjoin'.
+//Modified strjoin for `prompt` that returns a copy of `s2` if `s1` is NULL.
+//Frees `s1` after `ft_strjoin`.
 char	*mod_strjoin(char *s1, char *s2)
 {
 	char	*str;

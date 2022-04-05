@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/04 16:46:37 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 12:23:25 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char	*find_command(char *cmd, char **path_split, char *allocated)
 		if (stat(cmd, &s) == 0 && !(s.st_mode & S_IFDIR))
 			cmd_path = cmd;
 	}
-	else
+	else if (path_split)
 	{
 		while (*path_split != NULL)
 		{

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 11:24:38 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 13:28:54 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	prompt(t_data *data, int exit_flag)
 {
-	static char	*str;
+	static char	*str = NULL;
 	char		*tmp;
 	int			len;
 	int			slash;
@@ -32,25 +32,28 @@ void	prompt(t_data *data, int exit_flag)
 			str = NULL;
 		}
 		tmp = get_env(data, "USER");
-		if (!tmp)
-			error("GETENV");
-		str = mod_strjoin(str, "\e[1;31m");
-		str = mod_strjoin(str, tmp);
-		str = mod_strjoin(str, "\e[1;33m@42\e[1;32mNice\e[0m:\e[1;36m");
-		tmp = getcwd(NULL, 0);
-		len = ft_strlen(tmp);
-		slash = 0;
-		while (len && slash < 3)
+		if (tmp != NULL)
 		{
-			len--;
-			if (tmp[len] == '/')
-				slash++;
+			str = mod_strjoin(str, "\e[1;31m");
+			str = mod_strjoin(str, tmp);
+			str = mod_strjoin(str, "\e[1;33m@42\e[1;32mNice\e[0m:\e[1;36m");
+			tmp = getcwd(NULL, 0);
+			len = ft_strlen(tmp);
+			slash = 0;
+			while (len && slash < 3)
+			{
+				len--;
+				if (tmp[len] == '/')
+					slash++;
+			}
+			str = mod_strjoin(str, &tmp[len]);
+			str = mod_strjoin(str, "\e[0m$ ");
+			free(tmp);
 		}
-		str = mod_strjoin(str, &tmp[len]);
-		str = mod_strjoin(str, "\e[0m$ ");
-		free(tmp);
+		else
+			str = mod_strjoin(str, DEFAULT_PROMPT);
 	}
-	ft_putstr_fd(str, 2);
+	ft_putstr_fd(str, STDERR_FILENO);
 }
 
 //Reads line indefinitely
@@ -63,12 +66,10 @@ static void	loop_prompt(t_data *data)
 	{
 		prompt(data, 0);
 		line = readline(NULL);
-		add_history(line);
 		if (line == NULL)
-		{
-			ft_putstr_fd("exit\n", STDERR_FILENO);
-			exit(0);
-		}
+			exit_shell(0);
+		if (*line != 0)
+			add_history(line);
 		line = replace_vars(line, data);
 		if (check_syntax(line) == 0)
 		{

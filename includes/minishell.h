@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 11:18:35 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 12:39:00 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@
 # include <dirent.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
-# include <sys/types.h>
 
 # include "libft.h"
 
-// # define PROMPT "Minishell$ "
+# define DEFAULT_PATH "PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:."
+# define DEFAULT_PROMPT "Minishell$ "
 # define WAIT_PROMPT "> "
 # define SPECIAL_CHARS "~`#$&*()\\|[]{};'\"<>/"
 # define METACHARS " \t\n\v\f\r|<>\"'"
@@ -56,6 +56,7 @@ typedef struct s_data {
 }	t_data;
 
 //utils.c
+void	exit_shell(int status);
 void	error(const char *error);
 void	free_null(void **elem);
 char	in_quotes(const char *s, char *r);

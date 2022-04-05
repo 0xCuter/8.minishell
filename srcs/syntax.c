@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:01:49 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 11:16:32 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 11:47:45 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ char	*get_meta_arg(char *meta, int *meta_sub_size)
 	meta_trimmed = ft_strtrim(meta_sub, METACHARS);
 	free(meta_sub);
 	if (*meta_trimmed == 0)
+	{
+		free(meta_trimmed);
 		return (NULL);
+	}
 	return (meta_trimmed);
 }
 
