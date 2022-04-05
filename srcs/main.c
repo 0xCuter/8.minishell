@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 13:28:54 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 15:28:00 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_putendl_fd("Minishell requires no arguments", 2);
 		exit(1);
 	}
+	data.exit_status = 0;
 	init_envs(&data, envp);
 	init_path_split(&data);
 	setup_signals();

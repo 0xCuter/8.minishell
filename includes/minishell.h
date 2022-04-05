@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 12:39:00 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 15:34:59 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define DEFAULT_PATH "PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:."
 # define DEFAULT_PROMPT "Minishell$ "
 # define WAIT_PROMPT "> "
-# define SPECIAL_CHARS "~`#$&*()\\|[]{};'\"<>/"
+# define VAR_CHARS " \t\n\v\f\r|<>\"'?$="
 # define METACHARS " \t\n\v\f\r|<>\"'"
 # define METACHARS_DOLLAR_SIGN " \t\n\v\f\r|<>\"'$"
 # define METACHARS_QUOTES "\"'"
@@ -53,6 +53,7 @@ typedef struct s_data {
 	char	**envs;
 	char	**path_split;
 	char	*line;
+	int		exit_status;
 }	t_data;
 
 //utils.c

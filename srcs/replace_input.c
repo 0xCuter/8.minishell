@@ -6,14 +6,35 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:35:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/03 15:03:33 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 15:37:13 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//If the var is "?", it is expanded to `exit_status`
+//Else, the variable is replaced by a simple "$"
+static char	*replace_var_special(char *s, t_data *data, int *i, char *var_name_end)
+{
+	char	*temp;
+	char	*status_str;
+
+	temp = s;
+	if (*var_name_end == '?')
+	{
+		status_str = ft_itoa(data->exit_status);
+		s = ft_str_replace(s, *i, var_name_end - s + 1, status_str);
+		free(status_str);
+	}
+	else
+		s = ft_str_replace(s, *i, var_name_end - s, "$");
+	free(temp);
+	++*i;
+	return (s);
+}
+
 //Returns a new string with the variable replaced in `s`
-//The length of the var is added to `i`
+//The "$" is at `s + *i` and the length of the var is added to `*i`
 static char	*replace_var(char *s, t_data *data, int *i)
 {
 	char	*var;
@@ -21,14 +42,9 @@ static char	*replace_var(char *s, t_data *data, int *i)
 	char	*envar_value;
 	char	*temp;
 
-	var_name_end = ft_str_chrset(s + *i + 1, METACHARS_DOLLAR_SIGN);
+	var_name_end = ft_str_chrset(s + *i + 1, VAR_CHARS);
 	if (var_name_end == s + *i + 1)
-	{
-		temp = s;
-		s = ft_str_replace(s, *i, var_name_end - s, "$");
-		free(temp);
-		++*i;
-	}
+		s = replace_var_special(s, data, i, var_name_end);
 	else
 	{
 		var = ft_substr(s + *i + 1, 0, var_name_end - (s + *i) - 1);
