@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/04 17:01:42 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 01:17:30 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 
 # include "libft.h"
 
-# define PROMPT "Minishell$ "
+// # define PROMPT "Minishell$ "
 # define WAIT_PROMPT "> "
 # define METACHARS " \t\n\v\f\r|<>\"'"
 # define METACHARS_DOLLAR_SIGN " \t\n\v\f\r|<>\"'$"
@@ -64,6 +64,7 @@ char	*ft_str_replace(char *s, int start, int end, char *fit);
 char	*ft_str_chrset_ign_quotes(const char *s, const char *set);
 char	*ft_str_chrset(const char *s, const char *set);
 char	*ft_str_chrset_rev(const char *s, const char *set);
+char	*mod_strjoin(char *s1, char *s2);
 
 //tab_utils.c
 char	**duplicate_tab(char **tab);
@@ -76,10 +77,14 @@ void	free_tab(char **tab);
 char	*find_envar(t_data *data, char *var_name);
 char	*find_key(t_data *data, char *str);
 char	*get_env(t_data *data, char *key);
+void	replace_env(t_data *data, char *envar, char *line);
 
 //init.c
 void	init_envs(t_data *data, char **envp);
 void	init_path_split(t_data *data);
+
+//main.c
+void	prompt(t_data *data, int exit_flag);
 
 //signals.c
 void	setup_signals(void);
@@ -121,7 +126,7 @@ void	echo_cmd(char **argv);
 void	exit_cmd(char **argv);
 
 //pwd.c
-int		pwd_cmd(void);
+void	pwd_cmd(void);
 
 //cd.c
 void	cd_cmd(char **argv, t_data *data);

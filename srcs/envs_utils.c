@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/26 15:32:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/01 03:10:10 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/05 00:49:15 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,21 @@ char	*get_env(t_data *data, char *key)
 		return(ft_strchr(envar, '=') + 1);
 	}
 	return (NULL);
+}
+
+void	replace_env(t_data *data, char *envar, char *line)
+{
+	int	i;
+
+	i = 0;
+	while (data->envs[i])
+	{
+		if (data->envs[i] == envar)
+		{
+			free(data->envs[i]);
+			data->envs[i] = ft_strdup(line);
+			return ;
+		}
+		i++;
+	}
 }

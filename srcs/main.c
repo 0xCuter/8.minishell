@@ -3,40 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/04 16:10:18 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/04 22:24:05 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	prompt(t_data *data)
+void	prompt(t_data *data, int exit_flag)
 {
-	char	*tmp;
-	int		len;
-	int		slash;
+	static char	*str;
+	char		*tmp;
+	int			len;
+	int			slash;
 
-	tmp = get_env(data, "USER");
-	if (!tmp)
-		error("GETENV");
-	ft_putstr_fd("\e[1;31m", 1);
-	ft_putstr_fd(tmp, 1);
-	ft_putstr_fd("\e[1;33m@42\e[1;32mNice\e[0m:", 1);
-	tmp = getcwd(NULL, 0);
-	len = ft_strlen(tmp);
-	slash = 0;
-	while (len && slash < 3)
+	if (exit_flag)
 	{
-		len--;
-		if (tmp[len] == '/')
-			slash++;
+		free(str);
+		return ;
 	}
-	ft_putstr_fd("\e[1;36m", 1);
-	ft_putstr_fd(&tmp[len], 1);
-	ft_putstr_fd("\e[0m$ ", 1);
-	free(tmp);
+	if (data)
+	{
+		if (str)
+		{
+			free(str);
+			str = NULL;
+		}
+		tmp = get_env(data, "USER");
+		if (!tmp)
+			error("GETENV");
+		str = mod_strjoin(str, "\e[1;31m");
+		str = mod_strjoin(str, tmp);
+		str = mod_strjoin(str, "\e[1;33m@42\e[1;32mNice\e[0m:\e[1;36m");
+		tmp = getcwd(NULL, 0);
+		len = ft_strlen(tmp);
+		slash = 0;
+		while (len && slash < 3)
+		{
+			len--;
+			if (tmp[len] == '/')
+				slash++;
+		}
+		str = mod_strjoin(str, &tmp[len]);
+		str = mod_strjoin(str, "\e[0m$ ");
+		free(tmp);
+	}
+	ft_putstr_fd(str, 1);
 }
 
 //Reads line indefinitely
@@ -48,7 +62,7 @@ static void	loop_prompt(t_data *data)
 
 	while (1)
 	{
-		prompt(data);
+		prompt(data, 0);
 		line = readline(NULL);
 		add_history(line);
 		if (line == NULL)

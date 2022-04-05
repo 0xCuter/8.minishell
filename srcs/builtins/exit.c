@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 22:27:15 by scuter            #+#    #+#             */
-/*   Updated: 2022/03/23 22:10:53 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/05 02:52:20 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@ void	exit_cmd(char **argv)
 		ft_putendl_fd("exit: too many arguments", 2);
 	else
 	{
-		ft_putendl_fd("exit: numeric argument required", 2);
+		ft_putstr_fd("exit: ", 2);
+		ft_putstr_fd(argv[1], 2);
+		ft_putendl_fd(": numeric argument required", 2);
 		exit(255);
 	}
 }

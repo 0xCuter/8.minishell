@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   str_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 14:49:25 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/03 14:51:10 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 01:19:37 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,19 @@ char	*ft_str_chrset_rev(const char *s, const char *set)
 		++i;
 	}
 	return (last_r);
+}
+
+//Modified strjoin for prompt that returns a copy of's2' if 's1' is NULL.
+//Frees 's1' after 'ft_strjoin'.
+char	*mod_strjoin(char *s1, char *s2)
+{
+	char	*str;
+
+	if (!s1)
+		return (ft_strdup(s2));
+	str = ft_strjoin(s1, s2);
+	if (!str)
+		error("MALLOC");
+	free(s1);
+	return (str);
 }

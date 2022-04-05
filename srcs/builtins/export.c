@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:26:38 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/01 03:46:26 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/05 00:49:15 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,6 @@ static void	print_export(char **envs)
 	free(export);
 }
 
-static void	replace_env(t_data *data, char *envar, char *line)
-{
-	int	i;
-
-	i = 0;
-	while (data->envs[i])
-	{
-		if (data->envs[i] == envar)
-		{
-			free(data->envs[i]);
-			data->envs[i] = ft_strdup(line);
-			return ;
-		}
-		i++;
-	}
-}
-
 void	export_cmd(char **argv, t_data *data)
 {
 	char *envar;
@@ -94,8 +77,9 @@ void	export_cmd(char **argv, t_data *data)
 	{
 		if (check_export_arg(argv[i]))
 		{
-			ft_putstr_fd("export: not valid in this context: ", 2);
+			ft_putstr_fd("export: '", 2);
 			ft_putstr_fd(argv[i], 2);
+			ft_putendl_fd("': not a valid identifier", 2);
 		}
 		else
 		{
