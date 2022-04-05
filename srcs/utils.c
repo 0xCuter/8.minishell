@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:38:16 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/04 22:22:03 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/05 11:11:51 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//Prints the error and exits with `errno` code
+//Prints the error corresponding to `errno` and exits with `errno` value
 void	error(const char *error)
 {
 	perror(error);

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:01:49 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/03 15:33:44 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 11:16:32 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,8 @@ static char	meta_no_arg(char *line, char **last_meta, char **meta)
 }
 
 //Checks if the line has a correct syntax
-//Returns the position of the error, so that execution
-// can stop before that point
-char	*check_syntax(char *line)
+//Returns 1 if it finds one, else 0
+char	check_syntax(char *line)
 {
 	char	*last_meta;
 	char	*meta;
@@ -92,8 +91,8 @@ char	*check_syntax(char *line)
 		else
 		{
 			if (meta_no_arg(line, &last_meta, &meta))
-				return (last_meta);
+				return (1);
 		}
 	}
-	return (meta);
+	return (0);
 }

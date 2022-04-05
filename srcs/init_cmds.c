@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/04 16:05:47 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/05 11:20:02 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ static void	add_argv(t_command *cmd, char **cur_char, t_data *data)
 }
 
 //Inits a new `t_command` structure
-static t_command	*init_cmd(char *syntax_error, char **cur_char, t_data *data, char *stdout_pipe)
+static t_command	*init_cmd(char **cur_char, t_data *data, char *stdout_pipe)
 {
 	t_command	*cmd;
 
 	cmd = ft_calloc(1, sizeof(t_command));
-	while (**cur_char && *cur_char < syntax_error)
+	while (**cur_char)
 	{
 		if ((*cur_char)[0] == '|')
 		{
@@ -83,7 +83,7 @@ static t_command	*init_cmd(char *syntax_error, char **cur_char, t_data *data, ch
 }
 
 //Returns a list of struct representing commands to execute
-t_list	*init_cmds(char *line, t_data *data, char *syntax_error)
+t_list	*init_cmds(char *line, t_data *data)
 {
 	char		*cur_char;
 	t_command	*cmd;
@@ -95,9 +95,9 @@ t_list	*init_cmds(char *line, t_data *data, char *syntax_error)
 	stdout_pipe = 1;
 	cmd_id = 0;
 	cur_char = ft_str_chrset_rev(line, METACHARS);
-	while (cur_char && cur_char < syntax_error)
+	while (cur_char && *cur_char)
 	{
-		cmd = init_cmd(syntax_error, &cur_char, data, &stdout_pipe);
+		cmd = init_cmd(&cur_char, data, &stdout_pipe);
 		cmd->id = cmd_id++;
 		ft_lstadd_back(&c_list, ft_lstnew(cmd));
 		if (cur_char)

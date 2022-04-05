@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 01:17:30 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/05 11:18:35 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 
 // # define PROMPT "Minishell$ "
 # define WAIT_PROMPT "> "
+# define SPECIAL_CHARS "~`#$&*()\\|[]{};'\"<>/"
 # define METACHARS " \t\n\v\f\r|<>\"'"
 # define METACHARS_DOLLAR_SIGN " \t\n\v\f\r|<>\"'$"
 # define METACHARS_QUOTES "\"'"
@@ -94,7 +95,7 @@ char	*replace_vars(char *s, t_data *data);
 void	replace_quotes(char **s, t_data *data, int *pos);
 
 //init_cmds.c
-t_list	*init_cmds(char *line, t_data *data, char *syntax_error);
+t_list	*init_cmds(char *line, t_data *data);
 
 //init_redirections.c
 char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char);
@@ -115,7 +116,7 @@ void	exec_builtin(t_list *cmd_elem, t_data *data, char **argv);
 void	exec_cmd(t_list *cmd_elem, char **argv, t_data *data);
 
 //syntax.c
-char	*check_syntax(char *line);
+char	check_syntax(char *line);
 char	*get_meta_arg(char *meta, int *meta_sub_size);
 
 //---BUILTINS
