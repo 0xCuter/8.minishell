@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 22:09:02 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/05 02:57:05 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/06 19:32:54 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	set_pwd(t_data *data, char *pwd, char *str)
 	if (envar)
 		replace_env(data, envar, join);
 	else
-		add_line(join, data->envs);
+		data->envs = add_line(join, data->envs);
 	free(join);
 	free(pwd);
 }
@@ -56,10 +56,12 @@ void	cd_cmd(char **argv, t_data *data)
 	char	*path;
 	char	*pwd;
 
+	data->exit_status = 0;
 	path = NULL;
 	if (argv && argv[1] && argv[2])
 	{
-		ft_putendl_fd("cd: too many arguments", 2);
+		data->exit_status = 2;
+		ft_putendl_fd("cd: too many arguments", STDERR_FILENO);
 		return ;
 	}
 	if (!argv[1] || (!ft_strcmp(argv[1], "~")) || (!ft_strcmp(argv[1], "--")))
@@ -67,7 +69,8 @@ void	cd_cmd(char **argv, t_data *data)
 		path = get_env(data, "HOME");
 		if (!path)
 		{
-			ft_putendl_fd("cd: HOME not set", 2);
+			data->exit_status = 1;
+			ft_putendl_fd("cd: HOME not set", STDERR_FILENO);
 			return ;
 		}
 	}
@@ -79,7 +82,11 @@ void	cd_cmd(char **argv, t_data *data)
 	if (chdir(path) == -1)
 	{
 		free(pwd);
-		ft_putendl_fd(strerror(errno), 2);
+		data->exit_status = 1;
+		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+		ft_putstr_fd(path, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putendl_fd(strerror(errno), STDERR_FILENO);
 		return ;
 	}
 	set_pwd(data, pwd, "OLDPWD=");

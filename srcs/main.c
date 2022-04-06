@@ -6,24 +6,19 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 15:41:38 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/06 19:07:27 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	prompt(t_data *data, int exit_flag)
+char	*prompt(t_data *data)
 {
 	static char	*str = NULL;
 	char		*tmp;
 	int			len;
 	int			slash;
 
-	if (exit_flag)
-	{
-		free(str);
-		return ;
-	}
 	if (data)
 	{
 		if (str)
@@ -53,7 +48,7 @@ void	prompt(t_data *data, int exit_flag)
 		else
 			str = mod_strjoin(str, DEFAULT_PROMPT);
 	}
-	ft_putstr_fd(str, STDERR_FILENO);
+	return (str);
 }
 
 //Reads line indefinitely
@@ -62,10 +57,10 @@ static void	loop_prompt(t_data *data)
 	char	*line;
 	t_list	*c_list;
 
+	rl_outstream = stderr;
 	while (1)
 	{
-		prompt(data, 0);
-		line = readline(NULL);
+		line = readline(prompt(data));
 		if (line == NULL)
 			exit_shell(data->exit_status);
 		if (*line != 0)

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:07:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 19:33:17 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/06 18:29:37 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	ctrl_c()
 	// else
 	{
 		write(STDERR_FILENO, "\b \b\b \b\n", ft_strlen("\b \b\b \b\n"));
-		prompt(NULL, 0);
+		// prompt(NULL, 0);
 	}
 }
 

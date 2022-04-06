@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 22:27:15 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/05 02:52:20 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/06 18:18:39 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,30 +29,28 @@ static int	str_is_numeric(char *str)
 }
 
 // Exit the bash shell or shell script with a status of N.
-void	exit_cmd(char **argv)
+void	exit_cmd(char **argv, t_data *data)
 {
 	int	i;
 
+	data->exit_status = 0;
 	i = 0;
 	while (argv[i])
 		i++;
 	if (i == 1)
-	{
-		ft_putendl_fd("exit", 1);
-		exit(0);
-	}
+		exit_shell(0);
 	else if (i == 2 && str_is_numeric(argv[1]))
-	{
-		ft_putendl_fd("exit", 1);
-		exit(ft_atoi(argv[1]));
-	}
+		exit_shell((char)ft_atoi(argv[1]));
 	else if (i > 2 && str_is_numeric(argv[1]))
-		ft_putendl_fd("exit: too many arguments", 2);
+	{
+		data->exit_status = 1;
+		ft_putendl_fd("exit: too many arguments", STDERR_FILENO);
+	}
 	else
 	{
-		ft_putstr_fd("exit: ", 2);
-		ft_putstr_fd(argv[1], 2);
-		ft_putendl_fd(": numeric argument required", 2);
+		ft_putstr_fd("exit: ", STDERR_FILENO);
+		ft_putstr_fd(argv[1], STDERR_FILENO);
+		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
 		exit(255);
 	}
 }

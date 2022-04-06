@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:26:38 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/05 00:49:15 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/06 18:40:56 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	export_cmd(char **argv, t_data *data)
 	char *envar;
 	int i;
 
+	data->exit_status = 0;
 	if (!argv[1])
 	{
 		print_export(data->envs);
@@ -77,6 +78,7 @@ void	export_cmd(char **argv, t_data *data)
 	{
 		if (check_export_arg(argv[i]))
 		{
+			data->exit_status = 1;
 			ft_putstr_fd("export: '", 2);
 			ft_putstr_fd(argv[i], 2);
 			ft_putendl_fd("': not a valid identifier", 2);

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:38:16 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 13:34:16 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/06 18:30:05 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 //Frees prompt & history, prints "exit" and exits with `status`
 void	exit_shell(int status)
 {
-	prompt(NULL, 1);
-	// rl_clear_history();
 	ft_putstr_fd("exit\n", STDERR_FILENO);
+	free(prompt(NULL));
+	// rl_clear_history();
 	exit(status);
 }
 
@@ -26,7 +26,7 @@ void	exit_shell(int status)
 void	error(const char *error)
 {
 	perror(error);
-	prompt(NULL, 1);
+	free(prompt(NULL));
 	// rl_clear_history();
 	exit(errno);
 }

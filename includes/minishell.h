@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/06 17:02:45 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/06 18:30:10 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,9 @@ typedef struct s_data {
 	int		exit_status;
 }	t_data;
 
+//main.c
+char	*prompt(t_data *data);
+
 //utils.c
 void	exit_shell(int status);
 void	error(const char *error);
@@ -86,9 +89,6 @@ void	replace_env(t_data *data, char *envar, char *line);
 //init.c
 void	init_envs(t_data *data, char **envp);
 void	init_path_split(t_data *data);
-
-//main.c
-void	prompt(t_data *data, int exit_flag);
 
 //signals.c
 void	setup_signals(void);
@@ -123,26 +123,13 @@ int		exec_cmd(t_command *cmd, char **argv, t_data *data);
 char	check_syntax(char *line);
 char	*get_meta_arg(char *meta, int *meta_sub_size);
 
-//---BUILTINS
-//echo.c
-void	echo_cmd(char **argv);
-
-//exit.c
-void	exit_cmd(char **argv);
-
-//pwd.c
-void	pwd_cmd(void);
-
-//cd.c
+//builtins/
+void	echo_cmd(char **argv, t_data *data);
+void	exit_cmd(char **argv, t_data *data);
+void	pwd_cmd(t_data *data);
 void	cd_cmd(char **argv, t_data *data);
-
-//env.c
 void	env_cmd(t_data *data);
-
-//unset.c
 void	unset_cmd(char **argv, t_data *data);
-
-//export.c
 void	export_cmd(char **argv, t_data *data);
 
 #endif
