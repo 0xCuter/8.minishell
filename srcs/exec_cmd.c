@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 16:34:50 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/06 16:30:55 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,19 @@ static char	*find_command(char *cmd, char **path_split, char *allocated)
 		{
 			size = ft_strlen(*path_split) + ft_strlen(cmd) + 2;
 			cmd_path = malloc(size * sizeof(char));
-			ft_strlcpy(cmd_path, *path_split, size);
-			ft_strlcat(cmd_path, "/", size);
-			ft_strlcat(cmd_path, cmd, size);
-			if (stat(cmd_path, &s) == 0 && !(s.st_mode & S_IFDIR))
+			if (cmd_path != NULL)
 			{
-				*allocated = 1;
-				break ;
+				ft_strlcpy(cmd_path, *path_split, size);
+				ft_strlcat(cmd_path, "/", size);
+				ft_strlcat(cmd_path, cmd, size);
+				if (stat(cmd_path, &s) == 0 && !(s.st_mode & S_IFDIR))
+				{
+					*allocated = 1;
+					break ;
+				}
+				free(cmd_path);
+				cmd_path = NULL;
 			}
-			free(cmd_path);
-			cmd_path = NULL;
 			++path_split;
 		}
 	}
@@ -58,9 +61,9 @@ static char	*find_command(char *cmd, char **path_split, char *allocated)
 		if (*allocated)
 			free(cmd_path);
 		cmd_path = NULL;
-		ft_putstr_fd("-minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putendl_fd(": Permission denied", 2);
+		ft_putstr_fd("-minishell: ", STDERR_FILENO);
+		ft_putstr_fd(cmd, STDERR_FILENO);
+		ft_putendl_fd(": Permission denied", STDERR_FILENO);
 	}
 	return (cmd_path);
 }
@@ -70,15 +73,21 @@ static void	setup_pipes(t_command *cmd)
 {
 	if (cmd->stdin_piped)
 	{
-		dup2(cmd->stdin_pipe[0], STDIN_FILENO);
-		close(cmd->stdin_pipe[0]);
-		close(cmd->stdin_pipe[1]);
+		if (dup2(cmd->stdin_pipe[0], STDIN_FILENO) == -1)
+			error("DUP2");
+		if (close(cmd->stdin_pipe[0]) == -1)
+			error("CLOSE");
+		if (close(cmd->stdin_pipe[1]) == -1)
+			error("CLOSE");
 	}
 	if (cmd->stdout_piped)
 	{
-		dup2(cmd->stdout_pipe[1], STDOUT_FILENO);
-		close(cmd->stdout_pipe[0]);
-		close(cmd->stdout_pipe[1]);
+		if (dup2(cmd->stdout_pipe[1], STDOUT_FILENO) == -1)
+			error("DUP2");
+		if (close(cmd->stdout_pipe[0]) == -1)
+			error("CLOSE");
+		if (close(cmd->stdout_pipe[1]) == -1)
+			error("CLOSE");
 	}
 }
 
@@ -87,15 +96,19 @@ static void	setup_redirs(t_command *cmd)
 {
 	if (cmd->redir_stdin)
 	{
-		dup2(cmd->redir_stdin[0], STDIN_FILENO);
-		close(cmd->redir_stdin[0]);
-		free_null((void **)&cmd->redir_stdin);
+		if (dup2(cmd->redir_stdin[0], STDIN_FILENO) == -1)
+			error("DUP2");
+		if (close(cmd->redir_stdin[0]) == -1)
+			error("CLOSE");
+		free_null((void *)&cmd->redir_stdin);
 	}
 	if (cmd->redir_stdout)
 	{
-		dup2(*cmd->redir_stdout, STDOUT_FILENO);
-		close(*cmd->redir_stdout);
-		free_null((void **)&cmd->redir_stdout);
+		if (dup2(*cmd->redir_stdout, STDOUT_FILENO) == -1)
+			error("DUP2");
+		if (close(*cmd->redir_stdout) == -1)
+			error("CLOSE");
+		free_null((void *)&cmd->redir_stdout);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 14:49:25 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 12:19:53 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/06 10:18:02 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,24 @@ char	*ft_str_replace(char *s, int start, int end, char *fit)
 	char	*part;
 	char	*temp;
 
-	if (s == NULL)
+	if (s == NULL || fit == NULL)
 		return (NULL);
 	part = ft_substr(s, 0, start);
+	if (part == NULL)
+		return (NULL);
 	r = ft_strjoin(part, fit);
 	free(part);
+	if (r == NULL)
+		return (NULL);
 	part = ft_substr(s, end, ft_strlen(s));
+	if (part == NULL)
+		return (NULL);
 	temp = r;
 	r = ft_strjoin(r, part);
 	free(temp);
 	free(part);
+	if (r == NULL)
+		return (NULL);
 	return (r);
 }
 
@@ -41,7 +49,7 @@ char	*ft_str_chrset_ign_quotes(const char *s, const char *set)
 	char	*r;
 	char	*last_r;
 
-	if (*s == 0)
+	if (s == NULL || set == NULL || *s == 0)
 		return ((char *)s);
 	last_r = (char *)s + ft_strlen(s);
 	i = 0;
@@ -65,7 +73,7 @@ char	*ft_str_chrset(const char *s, const char *set)
 	char	*r;
 	char	*last_r;
 
-	if (*s == 0)
+	if (s == NULL || set == NULL || *s == 0)
 		return ((char *)s);
 	last_r = (char *)s + ft_strlen(s);
 	i = 0;
@@ -87,7 +95,7 @@ char	*ft_str_chrset_rev(const char *s, const char *set)
 	char	*r;
 	char	*last_r;
 
-	if (*s == 0)
+	if (s == NULL || set == NULL || *s == 0)
 		return ((char *)s + ft_strlen(s));
 	last_r = (char *)s;
 	i = 0;

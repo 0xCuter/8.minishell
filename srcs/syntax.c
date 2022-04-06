@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:01:49 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 11:47:45 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/06 14:50:40 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 static void	print_syntax_error(char *meta, char *line)
 {
 	ft_putstr_fd("-minishell: syntax error near unexpected token `", 2);
-	if (ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES)
+	if (meta && line
+		&& ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES)
 		!= line + ft_strlen(line))
 		write(2, ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES), 1);
 	else
@@ -26,7 +27,7 @@ static void	print_syntax_error(char *meta, char *line)
 
 //Returns a malloc'd string of the metacharacter's argument
 //Sets `meta_sub_size` to the length of the metacharacter's
-// argument (with whitespaces)
+// argument (with whitespaces) if not NULL
 //NULL if none
 char	*get_meta_arg(char *meta, int *meta_sub_size)
 {
@@ -35,10 +36,14 @@ char	*get_meta_arg(char *meta, int *meta_sub_size)
 
 	meta_sub = ft_substr(meta,
 			0, ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES) - meta);
+	if (meta_sub == NULL)
+		return (NULL);
 	if (meta_sub_size)
 		*meta_sub_size = ft_strlen(meta_sub);
 	meta_trimmed = ft_strtrim(meta_sub, METACHARS);
 	free(meta_sub);
+	if (meta_trimmed == NULL)
+		return (NULL);
 	if (*meta_trimmed == 0)
 	{
 		free(meta_trimmed);
@@ -73,6 +78,8 @@ char	check_syntax(char *line)
 	char	*last_meta;
 	char	*meta;
 
+	if (line == NULL)
+		return (1);
 	meta = ft_str_chrset(line, METACHARS_NO_WHITE_SPACES);
 	while (meta && meta != line + ft_strlen(line))
 	{

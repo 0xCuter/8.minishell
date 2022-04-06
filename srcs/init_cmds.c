@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 11:20:02 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/06 17:02:55 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ static void	add_arg(t_command *cmd, char *arg)
 	if (cmd->argv == NULL)
 	{
 		cmd->argv = ft_calloc(2, sizeof(char *));
+		if (cmd->argv == NULL)
+			return ;
 		cmd->argv[0] = arg;
 	}
 	else
@@ -38,6 +40,8 @@ static void	add_argv(t_command *cmd, char **cur_char, t_data *data)
 	arg_len = ft_str_chrset_ign_quotes(*cur_char,
 			METACHARS_NO_QUOTES) - (*cur_char);
 	arg = ft_substr(*cur_char, 0, arg_len);
+	if (arg == NULL)
+		return ;
 	*cur_char += arg_len;
 	i = 0;
 	while (arg && arg[i])
@@ -47,9 +51,9 @@ static void	add_argv(t_command *cmd, char **cur_char, t_data *data)
 		else
 			++i;
 	}
-	if (arg[0] == 0)
+	if (arg && arg[0] == 0)
 		free(arg);
-	else
+	else if (arg)
 		add_arg(cmd, arg);
 }
 
@@ -59,6 +63,8 @@ static t_command	*init_cmd(char **cur_char, t_data *data, char *stdout_pipe)
 	t_command	*cmd;
 
 	cmd = ft_calloc(1, sizeof(t_command));
+	if (cmd == NULL)
+		return (NULL);
 	while (**cur_char)
 	{
 		if ((*cur_char)[0] == '|')
@@ -71,9 +77,15 @@ static t_command	*init_cmd(char **cur_char, t_data *data, char *stdout_pipe)
 		else if ((*cur_char)[0] == '>' && (*cur_char)[1] == '>')
 			init_append(cmd, cur_char);
 		else if ((*cur_char)[0] == '<')
-			init_redir_stdin(cmd, cur_char);
+		{
+			if (init_redir_stdin(cmd, cur_char))
+				cmd->error_init = 1;
+		}
 		else if ((*cur_char)[0] == '>')
-			init_redir_stdout(cmd, cur_char);
+		{
+			if (init_redir_stdout(cmd, cur_char))
+				cmd->error_init = 1;
+		}
 		else
 			add_argv(cmd, cur_char, data);
 		if (*cur_char)
@@ -98,8 +110,13 @@ t_list	*init_cmds(char *line, t_data *data)
 	while (cur_char && *cur_char)
 	{
 		cmd = init_cmd(&cur_char, data, &stdout_pipe);
-		cmd->id = cmd_id++;
-		ft_lstadd_back(&c_list, ft_lstnew(cmd));
+		if (cmd != NULL)
+		{
+			cmd->id = cmd_id++;
+			void *new_cmd = ft_lstnew(cmd);
+			if (new_cmd != NULL)
+				ft_lstadd_back(&c_list, new_cmd);
+		}
 		if (cur_char)
 			cur_char = ft_str_chrset_rev(cur_char, METACHARS_WHITE_SPACES);
 	}

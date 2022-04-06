@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 16:04:11 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/06 17:02:45 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 
 typedef struct s_command {
 	int		id;
+	char	error_init;
 	char	**argv;
 	char	stdin_piped;
 	char	stdout_piped;
@@ -103,10 +104,11 @@ t_list	*init_cmds(char *line, t_data *data);
 char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char);
 void	init_heredoc(t_command *cmd, char **current_token);
 void	init_append(t_command *cmd, char **current_token);
-void	init_redir_stdin(t_command *cmd, char **current_token);
-void	init_redir_stdout(t_command *cmd, char **current_token);
+char	init_redir_stdin(t_command *cmd, char **current_token);
+char	init_redir_stdout(t_command *cmd, char **current_token);
 
 //exec.c
+void	clear_cmd(void *cmd_void);
 void	execute(t_data *data, char *line);
 void	exec_cmd_list(t_list *cmds, t_data *data);
 

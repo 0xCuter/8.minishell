@@ -6,14 +6,14 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 16:36:42 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/06 16:31:26 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//Frees the commands list
-static void	clear_cmd(void *cmd_void)
+//Frees a command structure
+void	clear_cmd(void *cmd_void)
 {
 	t_command	*cmd;
 
@@ -48,13 +48,15 @@ static void	init_pipes(t_command *cmd, int *pipes[2])
 		if (cmd->id % 2)
 		{
 			pipes[1] = malloc(2 * sizeof(int *));
-			pipe(pipes[1]);
+			if (pipe(pipes[1]) == -1)
+				error("PIPE");
 			cmd->stdout_pipe = pipes[1];
 		}
 		else
 		{
 			pipes[0] = malloc(2 * sizeof(int *));
-			pipe(pipes[0]);
+			if (pipe(pipes[0]) == -1)
+				error("PIPE");
 			cmd->stdout_pipe = pipes[0];
 		}
 	}
@@ -63,8 +65,10 @@ static void	init_pipes(t_command *cmd, int *pipes[2])
 //Closes the two pipe ends, frees it and sets it to `NULL`
 static void	close_pipe(int *pipe[2])
 {
-	close((*pipe)[0]);
-	close((*pipe)[1]);
+	if (close((*pipe)[0]) == -1)
+		error("CLOSE");
+	if (close((*pipe)[1]) == -1)
+		error("CLOSE");
 	free_null((void*)pipe);
 }
 
@@ -123,7 +127,7 @@ static int	exec_cmd_elem(t_command *cmd, t_data *data, int *pipes[2])
 			pid = -1;
 			exec_builtin(cmd, data, argv);
 		}
-		else
+		else if (cmd->error_init == 0)
 			pid = exec_cmd(cmd, argv, data);
 	}
 	return (pid);

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:35:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 15:37:13 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/06 10:15:41 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	*replace_vars(char *s, t_data *data)
 	int	i;
 
 	i = 0;
-	while (s[i])
+	while (s && s[i])
 	{
 		if (s[i] == '$' && in_quotes(s, s + i) != 2)
 			s = replace_var(s, data, &i);

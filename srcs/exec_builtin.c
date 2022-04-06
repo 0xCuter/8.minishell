@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:45 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/05 16:01:45 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/06 16:26:18 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,18 @@ static void	setup_pipes(t_command *cmd, int *old_stdin, int *old_stdout)
 	if (cmd->stdin_piped)
 	{
 		*old_stdin = dup(STDIN_FILENO);
-		dup2(cmd->stdin_pipe[0], STDIN_FILENO);
+		if (*old_stdin == -1)
+			error("DUP");
+		if (dup2(cmd->stdin_pipe[0], STDIN_FILENO) == -1)
+			error("DUP2");
 	}
 	if (cmd->stdout_piped)
 	{
 		*old_stdout = dup(STDOUT_FILENO);
-		dup2(cmd->stdout_pipe[1], STDOUT_FILENO);
+		if (*old_stdout == -1)
+			error("DUP");
+		if (dup2(cmd->stdout_pipe[1], STDOUT_FILENO) == -1)
+			error("DUP2");
 	}
 }
 
@@ -32,13 +38,17 @@ static void	reset_pipes(int old_stdin, int old_stdout)
 {
 	if (old_stdin != -2)
 	{
-		dup2(old_stdin, STDIN_FILENO);
-		close(old_stdin);
+		if (dup2(old_stdin, STDIN_FILENO) == -1)
+			error("DUP2");
+		if (close(old_stdin) == -1)
+			error("CLOSE");
 	}
 	if (old_stdout != -2)
 	{
-		dup2(old_stdout, STDOUT_FILENO);
-		close(old_stdout);
+		if (dup2(old_stdout, STDOUT_FILENO) == -1)
+			error("DUP2");
+		if (close(old_stdout) == -1)
+			error("CLOSE");
 	}
 }
 
@@ -70,16 +80,20 @@ static void	setup_redirs(t_command *cmd, int *old_stdin, int *old_stdout)
 	if (cmd->redir_stdin)
 	{
 		*old_stdin = dup(STDIN_FILENO);
-		dup2(cmd->redir_stdin[0], STDIN_FILENO);
-		close(cmd->redir_stdin[0]);
-		free_null((void **)&cmd->redir_stdin);
+		if (dup2(cmd->redir_stdin[0], STDIN_FILENO) == -1)
+			error("DUP2");
+		if (close(cmd->redir_stdin[0]) == -1)
+			error("CLOSE");
+		free_null((void *)&cmd->redir_stdin);
 	}
 	if (cmd->redir_stdout)
 	{
 		*old_stdout = dup(STDOUT_FILENO);
-		dup2(*cmd->redir_stdout, STDOUT_FILENO);
-		close(*cmd->redir_stdout);
-		free_null((void **)&cmd->redir_stdin);
+		if (dup2(*cmd->redir_stdout, STDOUT_FILENO) == -1)
+			error("DUP2");
+		if (close(*cmd->redir_stdout) == -1)
+			error("CLOSE");
+		free_null((void *)&cmd->redir_stdin);
 	}
 }
 
@@ -91,7 +105,7 @@ void	exec_builtin(t_command *cmd, t_data *data, char **argv)
 
 	setup_pipes(cmd, &old_stdin, &old_stdout);
 	setup_redirs(cmd, &old_stdin, &old_stdout);
-	if (argv)
+	if (argv && cmd->error_init == 0)
 	{
 		if (!ft_strcmp(argv[0], "echo"))
 			echo_cmd(argv);
