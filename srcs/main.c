@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 03:34:20 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/07 14:38:03 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-pid_t	g_pid;
+pid_t	*g_pids;
 
 char	*prompt(t_data *data)
 {
@@ -64,7 +64,10 @@ static void	loop_prompt(t_data *data)
 	{
 		line = readline(prompt(data));
 		if (line == NULL)
+		{
+			write(STDIN_FILENO, "\b\b  \b\b", 6);
 			exit_shell(data->exit_status);
+		}
 		if (*line != 0)
 			add_history(line);
 		line = replace_vars(line, data);
@@ -85,13 +88,13 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 1 || argv[1])
 	{
-		ft_putendl_fd("Minishell requires no arguments", 2);
-		exit(1);
+		ft_putendl_fd("Minishell requires no arguments", STDERR_FILENO);
+		exit(2);
 	}
 	data.exit_status = 0;
 	init_envs(&data, envp);
 	init_path_split(&data);
-	g_pid = 0;
+	g_pids = NULL;
 	setup_signals();
 	loop_prompt(&data);
 }

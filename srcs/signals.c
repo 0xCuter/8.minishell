@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:07:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 04:27:21 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/07 15:21:39 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,15 @@
 static void	ctrl_c(void)
 {
 	static int	flag = 0;
-	char	*line;
+	char		*line;
+	int			i;
 
-	if (g_pid)
+	if (g_pids)
 	{
 		write(STDERR_FILENO, "\n", 1);
-		kill(g_pid, SIGINT);
-		g_pid = 0;
+		i = 0;
+		while (g_pids[i])
+			kill(g_pids[i++], SIGINT);
 		flag = 0;
 	}
 	else
@@ -41,12 +43,14 @@ static void	ctrl_c(void)
 static void	ctrl_backslash(void)
 {
 	static int	flag = 0;
+	int			i;
 
-	if (g_pid)
+	if (g_pids)
 	{
 		write(STDERR_FILENO, "Quit: 3\n", ft_strlen("Quit: 3\n"));
-		kill(g_pid, SIGQUIT);
-		g_pid = 0;
+		i = 0;
+		while (g_pids[i])
+			kill(g_pids[i++], SIGINT);
 		flag = 0;
 	}
 	else
