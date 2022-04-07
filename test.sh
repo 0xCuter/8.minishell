@@ -1,6 +1,7 @@
 # Testser for minishell
 # Launch with ./test.sh [test_num] or ./test.sh 0 to execute all tests
 # Negative number tests are bound to fail with "KO"
+# Appends to "test.log" if KO
 
 case $1 in
    -2) TEST='echo "	a	$SHELL'
@@ -50,7 +51,23 @@ case $1 in
    ;;
    17) TEST="echo \$t\"     this 'test' \$SHELL\"LOL' another one \"\$SHELL\""
    ;;
-   *) echo Bad argument
+   18) TEST='echo test "" test $t test "$t" test'
+   ;;
+   19) TEST='echo $"HOME"'
+   ;;
+   20) TEST="echo $'HOME'"
+   ;;
+   21) TEST='echo $="HOME"'
+   ;;
+   22) TEST='echo $|"HOME"'
+   ;;
+   23) TEST='echo $|"HOME"'
+   ;;
+   24) TEST='echo -nTEST'
+   ;;
+   25) TEST='echo "$     a"'
+   ;;
+   26) TEST='echo $ a'
    ;;
 esac
 
@@ -71,6 +88,7 @@ then
    echo "-- OK --"
    echo -en "\e[0m"
 else
+   echo "$1 failed" >>test.log
    echo -en "\e[1;31m"
    echo "-- KO --"
    echo -en "\e[0m"

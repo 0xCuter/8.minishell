@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 10:36:21 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/06 18:40:18 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 17:45:25 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	unset_cmd(char **argv, t_data *data)
 		if (check_unset_arg(argv[i]))
 		{
 			data->exit_status = 1;
-			ft_putstr_fd("unset: '", STDERR_FILENO);
+			ft_putstr_fd("minishell: unset: '", STDERR_FILENO);
 			ft_putstr_fd(argv[i], STDERR_FILENO);
 			ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
 		}

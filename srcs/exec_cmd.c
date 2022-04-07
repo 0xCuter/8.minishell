@@ -6,20 +6,55 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 14:44:00 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 18:10:12 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static char	*find_cmd_in_path(char *cmd, t_data *data, char *allocated, struct stat *s)
+{
+	char 		*path_var;
+	char 		**path_split_start;
+	char 		**path_split;
+	char		*cmd_path;
+	int			size;
+
+	path_var = find_envar(data, "PATH");
+	if (path_var == NULL)
+		return (NULL);
+	path_split = ft_split(path_var, ':');
+	path_split_start = path_split;
+	while (path_split && *path_split)
+	{
+		size = ft_strlen(*path_split) + ft_strlen(cmd) + 2;
+		cmd_path = malloc(size * sizeof(char));
+		if (cmd_path != NULL)
+		{
+			ft_strlcpy(cmd_path, *path_split, size);
+			ft_strlcat(cmd_path, "/", size);
+			ft_strlcat(cmd_path, cmd, size);
+			if (stat(cmd_path, s) == 0 && !(s->st_mode & S_IFDIR))
+			{
+				*allocated = 1;
+				return (cmd_path);
+			}
+			free(cmd_path);
+			cmd_path = NULL;
+		}
+		++path_split;
+	}
+	free_tab(path_split_start);
+	return (NULL);
+}
+
 //Searches for the `cmd` path
 //Returns the command path if it is not a directory and
 // the user has the permission to execute it
 //Else returns `NULL`
-static char	*find_command(char *cmd, char **path_split, char *allocated, int *exit_status)
+static char	*find_cmd(char *cmd, t_data *data, char *allocated)
 {
 	struct stat	s;
-	int			size;
 	char		*cmd_path;
 
 	*allocated = 0;
@@ -28,38 +63,26 @@ static char	*find_command(char *cmd, char **path_split, char *allocated, int *ex
 	{
 		if (stat(cmd, &s) == 0 && !(s.st_mode & S_IFDIR))
 			cmd_path = cmd;
-	}
-	else if (path_split)
-	{
-		while (*path_split != NULL)
+		else if (!(s.st_mode & S_IXUSR))
 		{
-			size = ft_strlen(*path_split) + ft_strlen(cmd) + 2;
-			cmd_path = malloc(size * sizeof(char));
-			if (cmd_path != NULL)
-			{
-				ft_strlcpy(cmd_path, *path_split, size);
-				ft_strlcat(cmd_path, "/", size);
-				ft_strlcat(cmd_path, cmd, size);
-				if (stat(cmd_path, &s) == 0 && !(s.st_mode & S_IFDIR))
-				{
-					*allocated = 1;
-					break ;
-				}
-				free(cmd_path);
-				cmd_path = NULL;
-			}
-			++path_split;
+			data->exit_status = 127;
+			ft_putstr_fd("-minishell: ", STDERR_FILENO);
+			ft_putstr_fd(cmd, STDERR_FILENO);
+			ft_putendl_fd(": No such file or directory", STDERR_FILENO);
+			return (NULL);
 		}
 	}
+	else
+		cmd_path = find_cmd_in_path(cmd, data, allocated, &s);
 	if (cmd_path == NULL)
 	{
-		*exit_status = 127;
+		data->exit_status = 127;
 		ft_putstr_fd(cmd, STDERR_FILENO);
 		ft_putendl_fd(": command not found", STDERR_FILENO);
 	}
 	else if (!(s.st_mode & S_IXUSR))
 	{
-		*exit_status = 126;
+		data->exit_status = 126;
 		if (*allocated)
 			free(cmd_path);
 		cmd_path = NULL;
@@ -123,7 +146,7 @@ pid_t	exec_cmd(t_command *cmd, char **argv, t_data *data)
 	char	*cmd_path;
 
 	pid = -1;
-	cmd_path = find_command(argv[0], data->path_split, &cmd_path_allocated, &data->exit_status);
+	cmd_path = find_cmd(argv[0], data, &cmd_path_allocated);
 	if (cmd_path)
 	{
 		pid = fork();

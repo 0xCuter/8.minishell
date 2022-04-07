@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 22:27:15 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/06 18:18:39 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 17:44:39 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,13 @@ void	exit_cmd(char **argv, t_data *data)
 	else if (i > 2 && str_is_numeric(argv[1]))
 	{
 		data->exit_status = 1;
-		ft_putendl_fd("exit: too many arguments", STDERR_FILENO);
+		ft_putendl_fd("exit", STDERR_FILENO);
+		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
 	}
 	else
 	{
-		ft_putstr_fd("exit: ", STDERR_FILENO);
+		ft_putendl_fd("exit", STDERR_FILENO);
+		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(argv[1], STDERR_FILENO);
 		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
 		exit(255);

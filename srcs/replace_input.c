@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:35:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/06 10:15:41 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 17:27:14 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ static char	*replace_var_special(char *s, t_data *data, int *i, char *var_name_e
 		s = ft_str_replace(s, *i, var_name_end - s + 1, status_str);
 		free(status_str);
 	}
+	else if (*var_name_end == '\'' || *var_name_end == '"')
+		s = ft_str_replace(s, *i, var_name_end - s, "");
 	else
 		s = ft_str_replace(s, *i, var_name_end - s, "$");
 	free(temp);

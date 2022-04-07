@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:01:49 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 10:31:02 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 17:15:45 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,46 +25,65 @@ static void	print_syntax_error(char *meta, char *line)
 	write(2, "'\n", 2);
 }
 
+static char	*get_met_arg_with_quotes(char *meta, int *meta_sub_size, t_data *data)
+{
+	char	*meta_sub;
+	char	*end_quote;
+	int		i;
+
+	i = 0;
+	end_quote = ft_strchr(meta + 1, *meta);
+	if (end_quote == NULL)
+		return (NULL);
+	meta_sub = ft_substr(meta, 0, end_quote - meta + 1);
+	replace_quotes(&meta_sub, data, &i);
+	*meta_sub_size += i + 2;
+	return (meta_sub);
+}
+
 //Returns a malloc'd string of the metacharacter's argument
 //Sets `meta_sub_size` to the length of the metacharacter's argument (with whitespaces)
 //NULL if none
-char	*get_meta_arg(char *meta, int *meta_sub_size)
+char	*get_meta_arg(char *meta, int *meta_sub_size, t_data *data)
 {
 	char	*meta_sub;
-	char	*meta_trimmed;
-	char	*first_whitespaces;
+	char	*first_char;
 
 	*meta_sub_size = 0;
-	first_whitespaces = ft_str_chrset_rev(meta, METACHARS);
-	if (*first_whitespaces == 0)
+	first_char = ft_str_chrset_rev(meta + 1, METACHARS_WHITE_SPACES);
+	if (*first_char == 0)
 		return (NULL);
-	*meta_sub_size += first_whitespaces - meta;
-	meta = first_whitespaces;
-	meta_sub = ft_substr(meta,
-			0, ft_str_chrset(meta + 1, METACHARS) - meta);
-	if (meta_sub == NULL)
-		return (NULL);
-	*meta_sub_size += ft_strlen(meta_sub);
-	meta_trimmed = ft_strtrim(meta_sub, METACHARS);
-	free(meta_sub);
-	if (meta_trimmed == NULL)
-		return (NULL);
-	if (*meta_trimmed == 0)
+	*meta_sub_size += first_char - meta;
+	meta = first_char;
+	if (*meta == '\'' || *meta == '"')
 	{
-		free(meta_trimmed);
+		meta_sub = get_met_arg_with_quotes(meta, meta_sub_size, data);
+		if (meta_sub == NULL)
+			return (NULL);
+	}
+	else
+	{
+		meta_sub = ft_substr(meta, 0, ft_str_chrset(meta + 1, METACHARS) - meta);
+		if (meta_sub == NULL)
+			return (NULL);
+		*meta_sub_size += ft_strlen(meta_sub);
+	}
+	if (*meta_sub == 0)
+	{
+		free(meta_sub);
 		return (NULL);
 	}
-	return (meta_trimmed);
+	return (meta_sub);
 }
 
 //Returns 1 if the metacharacter has no argument and writes error
 //Else 0
-static char	meta_no_arg(char *line, char **meta)
+static char	meta_no_arg(char *line, char **meta, t_data *data)
 {
 	char	*meta_arg;
 	int		meta_arg_size;
 
-	meta_arg = get_meta_arg(*meta, &meta_arg_size);
+	meta_arg = get_meta_arg(*meta, &meta_arg_size, data);
 	if (meta_arg == NULL)
 	{
 		free(meta_arg);
@@ -78,13 +97,16 @@ static char	meta_no_arg(char *line, char **meta)
 
 //Checks if the line has a correct syntax
 //Returns 1 if it finds one, else 0
-char	check_syntax(char *line)
+char	check_syntax(char *line, t_data *data)
 {
 	char	*last_meta;
 	char	*meta;
 
 	if (line == NULL)
+	{
+		data->exit_status = 258;
 		return (1);
+	}
 	meta = ft_str_chrset(line, METACHARS_NO_WHITE_SPACES);
 	while (meta && meta != line + ft_strlen(line))
 	{
@@ -105,8 +127,11 @@ char	check_syntax(char *line)
 		}
 		else
 		{
-			if (meta_no_arg(line, &meta))
+			if (meta_no_arg(line, &meta, data))
+			{
+				data->exit_status = 258;
 				return (1);
+			}
 		}
 	}
 	return (0);

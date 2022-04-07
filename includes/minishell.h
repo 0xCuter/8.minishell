@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 13:46:43 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 17:56:02 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ typedef struct s_command {
 
 typedef struct s_data {
 	char	**envs;
-	char	**path_split;
 	char	*line;
 	int		exit_status;
 }	t_data;
@@ -104,10 +103,10 @@ t_list	*init_cmds(char *line, t_data *data);
 
 //init_redirections.c
 char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char);
-void	init_heredoc(t_command *cmd, char **current_token);
-void	init_append(t_command *cmd, char **current_token);
-char	init_redir_stdin(t_command *cmd, char **current_token);
-char	init_redir_stdout(t_command *cmd, char **current_token);
+void	init_heredoc(t_command *cmd, char **current_token, t_data *data);
+void	init_append(t_command *cmd, char **current_token, t_data *data);
+char	init_redir_stdin(t_command *cmd, char **current_token, t_data *data);
+char	init_redir_stdout(t_command *cmd, char **current_token, t_data *data);
 
 //exec.c
 void	clear_cmd(void *cmd_void);
@@ -122,8 +121,8 @@ void	exec_builtin(t_command *cmd, t_data *data, char **argv);
 int		exec_cmd(t_command *cmd, char **argv, t_data *data);
 
 //syntax.c
-char	check_syntax(char *line);
-char	*get_meta_arg(char *meta, int *meta_sub_size);
+char	check_syntax(char *line, t_data *data);
+char	*get_meta_arg(char *meta, int *meta_sub_size, t_data *data);
 
 //builtins/
 void	echo_cmd(char **argv, t_data *data);

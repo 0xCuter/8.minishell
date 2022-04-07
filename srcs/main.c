@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 14:38:03 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 17:56:34 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static void	loop_prompt(t_data *data)
 		if (*line != 0)
 			add_history(line);
 		line = replace_vars(line, data);
-		if (check_syntax(line) == 0)
+		if (check_syntax(line, data) == 0)
 		{
 			c_list = init_cmds(line, data);
 			free(line);
@@ -93,7 +93,6 @@ int	main(int argc, char **argv, char **envp)
 	}
 	data.exit_status = 0;
 	init_envs(&data, envp);
-	init_path_split(&data);
 	g_pids = NULL;
 	setup_signals();
 	loop_prompt(&data);

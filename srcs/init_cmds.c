@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 15:45:07 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 16:05:14 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,17 @@ static t_command	*init_cmd(char **cur_char, t_data *data, char *stdout_pipe)
 				break ;
 		}
 		else if ((*cur_char)[0] == '<' && (*cur_char)[1] == '<')
-			init_heredoc(cmd, cur_char);
+			init_heredoc(cmd, cur_char, data);
 		else if ((*cur_char)[0] == '>' && (*cur_char)[1] == '>')
-			init_append(cmd, cur_char);
+			init_append(cmd, cur_char, data);
 		else if ((*cur_char)[0] == '<')
 		{
-			if (init_redir_stdin(cmd, cur_char))
+			if (init_redir_stdin(cmd, cur_char, data))
 				cmd->error_init = 1;
 		}
 		else if ((*cur_char)[0] == '>')
 		{
-			if (init_redir_stdout(cmd, cur_char))
+			if (init_redir_stdout(cmd, cur_char, data))
 				cmd->error_init = 1;
 		}
 		else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 22:09:02 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/07 01:03:07 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/07 17:37:13 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	cd_cmd(char **argv, t_data *data)
 		if (!path)
 		{
 			data->exit_status = 1;
-			ft_putendl_fd("cd: HOME not set", STDERR_FILENO);
+			ft_putendl_fd("minishell: cd: HOME not set", STDERR_FILENO);
 			return ;
 		}
 	}
