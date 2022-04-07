@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 11:29:16 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 15:45:07 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,11 @@ static void	add_argv(t_command *cmd, char **cur_char, t_data *data)
 		return ;
 	*cur_char += arg_len;
 	i = 0;
+	if (arg && arg[0] == 0)
+	{
+		free(arg);
+		return ;
+	}
 	while (arg && arg[i])
 	{
 		if (arg[i] == '\'' || arg[i] == '"')
@@ -51,9 +56,7 @@ static void	add_argv(t_command *cmd, char **cur_char, t_data *data)
 		else
 			++i;
 	}
-	if (arg && arg[0] == 0)
-		free(arg);
-	else if (arg)
+	if (arg)
 		add_arg(cmd, arg);
 }
 
