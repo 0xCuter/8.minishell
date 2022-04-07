@@ -56,7 +56,7 @@ esac
 
 echo "Test: $1"
 echo "Leak result:"
-echo $TEST | valgrind --leak-check=full ./minishell 2>&1 | grep "lost:"
+echo $TEST | valgrind --leak-check=full --track-fds=yes ./minishell 2>&1 | grep "lost:\|FILE DESCRIPTORS:"
 echo
 MINI_RES=`echo $TEST | ./minishell 2>&-`
 echo "Minishell result:"
