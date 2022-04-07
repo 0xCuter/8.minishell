@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:45 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/06 17:46:54 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 10:55:16 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 //Sets the correct pipes
 static void	setup_pipes(t_command *cmd, int *old_stdin, int *old_stdout)
 {
-	if (cmd->stdin_piped)
+	if (cmd->stdin_piped && cmd->redir_stdin == 0)
 	{
 		*old_stdin = dup(STDIN_FILENO);
 		if (*old_stdin == -1)
@@ -23,7 +23,7 @@ static void	setup_pipes(t_command *cmd, int *old_stdin, int *old_stdout)
 		if (dup2(cmd->stdin_pipe[0], STDIN_FILENO) == -1)
 			error("DUP2");
 	}
-	if (cmd->stdout_piped)
+	if (cmd->stdout_piped && cmd->redir_stdout == 0)
 	{
 		*old_stdout = dup(STDOUT_FILENO);
 		if (*old_stdout == -1)

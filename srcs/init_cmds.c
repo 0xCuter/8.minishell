@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/06 17:02:55 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 11:01:41 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,6 @@ t_list	*init_cmds(char *line, t_data *data)
 			if (new_cmd != NULL)
 				ft_lstadd_back(&c_list, new_cmd);
 		}
-		if (cur_char)
-			cur_char = ft_str_chrset_rev(cur_char, METACHARS_WHITE_SPACES);
 	}
 	return (c_list);
 }

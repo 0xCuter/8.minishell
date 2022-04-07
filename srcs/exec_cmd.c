@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/06 16:30:55 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 09:56:12 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,9 @@ static void	setup_redirs(t_command *cmd)
 {
 	if (cmd->redir_stdin)
 	{
-		if (dup2(cmd->redir_stdin[0], STDIN_FILENO) == -1)
+		if (dup2(*cmd->redir_stdin, STDIN_FILENO) == -1)
 			error("DUP2");
-		if (close(cmd->redir_stdin[0]) == -1)
+		if (close(*cmd->redir_stdin) == -1)
 			error("CLOSE");
 		free_null((void *)&cmd->redir_stdin);
 	}

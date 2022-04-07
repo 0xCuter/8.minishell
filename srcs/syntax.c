@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:01:49 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/06 14:50:40 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 10:31:02 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,25 @@ static void	print_syntax_error(char *meta, char *line)
 }
 
 //Returns a malloc'd string of the metacharacter's argument
-//Sets `meta_sub_size` to the length of the metacharacter's
-// argument (with whitespaces) if not NULL
+//Sets `meta_sub_size` to the length of the metacharacter's argument (with whitespaces)
 //NULL if none
 char	*get_meta_arg(char *meta, int *meta_sub_size)
 {
 	char	*meta_sub;
 	char	*meta_trimmed;
+	char	*first_whitespaces;
 
+	*meta_sub_size = 0;
+	first_whitespaces = ft_str_chrset_rev(meta, METACHARS);
+	if (*first_whitespaces == 0)
+		return (NULL);
+	*meta_sub_size += first_whitespaces - meta;
+	meta = first_whitespaces;
 	meta_sub = ft_substr(meta,
-			0, ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES) - meta);
+			0, ft_str_chrset(meta + 1, METACHARS) - meta);
 	if (meta_sub == NULL)
 		return (NULL);
-	if (meta_sub_size)
-		*meta_sub_size = ft_strlen(meta_sub);
+	*meta_sub_size += ft_strlen(meta_sub);
 	meta_trimmed = ft_strtrim(meta_sub, METACHARS);
 	free(meta_sub);
 	if (meta_trimmed == NULL)
@@ -52,14 +57,14 @@ char	*get_meta_arg(char *meta, int *meta_sub_size)
 	return (meta_trimmed);
 }
 
-//Returns 1 if the metacharacter has no argument
+//Returns 1 if the metacharacter has no argument and writes error
 //Else 0
-static char	meta_no_arg(char *line, char **last_meta, char **meta)
+static char	meta_no_arg(char *line, char **meta)
 {
 	char	*meta_arg;
+	int		meta_arg_size;
 
-	*last_meta = *meta;
-	meta_arg = get_meta_arg(*meta, NULL);
+	meta_arg = get_meta_arg(*meta, &meta_arg_size);
 	if (meta_arg == NULL)
 	{
 		free(meta_arg);
@@ -67,7 +72,7 @@ static char	meta_no_arg(char *line, char **last_meta, char **meta)
 		return (1);
 	}
 	free(meta_arg);
-	*meta = ft_str_chrset(*meta + 1, METACHARS_NO_WHITE_SPACES);
+	*meta += meta_arg_size;
 	return (0);
 }
 
@@ -100,7 +105,7 @@ char	check_syntax(char *line)
 		}
 		else
 		{
-			if (meta_no_arg(line, &last_meta, &meta))
+			if (meta_no_arg(line, &meta))
 				return (1);
 		}
 	}

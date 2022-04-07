@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:03:34 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/06 17:47:07 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 10:05:22 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ void	echo_cmd(char **argv, t_data *data)
 	}
 	while (argv[i])
 	{
-		printf("%s", argv[i]);
+		ft_putstr_fd(argv[i], STDOUT_FILENO);
 		i++;
 		if (argv[i])
-			printf(" ");
+			ft_putstr_fd(" ", STDOUT_FILENO);
 	}
 	if (!n_flag)
-		printf("\n");
+		ft_putstr_fd("\n", STDOUT_FILENO);
 }

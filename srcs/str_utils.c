@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 14:49:25 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/06 10:18:02 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 10:17:14 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,26 +87,22 @@ char	*ft_str_chrset(const char *s, const char *set)
 	return (last_r);
 }
 
-//Returns index of the first appearing char in `s` that is *not* from `set`
+//Returns the index of the first appearing char in `s` that is *not* from `set`
 //End of `s` if none
 char	*ft_str_chrset_rev(const char *s, const char *set)
 {
-	int		i;
-	char	*r;
-	char	*last_r;
+	size_t	i;
 
 	if (s == NULL || set == NULL || *s == 0)
 		return ((char *)s + ft_strlen(s));
-	last_r = (char *)s;
 	i = 0;
-	while (i < (int)ft_strlen(set))
+	while (s[i])
 	{
-		r = ft_strchr(s, set[i]);
-		if (r && r <= last_r)
-			last_r = r + 1;
+		if (ft_strchr(set, s[i]) == NULL)
+			return ((char *)s + i);
 		++i;
 	}
-	return (last_r);
+	return ((char *)s + i);
 }
 
 //Modified strjoin for `prompt` that returns a copy of `s2` if `s1` is NULL.
