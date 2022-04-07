@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/06 19:07:27 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 03:34:20 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+pid_t	g_pid;
 
 char	*prompt(t_data *data)
 {
@@ -89,6 +91,7 @@ int	main(int argc, char **argv, char **envp)
 	data.exit_status = 0;
 	init_envs(&data, envp);
 	init_path_split(&data);
+	g_pid = 0;
 	setup_signals();
 	loop_prompt(&data);
 }

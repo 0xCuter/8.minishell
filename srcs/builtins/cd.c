@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 22:09:02 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/06 19:32:54 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 01:03:07 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,6 @@ void	cd_cmd(char **argv, t_data *data)
 
 	data->exit_status = 0;
 	path = NULL;
-	if (argv && argv[1] && argv[2])
-	{
-		data->exit_status = 2;
-		ft_putendl_fd("cd: too many arguments", STDERR_FILENO);
-		return ;
-	}
 	if (!argv[1] || (!ft_strcmp(argv[1], "~")) || (!ft_strcmp(argv[1], "--")))
 	{
 		path = get_env(data, "HOME");
