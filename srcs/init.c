@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:01:52 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/05 12:52:25 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/06 21:55:37 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,24 @@ static void	init_envs_default(t_data *data)
 	if (data->envs[0] == NULL)
 		error("MALLOC");
 	data->envs[1] = NULL;
+}
+
+static void	increase_shlvl(t_data *data)
+{
+	char	*shlvl;
+	char	*str;
+	char	*join;
+	int		lvl;
+
+	shlvl = get_env(data, "SHLVL");
+	if (!shlvl)
+		return ;
+	lvl = ft_atoi(shlvl) + 1;
+	str = ft_itoa(lvl);
+	join = ft_strjoin("SHLVL=", str);
+	free(str);
+	replace_env(data, shlvl - 6, join);
+	free(join);
 }
 
 //If `envp` is not empty, inits `data->envs` with its data
@@ -49,6 +67,7 @@ void	init_envs(t_data *data, char **envp)
 		i++;
 	}
 	data->envs[i] = NULL;
+	increase_shlvl(data);
 }
 
 //Inits the `path_split` in `data`

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/06 16:30:55 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 03:49:08 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,18 +116,18 @@ static void	setup_redirs(t_command *cmd)
 //Returns the child PID
 int	exec_cmd(t_command *cmd, char **argv, t_data *data)
 {
-	int		pid;
+	// int		pid;
 	char	cmd_path_allocated;
 	char	*cmd_path;
 
-	pid = -1;
+	// pid = -1;
 	cmd_path = find_command(argv[0], data->path_split, &cmd_path_allocated);
 	if (cmd_path)
 	{
-		pid = fork();
-		if (pid == -1)
+		g_pid = fork();
+		if (g_pid == -1)
 			error("FORK");
-		if (pid == 0)
+		if (g_pid == 0)
 		{
 			setup_pipes(cmd);
 			setup_redirs(cmd);
@@ -137,5 +137,5 @@ int	exec_cmd(t_command *cmd, char **argv, t_data *data)
 		if (cmd_path_allocated)
 			free(cmd_path);
 	}
-	return (pid);
+	return (g_pid);
 }
