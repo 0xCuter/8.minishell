@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:07:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 18:08:06 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/07 22:15:58 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,56 +14,7 @@
 
 // If a child process exists, redirects the signal to the child
 // Else prints a new line
-static void	ctrl_c(void)
-{
-	static int	flag = 0;
-	char		*line;
-	int			i;
-
-	if (g_pids)
-	{
-		write(STDERR_FILENO, "\n", 1);
-		i = 0;
-		while (g_pids[i])
-			kill(g_pids[i++], SIGINT);
-		flag = 0;
-	}
-	else
-	{
-		if (flag)
-			write(STDERR_FILENO, "\b\b  \b\b\n", ft_strlen("\b\b  \b\b\n"));
-		else
-			write(STDERR_FILENO, "\n", 1);
-		flag = 1;
-		line = prompt(NULL);
-		write(STDERR_FILENO, line, ft_strlen(line));
-	}
-}
-
-static void	ctrl_backslash(void)
-{
-	static int	flag = 0;
-	int			i;
-
-	if (g_pids)
-	{
-		write(STDERR_FILENO, "Quit: 3\n", ft_strlen("Quit: 3\n"));
-		i = 0;
-		while (g_pids[i])
-			kill(g_pids[i++], SIGINT);
-		flag = 0;
-	}
-	else
-	{
-		if (flag)
-			write(STDERR_FILENO, "\b\b  \b\b", ft_strlen("\b\b  \b\b"));
-		flag = 1;
-	}
-}
-
-// If a child process exists, redirects the signal to the child
-// Else prints a new line
-// static void	signal_handler(int sig)
+// static void	ctrl_c(void)
 // {
 // 	static int	flag = 0;
 // 	char		*line;
@@ -71,15 +22,13 @@ static void	ctrl_backslash(void)
 
 // 	if (g_pids)
 // 	{
-// 		if (sig == SIGQUIT)
-// 			write(STDERR_FILENO, "Quit: 3", ft_strlen("Quit: 3"));
 // 		write(STDERR_FILENO, "\n", 1);
 // 		i = 0;
 // 		while (g_pids[i])
 // 			kill(g_pids[i++], SIGINT);
 // 		flag = 0;
 // 	}
-// 	else if (sig == SIGINT)
+// 	else
 // 	{
 // 		if (flag)
 // 			write(STDERR_FILENO, "\b\b  \b\b\n", ft_strlen("\b\b  \b\b\n"));
@@ -89,7 +38,22 @@ static void	ctrl_backslash(void)
 // 		line = prompt(NULL);
 // 		write(STDERR_FILENO, line, ft_strlen(line));
 // 	}
-// 	else if (sig == SIGQUIT)
+// }
+
+// static void	ctrl_backslash(void)
+// {
+// 	static int	flag = 0;
+// 	int			i;
+
+// 	if (g_pids)
+// 	{
+// 		write(STDERR_FILENO, "Quit: 3\n", ft_strlen("Quit: 3\n"));
+// 		i = 0;
+// 		while (g_pids[i])
+// 			kill(g_pids[i++], SIGINT);
+// 		flag = 0;
+// 	}
+// 	else
 // 	{
 // 		if (flag)
 // 			write(STDERR_FILENO, "\b\b  \b\b", ft_strlen("\b\b  \b\b"));
@@ -97,13 +61,49 @@ static void	ctrl_backslash(void)
 // 	}
 // }
 
+// If a child process exists, redirects the signal to the child
+// Else prints a new line
+static void	signal_handler(int sig)
+{
+	static int	flag = 0;
+	char		*line;
+	int			i;
+
+	if (g_pids)
+	{
+		if (sig == SIGQUIT)
+			write(STDERR_FILENO, "Quit: 3", ft_strlen("Quit: 3"));
+		write(STDERR_FILENO, "\n", 1);
+		i = 0;
+		while (g_pids[i])
+			kill(g_pids[i++], SIGINT);
+		flag = 0;
+	}
+	else if (sig == SIGINT)
+	{
+		if (flag)
+			write(STDERR_FILENO, "\b\b  \b\b\n", ft_strlen("\b\b  \b\b\n"));
+		else
+			write(STDERR_FILENO, "\n", 1);
+		flag = 1;
+		line = prompt(NULL);
+		write(STDERR_FILENO, line, ft_strlen(line));
+	}
+	else if (sig == SIGQUIT)
+	{
+		if (flag)
+			write(STDERR_FILENO, "\b\b  \b\b", ft_strlen("\b\b  \b\b"));
+		flag = 1;
+	}
+}
+
 void	setup_signals(void)
 {
-	signal(SIGINT, (void *)ctrl_c);
-	signal(SIGQUIT, (void *)ctrl_backslash);
+	// signal(SIGINT, (void *)ctrl_c);
+	// signal(SIGQUIT, (void *)ctrl_backslash);
 
-	// signal(SIGINT, signal_handler);
-	// signal(SIGQUIT, signal_handler);
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, signal_handler);
 
 
 	// struct sigaction	c;
