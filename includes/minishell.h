@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 17:56:02 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 18:45:09 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_data {
 	char	**envs;
 	char	*line;
 	int		exit_status;
+	int		cmd_count;
 }	t_data;
 
 extern pid_t	*g_pids;

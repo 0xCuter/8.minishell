@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 16:05:14 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 18:45:01 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,11 +111,13 @@ t_list	*init_cmds(char *line, t_data *data)
 	stdout_pipe = 1;
 	cmd_id = 0;
 	cur_char = ft_str_chrset_rev(line, METACHARS);
+	data->cmd_count = 0;
 	while (cur_char && *cur_char)
 	{
 		cmd = init_cmd(&cur_char, data, &stdout_pipe);
 		if (cmd != NULL)
 		{
+			++data->cmd_count;
 			cmd->id = cmd_id++;
 			new_cmd = ft_lstnew(cmd);
 			if (new_cmd != NULL)

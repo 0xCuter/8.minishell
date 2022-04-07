@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:45 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 10:55:16 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 18:45:23 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	exec_builtin(t_command *cmd, t_data *data, char **argv)
 	{
 		if (!ft_strcmp(argv[0], "echo"))
 			echo_cmd(argv, data);
-		else if (!ft_strcmp(argv[0], "exit"))
+		else if (!ft_strcmp(argv[0], "exit") && data->cmd_count == 1)
 			exit_cmd(argv, data);
 		else if (!ft_strcmp(argv[0], "pwd"))
 			pwd_cmd(data);
