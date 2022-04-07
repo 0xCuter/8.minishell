@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 11:01:41 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/07 11:29:16 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ t_list	*init_cmds(char *line, t_data *data)
 	t_list		*c_list;
 	char		stdout_pipe;
 	int			cmd_id;
+	void		*new_cmd;
 
 	c_list = NULL;
 	stdout_pipe = 1;
@@ -113,7 +114,7 @@ t_list	*init_cmds(char *line, t_data *data)
 		if (cmd != NULL)
 		{
 			cmd->id = cmd_id++;
-			void *new_cmd = ft_lstnew(cmd);
+			new_cmd = ft_lstnew(cmd);
 			if (new_cmd != NULL)
 				ft_lstadd_back(&c_list, new_cmd);
 		}
