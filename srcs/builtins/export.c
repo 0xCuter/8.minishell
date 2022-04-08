@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:26:38 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/08 13:25:06 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 14:15:29 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void	print_export(char **envs)
 		ft_putchar_fd('\n', 1);
 		i++;
 	}
-	free(export);
+	free_tab(export);
 }
 
 void	export_cmd(char **argv, t_data *data)
