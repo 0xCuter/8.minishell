@@ -6,11 +6,24 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:03:34 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/08 16:53:19 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/08 19:19:51 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	print_echo(char **argv, int i, int n_flag)
+{
+	while (argv[i])
+	{
+		ft_putstr_fd(argv[i], STDOUT_FILENO);
+		i++;
+		if (argv[i])
+			ft_putstr_fd(" ", STDOUT_FILENO);
+	}
+	if (!n_flag)
+		ft_putstr_fd("\n", STDOUT_FILENO);
+}
 
 // Write arguments to the standard output separated by
 // a single space character and followed by a newline.
@@ -37,13 +50,5 @@ void	echo_cmd(char **argv, t_data *data)
 		else
 			break ;
 	}
-	while (argv[i])
-	{
-		ft_putstr_fd(argv[i], STDOUT_FILENO);
-		i++;
-		if (argv[i])
-			ft_putstr_fd(" ", STDOUT_FILENO);
-	}
-	if (!n_flag)
-		ft_putstr_fd("\n", STDOUT_FILENO);
+	print_echo(argv, i, n_flag);
 }
