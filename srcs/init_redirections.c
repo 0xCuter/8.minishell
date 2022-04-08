@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 14:35:46 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 13:03:53 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 18:13:30 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ char	init_redir_stdin(t_command *cmd, char **cur_char, t_data *data)
 	int		meta_length;
 	int		r;
 
+	*cur_char += 1;
 	r = 0;
 	meta_arg = get_meta_arg(*cur_char, &meta_length, data);
 	if (meta_arg == NULL)
@@ -115,6 +116,7 @@ char	init_redir_stdout(t_command *cmd, char **cur_char, t_data *data)
 	int		meta_length;
 	int		r;
 
+	*cur_char += 1;
 	r = 0;
 	meta_arg = get_meta_arg(*cur_char, &meta_length, data);
 	if (meta_arg == NULL)

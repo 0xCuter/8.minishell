@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 11:59:16 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 16:12:20 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,7 @@ static char	*find_cmd(char *cmd, t_data *data, char *allocated)
 	cmd_path = NULL;
 	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
 	{
-		if (stat(cmd, &s) == 0 && !(s.st_mode & S_IFDIR))
-			cmd_path = cmd;
-		else if (!(s.st_mode & S_IXUSR))
+		if (stat(cmd, &s))
 		{
 			data->exit_status = 127;
 			ft_putstr_fd("-minishell: ", STDERR_FILENO);
@@ -74,6 +72,16 @@ static char	*find_cmd(char *cmd, t_data *data, char *allocated)
 			ft_putendl_fd(": No such file or directory", STDERR_FILENO);
 			return (NULL);
 		}
+		else if (s.st_mode & S_IFDIR)
+		{
+			data->exit_status = 126;
+			ft_putstr_fd("-minishell: ", STDERR_FILENO);
+			ft_putstr_fd(cmd, STDERR_FILENO);
+			ft_putendl_fd(": is a directory", STDERR_FILENO);
+			return (NULL);
+		}
+		else
+			cmd_path = cmd;
 	}
 	else
 		cmd_path = find_cmd_in_path(cmd, data, allocated, &s);

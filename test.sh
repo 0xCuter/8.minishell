@@ -10,7 +10,7 @@ case $1 in
    ;;
    0) make DEBUG=1 && clear
       i=1
-      while [ $i -lt 17 ]
+      while [ $i -lt 26 ]
       do
          ./test.sh $i
          echo
@@ -49,7 +49,7 @@ case $1 in
    ;;
    16) TEST='echo YOLO$THISISALONGVAR"+astring here yep $SHELL $e$SHELL"$LANG'
    ;;
-   17) TEST="echo \$t\"     this 'test' \$SHELL\"LOL' another one \"\$SHELL\""
+   17) TEST="echo \$t     this 'test' \$SHELL LOL' another one \$SHELL'"
    ;;
    18) TEST='echo test "" test $t test "$t" test'
    ;;
@@ -74,7 +74,7 @@ esac
 # echo "Test: $1"
 # echo "Leak result:"
 # echo $TEST | valgrind --leak-check=full --track-fds=yes ./minishell 2>&1 | grep "lost:\|FILE DESCRIPTORS:"
-# echo $TEST | ./minishell 2>&1 | grep "TOTAL"
+# echo $TEST | ./minishell 2>&1 | grep "LEAK"
 echo
 MINI_RES=`echo $TEST | ./minishell 2>&-`
 echo "Minishell result:"

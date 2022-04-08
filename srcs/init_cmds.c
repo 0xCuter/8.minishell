@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 13:20:24 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 18:17:34 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ static t_command	*init_cmd(char **cur_char, t_data *data, char *stdout_pipe)
 	{
 		if (init_cmd_bis(cur_char, data, stdout_pipe, cmd))
 			break ;
-		if (*cur_char)
+		if (*cur_char && **cur_char)
 			*cur_char = ft_str_chrset_rev(*cur_char, METACHARS_WHITE_SPACES);
 	}
 	return (cmd);
@@ -117,7 +117,7 @@ t_list	*init_cmds(char *line, t_data *data)
 	c_list = NULL;
 	stdout_pipe = 1;
 	cmd_id = 0;
-	cur_char = ft_str_chrset_rev(line, METACHARS);
+	cur_char = ft_str_chrset_rev(line, METACHARS_WHITE_SPACES);
 	data->cmd_count = 0;
 	while (cur_char && *cur_char)
 	{
