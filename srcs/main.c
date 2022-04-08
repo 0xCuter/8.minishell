@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 11:59:36 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 14:15:29 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*prompt(t_data *data)
 			// str = mod_strjoin(str, "\e[1;31m");
 			str = mod_strjoin(str, tmp);
 			// str = mod_strjoin(str, "\e[1;33m@42\e[1;32mNice\e[0m:\e[1;36m");
-			str = mod_strjoin(str, "@42Nice");
+			str = mod_strjoin(str, "@42Nice:");
 			tmp = getcwd(NULL, 0);
 			len = ft_strlen(tmp);
 			slash = 0;

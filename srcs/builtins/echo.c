@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:03:34 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/07 10:05:22 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 16:22:23 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,23 @@ void	echo_cmd(char **argv, t_data *data)
 {
 	int	n_flag;
 	int	i;
+	int j;
 
 	data->exit_status = 0;
 	n_flag = 0;
 	i = 1;
-	while (argv[i] && !ft_strcmp("-n", argv[i]))
+	while (argv[i] && argv[i][0] == '-')
 	{
-		n_flag = 1;
-		i++;
+		j = 1;
+		while (argv[i][j] == 'n')
+			j++;
+		if (!argv[i][j])
+		{
+			n_flag = 1;
+			i++;
+		}
+		else
+			break ;
 	}
 	while (argv[i])
 	{
