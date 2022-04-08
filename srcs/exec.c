@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 15:00:33 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 12:16:35 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,7 @@ void	exec_cmd_list(t_list *c_list, t_data *data)
 	}
 	close_pipes(0, pipes, 1);
 	wait_children(data, pid);
+	g_last_child = 1;
 	if (c_list)
 		ft_lstclear(&c_list, clear_cmd);
 }
