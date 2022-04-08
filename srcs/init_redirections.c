@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 14:35:46 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 18:38:43 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 19:36:38 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,12 @@ char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char)
 //<<
 char	init_heredoc(t_command *cmd, char **cur_char, t_data *data)
 {
+	char	r;
 	char	*l;
 	char	*meta_arg;
 	int		meta_length;
 	int		stdin_copy;
 
-	stdin_copy = dup(STDIN_FILENO);
-	signal(SIGINT, (void *)heredoc_signal);
 	++*cur_char;
 	meta_arg = get_meta_arg(*cur_char, &meta_length, data);
 	if (meta_arg == NULL)
@@ -47,32 +46,38 @@ char	init_heredoc(t_command *cmd, char **cur_char, t_data *data)
 	cmd->redir_stdin = malloc(2 * sizeof(int));
 	if (cmd->redir_stdin == NULL)
 	{
+		*cur_char += meta_length;
 		free(meta_arg);
 		return (1);
 	}
 	if (pipe(cmd->redir_stdin) == -1)
 		error("PIPE");
+	stdin_copy = dup(STDIN_FILENO);
+	r = 0;
+	signal(SIGINT, (void *)heredoc_signal);
 	while (1)
 	{
 		l = readline(WAIT_PROMPT);
 		if (l == NULL || !ft_strcmp(l, meta_arg))
 		{
-			dup2(stdin_copy, STDIN_FILENO);
-			close(stdin_copy);
-			free(l);
-			free(meta_arg);
-			close(cmd->redir_stdin[1]);
-			*cur_char += meta_length;
-			return (1);
+			if (g_heredocing)
+			{
+				dup2(stdin_copy, STDIN_FILENO);
+				r = 1;
+			}
+			break ;
 		}
 		ft_putendl_fd(l, cmd->redir_stdin[1]);
 		free(l);
 	}
+	setup_signals();
+	g_heredocing = 0;
+	close(stdin_copy);
 	free(l);
 	free(meta_arg);
 	close(cmd->redir_stdin[1]);
 	*cur_char += meta_length;
-	return (0);
+	return (r);
 }
 
 //>>

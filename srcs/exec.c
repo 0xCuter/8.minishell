@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 16:55:23 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/08 19:42:16 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ static pid_t	exec_cmd_elem(t_command *cmd, t_data *data, int *pipes[2])
 				pid = -1;
 				exec_builtin(cmd, data, argv);
 			}
-			else if (cmd->error_init == 0)
+			else
 				pid = exec_cmd(cmd, argv, data);
 		}
 		else

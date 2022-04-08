@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 14:15:29 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/08 19:33:11 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 pid_t	*g_pids;
 char	g_last_child;
+char	g_heredocing;
 
 char	*prompt(t_data *data)
 {
@@ -94,7 +95,9 @@ int	main(int argc, char **argv, char **envp)
 		ft_putendl_fd("Minishell requires no arguments", STDERR_FILENO);
 		exit(2);
 	}
+	rl_catch_signals = 0;
 	g_last_child = 1;
+	g_heredocing = 0;
 	data.exec_name = argv[0];
 	init_envs(&data, envp);
 	g_pids = NULL;

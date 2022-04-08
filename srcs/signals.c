@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:07:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 18:29:18 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/08 19:40:59 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,8 @@
 
 void	heredoc_signal(void)
 {
-	// int	stdin_copy;
-
-	// stdin_copy = dup(STDIN_FILENO);
+	g_heredocing = 1;
 	close(STDIN_FILENO);
-	// dup2(stdin_copy, STDIN_FILENO);
-	// close(stdin_copy);
 }
 
 // If a child processes exist, redirects the signal to the child
@@ -42,17 +38,15 @@ void	signal_handler(int sig)
 		}
 		else if (sig == SIGINT)
 		{
-			write(STDERR_FILENO, prompt(NULL), ft_strlen(prompt(NULL)));
-			write(STDERR_FILENO, rl_line_buffer, ft_strlen(rl_line_buffer));
-			write(STDERR_FILENO, "  \n", 3);
+			write(STDERR_FILENO, "\n", 1);
 			rl_on_new_line();
 			rl_replace_line("", 1);
 			rl_redisplay();
 		}
 		else if (sig == SIGQUIT)
 		{
-			write(STDERR_FILENO, prompt(NULL), ft_strlen(prompt(NULL)));
-			write(STDERR_FILENO, rl_line_buffer, ft_strlen(rl_line_buffer));
+			if (g_heredocing == 1)
+				write(STDERR_FILENO, WAIT_PROMPT, ft_strlen(WAIT_PROMPT));
 			write(STDERR_FILENO, "  \a\b\b", 5);
 			rl_redisplay();
 		}

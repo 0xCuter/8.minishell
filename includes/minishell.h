@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 18:38:27 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 19:08:48 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_data {
 
 extern pid_t	*g_pids;
 extern char		g_last_child;
+extern char		g_heredocing;
 
 //main.c
 char	*prompt(t_data *data);

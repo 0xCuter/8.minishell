@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 18:38:47 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 19:16:39 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ static char	init_cmd_bis(char **cur, t_data *d, char *stdout_p, t_command *c)
 	{
 		if (init_heredoc(c, cur, d))
 			c->error_init = 1;
-		signal(SIGINT, signal_handler);
 	}
 	else if ((*cur)[0] == '>' && (*cur)[1] == '>')
 		init_append(c, cur, d);
