@@ -6,13 +6,13 @@
 #    By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/22 08:53:40 by vvandenb          #+#    #+#              #
-#    Updated: 2022/04/05 13:13:47 by vvandenb         ###   ########.fr        #
+#    Updated: 2022/04/08 10:28:03 by vvandenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror	\
-		-I $(HEADERS_DIR) -I $(LIBFT_DIR)
+		-I $(HEADERS_DIR) -I $(LIBFT_DIR) -I /Users/$(USER)/.brew/opt/readline/include
 ifdef DEBUG
 	CFLAGS += -g
 endif
@@ -45,7 +45,8 @@ $(LIBFT): FORCE
 
 $(NAME): $(LIBFT) $(OBJS)
 	@echo Compiling...
-	@$(CC) $(OBJS) -o $@ $(CFLAGS) $(LIBFT_FLAGS) -l readline
+# @$(CC) $(OBJS) -o $@ $(CFLAGS) $(LIBFT_FLAGS) -l readline
+	@$(CC) $(OBJS) -o $@ $(CFLAGS) $(LIBFT_FLAGS) -l readline -L /Users/$(USER)/.brew/opt/readline/lib
 	@echo Compiled!
 
 clean:

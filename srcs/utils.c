@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:38:16 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/06 21:13:39 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/08 11:30:16 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ void	exit_shell(int status)
 {
 	ft_putstr_fd("exit\n", STDERR_FILENO);
 	free(prompt(NULL));
-	// rl_clear_history();
+	rl_clear_history();
+	// system("leaks minishell");
 	exit(status);
 }
 
@@ -27,7 +28,7 @@ void	error(const char *error)
 {
 	perror(error);
 	free(prompt(NULL));
-	// rl_clear_history();
+	rl_clear_history();
 	exit(errno);
 }
 

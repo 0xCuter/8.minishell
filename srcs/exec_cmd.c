@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 18:10:12 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 11:59:16 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static char	*find_cmd_in_path(char *cmd, t_data *data, char *allocated, struct s
 	char		*cmd_path;
 	int			size;
 
-	path_var = find_envar(data, "PATH");
+	path_var = get_env(data, "PATH");
 	if (path_var == NULL)
 		return (NULL);
 	path_split = ft_split(path_var, ':');
@@ -37,6 +37,7 @@ static char	*find_cmd_in_path(char *cmd, t_data *data, char *allocated, struct s
 			if (stat(cmd_path, s) == 0 && !(s->st_mode & S_IFDIR))
 			{
 				*allocated = 1;
+				free_tab(path_split_start);
 				return (cmd_path);
 			}
 			free(cmd_path);
@@ -57,6 +58,8 @@ static char	*find_cmd(char *cmd, t_data *data, char *allocated)
 	struct stat	s;
 	char		*cmd_path;
 
+	if (!ft_strcmp(cmd, data->exec_name))
+		g_last_child = 0;
 	*allocated = 0;
 	cmd_path = NULL;
 	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))

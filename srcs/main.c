@@ -6,13 +6,14 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 17:56:34 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 11:59:36 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 pid_t	*g_pids;
+char	g_last_child;
 
 char	*prompt(t_data *data)
 {
@@ -31,9 +32,10 @@ char	*prompt(t_data *data)
 		tmp = get_env(data, "USER");
 		if (tmp != NULL)
 		{
-			str = mod_strjoin(str, "\e[1;31m");
+			// str = mod_strjoin(str, "\e[1;31m");
 			str = mod_strjoin(str, tmp);
-			str = mod_strjoin(str, "\e[1;33m@42\e[1;32mNice\e[0m:\e[1;36m");
+			// str = mod_strjoin(str, "\e[1;33m@42\e[1;32mNice\e[0m:\e[1;36m");
+			str = mod_strjoin(str, "@42Nice");
 			tmp = getcwd(NULL, 0);
 			len = ft_strlen(tmp);
 			slash = 0;
@@ -44,7 +46,8 @@ char	*prompt(t_data *data)
 					slash++;
 			}
 			str = mod_strjoin(str, &tmp[len]);
-			str = mod_strjoin(str, "\e[0m$ ");
+			// str = mod_strjoin(str, "\e[0m$ ");
+			str = mod_strjoin(str, "$ ");
 			free(tmp);
 		}
 		else
@@ -91,7 +94,8 @@ int	main(int argc, char **argv, char **envp)
 		ft_putendl_fd("Minishell requires no arguments", STDERR_FILENO);
 		exit(2);
 	}
-	data.exit_status = 0;
+	g_last_child = 1;
+	data.exec_name = argv[0];
 	init_envs(&data, envp);
 	g_pids = NULL;
 	setup_signals();

@@ -71,9 +71,10 @@ case $1 in
    ;;
 esac
 
-echo "Test: $1"
-echo "Leak result:"
-echo $TEST | valgrind --leak-check=full --track-fds=yes ./minishell 2>&1 | grep "lost:\|FILE DESCRIPTORS:"
+# echo "Test: $1"
+# echo "Leak result:"
+# echo $TEST | valgrind --leak-check=full --track-fds=yes ./minishell 2>&1 | grep "lost:\|FILE DESCRIPTORS:"
+# echo $TEST | ./minishell 2>&1 | grep "TOTAL"
 echo
 MINI_RES=`echo $TEST | ./minishell 2>&-`
 echo "Minishell result:"
@@ -84,12 +85,14 @@ echo "$BASH_RES"
 
 if [[ $MINI_RES == $BASH_RES ]]
 then
-   echo -en "\e[1;33m"
-   echo "-- OK --"
-   echo -en "\e[0m"
+   echo "\033[1;33m-- OK --\033[0m"
+#    echo -en "\e[1;33m"
+#    echo "-- OK --"
+#    echo -en "\e[0m"
 else
    echo "$1 failed" >>test.log
-   echo -en "\e[1;31m"
-   echo "-- KO --"
-   echo -en "\e[0m"
+   echo "\033[1;31m-- KO --\033[0m"
+#    echo -en "\e[1;31m"
+#    echo "-- KO --"
+#    echo -en "\e[0m"
 fi
