@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:03:34 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/08 16:22:23 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/08 16:53:19 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	echo_cmd(char **argv, t_data *data)
 {
 	int	n_flag;
 	int	i;
-	int j;
+	int	j;
 
 	data->exit_status = 0;
 	n_flag = 0;

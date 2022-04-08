@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 16:12:20 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 18:38:35 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static char	*find_cmd_in_path(char *cmd, t_data *data, char *allocated, struct stat *s)
 {
-	char 		*path_var;
-	char 		**path_split_start;
-	char 		**path_split;
-	char		*cmd_path;
-	int			size;
+	char	*path_var;
+	char	**path_split_start;
+	char	**path_split;
+	char	*cmd_path;
+	int		size;
 
 	path_var = get_env(data, "PATH");
 	if (path_var == NULL)

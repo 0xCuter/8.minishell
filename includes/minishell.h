@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 13:02:08 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 18:38:27 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void	init_path_split(t_data *data);
 
 //signals.c
 void	setup_signals(void);
+void	signal_handler(int sig);
+void	heredoc_signal(void);
 
 //replace_input.c
 char	*replace_vars(char *s, t_data *data);
@@ -106,7 +108,7 @@ t_list	*init_cmds(char *line, t_data *data);
 
 //init_redirections.c
 char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char);
-void	init_heredoc(t_command *cmd, char **cur, t_data *data);
+char	init_heredoc(t_command *cmd, char **cur, t_data *data);
 void	init_append(t_command *cmd, char **cur, t_data *data);
 char	init_redir_stdin(t_command *cmd, char **cur, t_data *data);
 char	init_redir_stdout(t_command *cmd, char **cur, t_data *data);
