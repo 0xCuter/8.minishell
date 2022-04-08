@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:01:49 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 17:15:45 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 18:12:09 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 static void	print_syntax_error(char *meta, char *line)
 {
 	ft_putstr_fd("-minishell: syntax error near unexpected token `", 2);
-	if (meta && line
-		&& ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES)
-		!= line + ft_strlen(line))
+	if (meta && *meta == '|')
+		write(2, "||", 2);
+	else if (meta && ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES) != line + ft_strlen(line))
 		write(2, ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES), 1);
 	else
 		write(2, "newline", 7);
@@ -51,10 +51,13 @@ char	*get_meta_arg(char *meta, int *meta_sub_size, t_data *data)
 
 	*meta_sub_size = 0;
 	first_char = ft_str_chrset_rev(meta + 1, METACHARS_WHITE_SPACES);
-	if (*first_char == 0)
+	if (ft_strchr(METACHARS, *first_char))
 		return (NULL);
-	*meta_sub_size += first_char - meta;
-	meta = first_char;
+	if (*first_char)
+	{
+		*meta_sub_size += first_char - meta;
+		meta = first_char;
+	}
 	if (*meta == '\'' || *meta == '"')
 	{
 		meta_sub = get_met_arg_with_quotes(meta, meta_sub_size, data);
@@ -84,10 +87,17 @@ static char	meta_no_arg(char *line, char **meta, t_data *data)
 	int		meta_arg_size;
 
 	meta_arg = get_meta_arg(*meta, &meta_arg_size, data);
-	if (meta_arg == NULL)
+	if (meta_arg == NULL || *meta_arg == '|')
 	{
-		free(meta_arg);
+		if (*meta && **meta == '|')
+		{
+			if (ft_str_chrset(*meta + 1, METACHARS_NO_WHITE_SPACES) != line + ft_strlen(line))
+				*meta = ft_str_chrset(*meta + 1, METACHARS_NO_WHITE_SPACES);
+			else
+				*meta = NULL;
+		}
 		print_syntax_error(*meta, line);
+		free(meta_arg);
 		return (1);
 	}
 	free(meta_arg);
@@ -108,7 +118,7 @@ char	check_syntax(char *line, t_data *data)
 		return (1);
 	}
 	meta = ft_str_chrset(line, METACHARS_NO_WHITE_SPACES);
-	while (meta && meta != line + ft_strlen(line))
+	while (meta && *meta && meta < line + ft_strlen(line))
 	{
 		if ((meta[0] == '<' && meta[1] == '<')
 			|| (meta[0] == '>' && meta[1] == '>'))
@@ -132,6 +142,8 @@ char	check_syntax(char *line, t_data *data)
 				data->exit_status = 258;
 				return (1);
 			}
+			if (meta && *meta)
+				meta = ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES);
 		}
 	}
 	return (0);

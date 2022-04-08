@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 17:33:06 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/08 19:08:48 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_data {
 
 extern pid_t	*g_pids;
 extern char		g_last_child;
+extern char		g_heredocing;
 
 //main.c
 char	*prompt(t_data *data);
@@ -108,10 +109,10 @@ t_list	*init_cmds(char *line, t_data *data);
 
 //init_redirections.c
 char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char);
-char	init_heredoc(t_command *cmd, char **current_token, t_data *data);
-void	init_append(t_command *cmd, char **current_token, t_data *data);
-char	init_redir_stdin(t_command *cmd, char **current_token, t_data *data);
-char	init_redir_stdout(t_command *cmd, char **current_token, t_data *data);
+char	init_heredoc(t_command *cmd, char **cur, t_data *data);
+void	init_append(t_command *cmd, char **cur, t_data *data);
+char	init_redir_stdin(t_command *cmd, char **cur, t_data *data);
+char	init_redir_stdout(t_command *cmd, char **cur, t_data *data);
 
 //exec.c
 void	clear_cmd(void *cmd_void);
