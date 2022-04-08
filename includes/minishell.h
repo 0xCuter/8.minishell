@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 12:09:25 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 17:33:06 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void	init_path_split(t_data *data);
 
 //signals.c
 void	setup_signals(void);
+void	signal_handler(int sig);
+void	heredoc_signal(void);
 
 //replace_input.c
 char	*replace_vars(char *s, t_data *data);
@@ -106,7 +108,7 @@ t_list	*init_cmds(char *line, t_data *data);
 
 //init_redirections.c
 char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char);
-void	init_heredoc(t_command *cmd, char **current_token, t_data *data);
+char	init_heredoc(t_command *cmd, char **current_token, t_data *data);
 void	init_append(t_command *cmd, char **current_token, t_data *data);
 char	init_redir_stdin(t_command *cmd, char **current_token, t_data *data);
 char	init_redir_stdout(t_command *cmd, char **current_token, t_data *data);

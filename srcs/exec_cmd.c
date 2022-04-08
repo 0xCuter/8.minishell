@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 11:59:16 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 16:54:55 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static char	*find_cmd_in_path(char *cmd, t_data *data, char *allocated, struct stat *s)
 {
-	char 		*path_var;
-	char 		**path_split_start;
-	char 		**path_split;
-	char		*cmd_path;
-	int			size;
+	char	*path_var;
+	char	**path_split_start;
+	char	**path_split;
+	char	*cmd_path;
+	int		size;
 
 	path_var = get_env(data, "PATH");
 	if (path_var == NULL)

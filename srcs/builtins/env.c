@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:23:35 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/06 18:35:00 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 16:53:31 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	env_cmd(t_data *data)
 {
-	int i;
+	int	i;
 
 	data->exit_status = 0;
 	i = 0;

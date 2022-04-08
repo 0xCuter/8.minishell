@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 12:16:35 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 16:55:23 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void	close_pipe(int *pipe[2])
 		error("CLOSE");
 	if (close((*pipe)[1]) == -1)
 		error("CLOSE");
-	free_null((void*)pipe);
+	free_null((void *)pipe);
 }
 
 //If `end`, closes all open pipes
@@ -107,7 +107,7 @@ static void	wait_children(t_data *data, int last_pid)
 		if (WIFSIGNALED(waited_status))
 			data->exit_status = 128 + WTERMSIG(waited_status);
 	}
-	while(waited_pid > 0)
+	while (waited_pid > 0)
 	{
 		waited_pid = wait(&waited_status);
 		if (last_pid != -1 && waited_pid == last_pid)

@@ -3,19 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:07:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 12:06:25 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 18:29:18 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	heredoc_signal(void)
+{
+	// int	stdin_copy;
+
+	// stdin_copy = dup(STDIN_FILENO);
+	close(STDIN_FILENO);
+	// dup2(stdin_copy, STDIN_FILENO);
+	// close(stdin_copy);
+}
+
 // If a child processes exist, redirects the signal to the child
 // Else if CTRL+C prints newline
 // Else if CTRL+\ rings terminal
-static void	signal_handler(int sig)
+void	signal_handler(int sig)
 {
 	int	i;
 
