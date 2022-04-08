@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 14:35:46 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 16:10:41 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 13:03:53 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char)
 }
 
 //<<
-void	init_heredoc(t_command *cmd, char **current_token, t_data *data)
+void	init_heredoc(t_command *cmd, char **cur_char, t_data *data)
 {
 	char	*l;
 	char	*meta_arg;
 	int		meta_length;
 
-	++*current_token;
-	meta_arg = get_meta_arg(*current_token, &meta_length, data);
+	++*cur_char;
+	meta_arg = get_meta_arg(*cur_char, &meta_length, data);
 	if (meta_arg == NULL)
 		return ;
 	cmd->redir_stdin = malloc(2 * sizeof(int));
@@ -57,17 +57,17 @@ void	init_heredoc(t_command *cmd, char **current_token, t_data *data)
 	free(l);
 	free(meta_arg);
 	close(cmd->redir_stdin[1]);
-	*current_token += meta_length;
+	*cur_char += meta_length;
 }
 
 //>>
-void	init_append(t_command *cmd, char **current_token, t_data *data)
+void	init_append(t_command *cmd, char **cur_char, t_data *data)
 {
 	char	*meta_arg;
 	int		meta_length;
 
-	++*current_token;
-	meta_arg = get_meta_arg(*current_token, &meta_length, data);
+	++*cur_char;
+	meta_arg = get_meta_arg(*cur_char, &meta_length, data);
 	if (meta_arg == NULL)
 		return ;
 	cmd->redir_stdout = malloc(sizeof(int));
@@ -77,18 +77,18 @@ void	init_append(t_command *cmd, char **current_token, t_data *data)
 	free(meta_arg);
 	if (*cmd->redir_stdout == -1)
 		error("OPEN");
-	*current_token += meta_length;
+	*cur_char += meta_length;
 }
 
 //<
-char	init_redir_stdin(t_command *cmd, char **current_token, t_data *data)
+char	init_redir_stdin(t_command *cmd, char **cur_char, t_data *data)
 {
 	char	*meta_arg;
 	int		meta_length;
 	int		r;
 
 	r = 0;
-	meta_arg = get_meta_arg(*current_token, &meta_length, data);
+	meta_arg = get_meta_arg(*cur_char, &meta_length, data);
 	if (meta_arg == NULL)
 		return (1);
 	cmd->redir_stdin = malloc(sizeof(int));
@@ -104,19 +104,19 @@ char	init_redir_stdin(t_command *cmd, char **current_token, t_data *data)
 		r = 1;
 	}
 	free(meta_arg);
-	*current_token += meta_length;
+	*cur_char += meta_length;
 	return (r);
 }
 
 //>
-char	init_redir_stdout(t_command *cmd, char **current_token, t_data *data)
+char	init_redir_stdout(t_command *cmd, char **cur_char, t_data *data)
 {
 	char	*meta_arg;
 	int		meta_length;
 	int		r;
 
 	r = 0;
-	meta_arg = get_meta_arg(*current_token, &meta_length, data);
+	meta_arg = get_meta_arg(*cur_char, &meta_length, data);
 	if (meta_arg == NULL)
 		return (1);
 	cmd->redir_stdout = malloc(sizeof(int));
@@ -133,6 +133,6 @@ char	init_redir_stdout(t_command *cmd, char **current_token, t_data *data)
 		r = 1;
 	}
 	free(meta_arg);
-	*current_token += meta_length;
+	*cur_char += meta_length;
 	return (r);
 }

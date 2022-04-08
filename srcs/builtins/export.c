@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:26:38 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/07 19:03:13 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 13:25:06 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ static int	check_export_arg(char *argv)
 	if (!ft_isalpha(argv[i]) && argv[i] != '_')
 		return (1);
 	i++;
-	while(argv[i] && argv[i] != '=')
+	while (argv[i] && argv[i] != '=')
 	{
-		if (!ft_isalnum(argv[i]) && argv[i]!= '_')
-			return(1);
+		if (!ft_isalnum(argv[i]) && argv[i] != '_')
+			return (1);
 		i++;
 	}
 	return (0);
@@ -64,8 +64,8 @@ static void	print_export(char **envs)
 
 void	export_cmd(char **argv, t_data *data)
 {
-	char *envar;
-	int i;
+	char	*envar;
+	int		i;
 
 	data->exit_status = 0;
 	if (!argv[1])

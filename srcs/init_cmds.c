@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 18:45:01 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 13:20:24 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,32 @@ static void	add_argv(t_command *cmd, char **cur_char, t_data *data)
 		add_arg(cmd, arg);
 }
 
+static char	init_cmd_bis(char **cur, t_data *d, char *stdout_p, t_command *c)
+{
+	if ((*cur)[0] == '|')
+	{
+		if (init_pipe(c, stdout_p, cur))
+			return (1);
+	}
+	else if ((*cur)[0] == '<' && (*cur)[1] == '<')
+		init_heredoc(c, cur, d);
+	else if ((*cur)[0] == '>' && (*cur)[1] == '>')
+		init_append(c, cur, d);
+	else if ((*cur)[0] == '<')
+	{
+		if (init_redir_stdin(c, cur, d))
+			c->error_init = 1;
+	}
+	else if ((*cur)[0] == '>')
+	{
+		if (init_redir_stdout(c, cur, d))
+			c->error_init = 1;
+	}
+	else
+		add_argv(c, cur, d);
+	return (0);
+}
+
 //Inits a new `t_command` structure
 static t_command	*init_cmd(char **cur_char, t_data *data, char *stdout_pipe)
 {
@@ -70,27 +96,8 @@ static t_command	*init_cmd(char **cur_char, t_data *data, char *stdout_pipe)
 		return (NULL);
 	while (**cur_char)
 	{
-		if ((*cur_char)[0] == '|')
-		{
-			if (init_pipe(cmd, stdout_pipe, cur_char))
-				break ;
-		}
-		else if ((*cur_char)[0] == '<' && (*cur_char)[1] == '<')
-			init_heredoc(cmd, cur_char, data);
-		else if ((*cur_char)[0] == '>' && (*cur_char)[1] == '>')
-			init_append(cmd, cur_char, data);
-		else if ((*cur_char)[0] == '<')
-		{
-			if (init_redir_stdin(cmd, cur_char, data))
-				cmd->error_init = 1;
-		}
-		else if ((*cur_char)[0] == '>')
-		{
-			if (init_redir_stdout(cmd, cur_char, data))
-				cmd->error_init = 1;
-		}
-		else
-			add_argv(cmd, cur_char, data);
+		if (init_cmd_bis(cur_char, data, stdout_pipe, cmd))
+			break ;
 		if (*cur_char)
 			*cur_char = ft_str_chrset_rev(*cur_char, METACHARS_WHITE_SPACES);
 	}

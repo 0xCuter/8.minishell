@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tab_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 22:44:17 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/01 03:08:46 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/08 13:25:35 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 char	**duplicate_tab(char **tab)
 {
-	char **dup;
-	int	i;
+	char	**dup;
+	int		i;
 
 	i = 0;
 	while (tab[i])
@@ -33,9 +33,9 @@ char	**duplicate_tab(char **tab)
 
 void	sort_tab(char **tab)
 {
-	char *tmp;
-	int	i;
-	int j;
+	char	*tmp;
+	int		i;
+	int		j;
 
 	i = 0;
 	while (tab[i])

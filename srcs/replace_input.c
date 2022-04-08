@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:35:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 17:27:14 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/08 13:28:16 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,22 @@
 
 //If the var is "?", it is expanded to `exit_status`
 //Else, the variable is replaced by a simple "$"
-static char	*replace_var_special(char *s, t_data *data, int *i, char *var_name_end)
+static char	*replace_var_special(char *s, t_data *data, int *i, char *var_end)
 {
 	char	*temp;
 	char	*status_str;
 
 	temp = s;
-	if (*var_name_end == '?')
+	if (*var_end == '?')
 	{
 		status_str = ft_itoa(data->exit_status);
-		s = ft_str_replace(s, *i, var_name_end - s + 1, status_str);
+		s = ft_str_replace(s, *i, var_end - s + 1, status_str);
 		free(status_str);
 	}
-	else if (*var_name_end == '\'' || *var_name_end == '"')
-		s = ft_str_replace(s, *i, var_name_end - s, "");
+	else if (*var_end == '\'' || *var_end == '"')
+		s = ft_str_replace(s, *i, var_end - s, "");
 	else
-		s = ft_str_replace(s, *i, var_name_end - s, "$");
+		s = ft_str_replace(s, *i, var_end - s, "$");
 	free(temp);
 	++*i;
 	return (s);
@@ -51,17 +51,11 @@ static char	*replace_var(char *s, t_data *data, int *i)
 	{
 		var = ft_substr(s + *i + 1, 0, var_name_end - (s + *i) - 1);
 		envar_value = get_env(data, var);
-		if (envar_value)
-		{
-			temp = s;
-			s = ft_str_replace(s, *i, var_name_end - s, envar_value);
-			*i += ft_strlen(envar_value);
-		}
-		else
-		{
-			temp = s;
-			s = ft_str_replace(s, *i, var_name_end - s, "");
-		}
+		if (envar_value == NULL)
+			envar_value = "";
+		temp = s;
+		s = ft_str_replace(s, *i, var_name_end - s, envar_value);
+		*i += ft_strlen(envar_value);
 		free(temp);
 		free(var);
 	}
@@ -119,7 +113,7 @@ void	replace_quotes(char **s, t_data *data, int *pos)
 	}
 	size_before = next_quote - 1 - (*s + *pos);
 	add_line = get_quotes_content(*s + *pos, next_quote, data);
-	new_line = ft_str_replace(*s, *s + *pos - *s, next_quote - *s + 1, add_line);
+	new_line = ft_str_replace(*s, *pos, next_quote - *s + 1, add_line);
 	free(*s);
 	*pos += size_before + (ft_strlen(add_line) - size_before);
 	free(add_line);
