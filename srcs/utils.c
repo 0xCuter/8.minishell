@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:38:16 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 17:39:36 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/09 10:02:52 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	exit_shell(int status)
 	ft_putstr_fd("exit\n", STDERR_FILENO);
 	free(prompt(NULL));
 	rl_clear_history();
-	// system("leaks minishell");
+	system("leaks minishell");
 	exit(status);
 }
 

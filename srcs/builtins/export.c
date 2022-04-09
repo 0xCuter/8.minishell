@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:26:38 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/08 14:15:29 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/09 10:40:38 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,33 @@ static int	check_export_arg(char *argv)
 
 	i = 0;
 	if (!ft_isalpha(argv[i]) && argv[i] != '_')
+	{
+		ft_putstr_fd("minishell: export: `", 2);
+		ft_putstr_fd(argv, 2);
+		ft_putendl_fd("': not a valid identifier", 2);
 		return (1);
+	}
 	i++;
 	while (argv[i] && argv[i] != '=')
 	{
 		if (!ft_isalnum(argv[i]) && argv[i] != '_')
+		{
+			ft_putstr_fd("minishell: export: `", 2);
+			ft_putstr_fd(argv, 2);
+			ft_putendl_fd("': not a valid identifier", 2);
 			return (1);
+		}
 		i++;
 	}
 	return (0);
 }
 
-static void	print_export(char **envs)
+static void	put_export(char **export)
 {
-	char	**export;
-	int		i;
-	int		j;
-	int		equal;
+	int	i;
+	int	j;
+	int	equal;
 
-	export = duplicate_tab(envs);
-	sort_tab(export);
 	i = 0;
 	while (export[i])
 	{
@@ -59,6 +66,15 @@ static void	print_export(char **envs)
 		ft_putchar_fd('\n', 1);
 		i++;
 	}
+}
+
+static void	print_export(char **envs)
+{
+	char	**export;
+
+	export = duplicate_tab(envs);
+	sort_tab(export);
+	put_export(export);
 	free_tab(export);
 }
 
@@ -77,12 +93,7 @@ void	export_cmd(char **argv, t_data *data)
 	while (argv[i])
 	{
 		if (check_export_arg(argv[i]))
-		{
 			data->exit_status = 1;
-			ft_putstr_fd("minishell: export: `", 2);
-			ft_putstr_fd(argv[i], 2);
-			ft_putendl_fd("': not a valid identifier", 2);
-		}
 		else
 		{
 			envar = find_key(data, argv[i]);
