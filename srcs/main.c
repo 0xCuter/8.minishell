@@ -6,13 +6,13 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 14:29:44 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 15:43:55 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_globs g_globs;
+t_globs	g_globs;
 
 char	*prompt(t_data *data)
 {
@@ -120,7 +120,6 @@ static void	loop_prompt(t_data *data)
 	char	*line;
 	t_list	*c_list;
 
-	rl_outstream = stderr;
 	while (1)
 	{
 		line = readline(prompt(data));
@@ -129,7 +128,8 @@ static void	loop_prompt(t_data *data)
 			write(STDIN_FILENO, "\b\b  \b\b", 6);
 			exit_shell(data->exit_status);
 		}
-		while (trailing_pipeline(&line, data));
+		while (trailing_pipeline(&line, data))
+			;
 		if (*line != 0)
 			add_history(line);
 		line = replace_vars(line, data);
@@ -154,8 +154,9 @@ int	main(int argc, char **argv, char **envp)
 		exit(2);
 	}
 	rl_catch_signals = 0;
+	rl_outstream = stderr;
 	g_globs.last_child = 1;
-	g_globs.heredocing = 0;
+	g_globs.heredoc_killed = 0;
 	g_globs.pids = NULL;
 	data.exec_name = argv[0];
 	init_envs(&data, envp);

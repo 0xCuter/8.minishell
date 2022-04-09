@@ -6,7 +6,7 @@
 #    By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/22 08:53:40 by vvandenb          #+#    #+#              #
-#    Updated: 2022/04/08 17:57:05 by vvandenb         ###   ########.fr        #
+#    Updated: 2022/04/09 15:52:39 by vvandenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,8 +27,8 @@ NAME = minishell
 SRCS =	$(SRCS_DIR)main.c $(SRCS_DIR)signals.c	\
 		$(SRCS_DIR)utils.c $(SRCS_DIR)str_utils.c $(SRCS_DIR)tab_utils.c	\
 		$(SRCS_DIR)init.c $(SRCS_DIR)syntax.c $(SRCS_DIR)replace_input.c $(SRCS_DIR)init_cmds.c	\
-		$(SRCS_DIR)exec.c $(SRCS_DIR)exec_builtin.c $(SRCS_DIR)exec_cmd.c $(SRCS_DIR)envs_utils.c \
-		$(SRCS_DIR)init_redirections.c	\
+		$(SRCS_DIR)exec/exec.c $(SRCS_DIR)exec/exec_builtin.c $(SRCS_DIR)exec/exec_cmd.c $(SRCS_DIR)exec/exec_utils.c \
+		$(SRCS_DIR)init_redirs.c $(SRCS_DIR)init_redirs_utils.c $(SRCS_DIR)envs_utils.c	\
 		$(SRCS_DIR)builtins/echo.c $(SRCS_DIR)builtins/exit.c $(SRCS_DIR)builtins/pwd.c $(SRCS_DIR)builtins/cd.c	\
 		$(SRCS_DIR)builtins/env.c $(SRCS_DIR)builtins/unset.c $(SRCS_DIR)builtins/export.c
 OBJS = $(SRCS:c=o)

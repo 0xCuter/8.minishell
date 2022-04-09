@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:45 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/07 18:45:23 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 14:40:36 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,34 +75,14 @@ char	is_builtin(char *cmd_name)
 	return (r);
 }
 
-static void	setup_redirs(t_command *cmd, int *old_stdin, int *old_stdout)
-{
-	if (cmd->redir_stdin)
-	{
-		*old_stdin = dup(STDIN_FILENO);
-		if (dup2(cmd->redir_stdin[0], STDIN_FILENO) == -1)
-			error("DUP2");
-		if (close(cmd->redir_stdin[0]) == -1)
-			error("CLOSE");
-		free_null((void *)&cmd->redir_stdin);
-	}
-	if (cmd->redir_stdout)
-	{
-		*old_stdout = dup(STDOUT_FILENO);
-		if (dup2(*cmd->redir_stdout, STDOUT_FILENO) == -1)
-			error("DUP2");
-		if (close(*cmd->redir_stdout) == -1)
-			error("CLOSE");
-		free_null((void *)&cmd->redir_stdin);
-	}
-}
-
 //Executes a builtin
 void	exec_builtin(t_command *cmd, t_data *data, char **argv)
 {
-	int	old_stdin = -2;
-	int	old_stdout = -2;
+	int	old_stdin;
+	int	old_stdout;
 
+	old_stdin = -2;
+	old_stdout = -2;
 	setup_pipes(cmd, &old_stdin, &old_stdout);
 	setup_redirs(cmd, &old_stdin, &old_stdout);
 	if (argv && cmd->error_init == 0)

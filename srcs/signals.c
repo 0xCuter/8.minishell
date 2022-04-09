@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:07:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 14:29:44 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 15:43:59 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	heredoc_signal(void)
 {
-	g_globs.heredocing = 1;
+	g_globs.heredoc_killed = 1;
 	close(STDIN_FILENO);
 }
 
@@ -29,7 +29,7 @@ static void	signal_parent(int sig)
 	}
 	if (sig == SIGQUIT)
 	{
-		if (g_globs.heredocing == 1)
+		if (g_globs.heredoc_killed == 1)
 			write(STDERR_FILENO, WAIT_PROMPT, ft_strlen(WAIT_PROMPT));
 		write(STDERR_FILENO, "  \a\b\b", 5);
 		rl_redisplay();

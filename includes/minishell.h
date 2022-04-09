@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 14:33:14 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 16:17:46 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef struct s_data {
 typedef struct s_globs {
 	pid_t	*pids;
 	char	last_child;
-	char	heredocing;
+	char	heredoc_killed;
 }	t_globs;
 
 extern t_globs	g_globs;
@@ -113,27 +113,35 @@ void	replace_quotes(char **s, t_data *data, int *pos);
 //init_cmds.c
 t_list	*init_cmds(char *line, t_data *data);
 
-//init_redirections.c
+//init_redirs.c
 char	init_heredoc(t_command *cmd, char **cur, t_data *data);
 char	init_append(t_command *cmd, char **cur, t_data *data);
 char	init_redir_stdin(t_command *cmd, char **cur, t_data *data);
 char	init_redir_stdout(t_command *cmd, char **cur, t_data *data);
 
-//exec.c
-void	clear_cmd(void *cmd_void);
-void	execute(t_data *data, char *line);
-void	exec_cmd_list(t_list *cmds, t_data *data);
-
-//exec_builtin.c
-char	is_builtin(char *cmd_name);
-void	exec_builtin(t_command *cmd, t_data *data, char **argv);
-
-//exec_cmd.c
-int		exec_cmd(t_command *cmd, char **argv, t_data *data);
+//init_redirs_utils.c
+void	error_open(int **fd, char *arg, char *r);
+void	close_free(int *fd);
+char	free_ret_1(char *arg);
 
 //syntax.c
 char	check_syntax(char *line, t_data *data);
 char	*get_meta_arg(char *meta, int *meta_sub_size, t_data *data);
+
+//execs/
+// exec.c
+void	clear_cmd(void *cmd_void);
+void	execute(t_data *data, char *line);
+void	exec_cmd_list(t_list *cmds, t_data *data);
+// exec_utils.c
+void	setup_redirs(t_command *cmd, int *old_stdin, int *old_stdout);
+char	cmd_is_path(char *cmd);
+char	*error_ret_null(t_data *data, int error, char *s1, char *s2);
+// exec_builtin.c
+char	is_builtin(char *cmd_name);
+void	exec_builtin(t_command *cmd, t_data *data, char **argv);
+// exec_cmd.c
+int		exec_cmd(t_command *cmd, char **argv, t_data *data);
 
 //builtins/
 void	echo_cmd(char **argv, t_data *data);
