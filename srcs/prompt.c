@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/09 17:30:15 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 17:47:37 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 21:10:23 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,24 +91,23 @@ char	trailing_pipeline(char **line, t_data *data)
 	char	*temp;
 	char	*last_pipe;
 	char	*l;
-	int		i;
 
 	last_pipe = get_last_pipe(*line);
 	if (last_pipe == NULL)
 		return (0);
-	i = 0;
-	temp = get_meta_arg(last_pipe, &i, data);
-	if (temp)
-		return (free_ret(temp, 0));
-	free_null((void *)&temp);
+	if (ft_str_chrset_rev(last_pipe + 1, METACHARS_WHITE_SPACES)[0] != 0)
+		return (0);
 	l = readline(WAIT_PROMPT);
 	if (l == NULL)
 		return (free_ret(l, 0));
-	temp = ft_strjoin(*line, " ");
-	free(*line);
-	*line = ft_strjoin(temp, l);
+	if (l[0] != 0)
+	{
+		temp = ft_strjoin(*line, " ");
+		free(*line);
+		*line = ft_strjoin(temp, l);
+		free(temp);
+		*line = replace_vars(*line, data);
+	}
 	free(l);
-	free(temp);
-	*line = replace_vars(*line, data);
 	return (1);
 }

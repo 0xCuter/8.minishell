@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:01:49 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 17:28:47 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 21:20:34 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static void	print_syntax_error(char *meta, char *line)
 		STDERR_FILENO);
 	if (meta && *meta == '|')
 		ft_putstr_fd("||", STDERR_FILENO);
-	else if (meta && ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES)
+	else if (meta && *meta != 0
+		&& ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES)
 		!= line + ft_strlen(line))
 		write(2, ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES), 1);
 	else
@@ -35,7 +36,9 @@ static char	meta_no_arg(char *line, char **meta, t_data *data)
 	int		meta_arg_size;
 
 	meta_arg = get_meta_arg(*meta, &meta_arg_size, data);
-	if (meta_arg == NULL || *meta_arg == '|')
+	if ((meta_arg == NULL
+			&& ft_str_chrset(*meta + 1, METACHARS_NO_WHITE_SPACES)[0] == 0)
+			|| (meta_arg != NULL && *meta_arg == '|'))
 	{
 		if (*meta && **meta == '|')
 		{
