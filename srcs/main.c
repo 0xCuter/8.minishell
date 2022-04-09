@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 12:32:06 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 14:13:11 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,9 @@ char	*prompt(t_data *data)
 		tmp = get_env(data, "USER");
 		if (tmp != NULL)
 		{
-			// str = mod_strjoin(str, "\e[1;31m");
+			str = mod_strjoin(str, "\001\e[1;31m\002");
 			str = mod_strjoin(str, tmp);
-			// str = mod_strjoin(str, "\e[1;33m@42\e[1;32mNice\e[0m:\e[1;36m");
-			str = mod_strjoin(str, "@42Nice:");
+			str = mod_strjoin(str, "\001\e[1;33m\002@42\001\e[1;32m\002Nice\001\e[0m\002:\001\e[1;36m\002");
 			tmp = getcwd(NULL, 0);
 			len = ft_strlen(tmp);
 			slash = 0;
@@ -47,8 +46,7 @@ char	*prompt(t_data *data)
 					slash++;
 			}
 			str = mod_strjoin(str, &tmp[len]);
-			// str = mod_strjoin(str, "\e[0m$ ");
-			str = mod_strjoin(str, "$ ");
+			str = mod_strjoin(str, "\001\e[0m\002$ ");
 			free(tmp);
 		}
 		else
