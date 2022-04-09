@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 14:25:33 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 14:29:44 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static char	*find_cmd(char *cmd, t_data *data, char *allocated)
 	char		*cmd_path;
 
 	if (!ft_strcmp(cmd, data->exec_name))
-		globs.last_child = 0;
+		g_globs.last_child = 0;
 	*allocated = 0;
 	cmd_path = NULL;
 	if (cmd_is_path(cmd))

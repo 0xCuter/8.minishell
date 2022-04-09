@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 14:35:46 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 14:25:55 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 14:29:44 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static char	init_heredoc_bis(t_command *cmd, char *meta_arg)
 		l = readline(WAIT_PROMPT);
 		if (l == NULL || !ft_strcmp(l, meta_arg))
 		{
-			if (globs.heredocing)
+			if (g_globs.heredocing)
 			{
 				dup2(stdin_copy, STDIN_FILENO);
 				r = 1;
@@ -63,7 +63,7 @@ char	init_heredoc(t_command *cmd, char **cur_char, t_data *data)
 		error("PIPE");
 	r = init_heredoc_bis(cmd, meta_arg);
 	setup_signals();
-	globs.heredocing = 0;
+	g_globs.heredocing = 0;
 	free(meta_arg);
 	close(cmd->redir_stdin[1]);
 	*cur_char += meta_length;

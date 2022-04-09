@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 14:25:33 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 14:29:44 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,8 @@ static void	wait_children(t_data *data, int last_pid)
 				data->exit_status = 128 + WTERMSIG(waited_status);
 		}
 	}
-	temp = globs.pids;
-	globs.pids = NULL;
+	temp = g_globs.pids;
+	g_globs.pids = NULL;
 	free(temp);
 }
 
@@ -158,26 +158,26 @@ static void	add_g_pids(pid_t pid)
 	pid_t	*temp_bis;
 	int		i;
 
-	if (globs.pids == NULL)
+	if (g_globs.pids == NULL)
 	{
-		globs.pids = ft_calloc(2, sizeof(pid_t));
-		globs.pids[0] = pid;
+		g_globs.pids = ft_calloc(2, sizeof(pid_t));
+		g_globs.pids[0] = pid;
 	}
 	else
 	{
 		i = 0;
-		while (globs.pids[i])
+		while (g_globs.pids[i])
 			++i;
 		temp = ft_calloc(i + 2, sizeof(pid_t));
 		temp[i] = pid;
 		--i;
 		while (i >= 0)
 		{
-			temp[i] = globs.pids[i];
+			temp[i] = g_globs.pids[i];
 			--i;
 		}
-		temp_bis = globs.pids;
-		globs.pids = temp;
+		temp_bis = g_globs.pids;
+		g_globs.pids = temp;
 		free(temp_bis);
 	}
 }
@@ -201,7 +201,7 @@ void	exec_cmd_list(t_list *c_list, t_data *data)
 	}
 	close_pipes(0, pipes, 1);
 	wait_children(data, pid);
-	globs.last_child = 1;
+	g_globs.last_child = 1;
 	if (c_list)
 		ft_lstclear(&c_list, clear_cmd);
 }

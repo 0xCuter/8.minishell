@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 14:19:05 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 14:33:14 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@
 
 # include "libft.h"
 
-# define DEFAULT_PATH "PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:."
+# define DEFAULT_PATH "PATH=/usr/local/bin:/usr/local/sbin:\
+/usr/bin:/usr/sbin:/bin:/sbin:."
 # define DEFAULT_PROMPT "Minishell$ "
 # define WAIT_PROMPT "> "
 # define VAR_CHARS " \t\n\v\f\r|<>\"'?$="
@@ -64,7 +65,7 @@ typedef struct s_globs {
 	char	heredocing;
 }	t_globs;
 
-extern t_globs globs;
+extern t_globs	g_globs;
 
 //main.c
 char	*prompt(t_data *data);

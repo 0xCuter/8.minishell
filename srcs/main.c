@@ -6,13 +6,13 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 14:21:09 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 14:29:44 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_globs globs;
+t_globs g_globs;
 
 char	*prompt(t_data *data)
 {
@@ -154,9 +154,9 @@ int	main(int argc, char **argv, char **envp)
 		exit(2);
 	}
 	rl_catch_signals = 0;
-	globs.last_child = 1;
-	globs.heredocing = 0;
-	globs.pids = NULL;
+	g_globs.last_child = 1;
+	g_globs.heredocing = 0;
+	g_globs.pids = NULL;
 	data.exec_name = argv[0];
 	init_envs(&data, envp);
 	setup_signals();
