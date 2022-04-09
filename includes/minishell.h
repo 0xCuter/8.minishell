@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 13:01:55 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 13:46:46 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	replace_env(t_data *data, char *envar, char *line);
 //init.c
 void	init_envs(t_data *data, char **envp);
 void	init_path_split(t_data *data);
+char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char);
 
 //signals.c
 void	setup_signals(void);
@@ -108,7 +109,6 @@ void	replace_quotes(char **s, t_data *data, int *pos);
 t_list	*init_cmds(char *line, t_data *data);
 
 //init_redirections.c
-char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char);
 char	init_heredoc(t_command *cmd, char **cur, t_data *data);
 char	init_append(t_command *cmd, char **cur, t_data *data);
 char	init_redir_stdin(t_command *cmd, char **cur, t_data *data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 19:42:16 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 12:58:32 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,8 @@ static void	wait_children(t_data *data, int last_pid)
 }
 
 //Executes a command or a builtin
-static pid_t	exec_cmd_elem(t_command *cmd, t_data *data, int *pipes[2])
+static pid_t	exec_cmd_elem(t_command *cmd, \
+	t_data *data, int *pipes[2])
 {
 	char	**argv;
 	pid_t	pid;

@@ -3,55 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   init_redirections.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 14:35:46 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 13:04:29 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 13:46:46 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//|
-char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char)
-{
-	if (*stdout_pipe)
-	{
-		cmd->stdout_piped = 1;
-		*stdout_pipe = 0;
-		return (1);
-	}
-	else
-	{
-		cmd->stdin_piped = 1;
-		*stdout_pipe = 1;
-		++*cur_char;
-	}
-	return (0);
-}
-
-//<<
-char	init_heredoc(t_command *cmd, char **cur_char, t_data *data)
+static char	init_heredoc_bis(t_command *cmd, char *meta_arg)
 {
 	char	r;
 	char	*l;
-	char	*meta_arg;
-	int		meta_length;
 	int		stdin_copy;
 
-	++*cur_char;
-	meta_arg = get_meta_arg(*cur_char, &meta_length, data);
-	if (meta_arg == NULL)
-		return (1);
-	cmd->redir_stdin = malloc(2 * sizeof(int));
-	if (cmd->redir_stdin == NULL)
-	{
-		*cur_char += meta_length;
-		free(meta_arg);
-		return (1);
-	}
-	if (pipe(cmd->redir_stdin) == -1)
-		error("PIPE");
 	stdin_copy = dup(STDIN_FILENO);
 	r = 0;
 	signal(SIGINT, (void *)heredoc_signal);
@@ -70,10 +36,34 @@ char	init_heredoc(t_command *cmd, char **cur_char, t_data *data)
 		ft_putendl_fd(l, cmd->redir_stdin[1]);
 		free(l);
 	}
-	setup_signals();
-	g_heredocing = 0;
 	close(stdin_copy);
 	free(l);
+	return (r);
+}
+
+//<<
+char	init_heredoc(t_command *cmd, char **cur_char, t_data *data)
+{
+	char	r;
+	char	*meta_arg;
+	int		meta_length;
+
+	++*cur_char;
+	meta_arg = get_meta_arg(*cur_char, &meta_length, data);
+	if (meta_arg == NULL)
+		return (1);
+	cmd->redir_stdin = malloc(2 * sizeof(int));
+	if (cmd->redir_stdin == NULL)
+	{
+		*cur_char += meta_length;
+		free(meta_arg);
+		return (1);
+	}
+	if (pipe(cmd->redir_stdin) == -1)
+		error("PIPE");
+	r = init_heredoc_bis(cmd, meta_arg);
+	setup_signals();
+	g_heredocing = 0;
 	free(meta_arg);
 	close(cmd->redir_stdin[1]);
 	*cur_char += meta_length;
