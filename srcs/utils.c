@@ -6,19 +6,20 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:38:16 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 14:57:33 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 17:28:58 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //Frees prompt & history, prints "exit" and exits with `status`
-void	exit_shell(int status)
+void	exit_shell(int status, char ctrl_d)
 {
+	if (ctrl_d)
+		write(STDIN_FILENO, "\b\b  \b\b", 6);
 	ft_putstr_fd("exit\n", STDERR_FILENO);
 	free(prompt(NULL));
 	rl_clear_history();
-	// system("leaks minishell");
 	exit(status);
 }
 
@@ -64,4 +65,12 @@ char	in_quotes(const char *s, char *r)
 		quote = ft_str_chrset(quote_end + 1, METACHARS_QUOTES);
 	}
 	return (0);
+}
+
+//`data->exit_status` is set to `error`
+//Returns 1
+char	err_ret_1(t_data *data, int error)
+{
+	data->exit_status = error;
+	return (1);
 }

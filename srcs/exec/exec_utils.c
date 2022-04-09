@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/09 14:40:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 16:20:38 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 17:01:47 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*error_ret_null(t_data *data, int error, char *s1, char *s2)
 {
 	data->exit_status = error;
 	ft_putstr_fd(s1, STDERR_FILENO);
-	ft_putstr_fd(s2, STDERR_FILENO);
+	ft_putendl_fd(s2, STDERR_FILENO);
 	free(s2);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 22:27:15 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/09 14:57:31 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 17:10:48 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ void	exit_cmd(char **argv, t_data *data)
 	while (argv[i])
 		i++;
 	if (i == 1)
-		exit_shell(0);
+		exit_shell(0, 0);
 	else if (i == 2 && str_is_numeric(argv[1]))
-		exit_shell((char)ft_atoi(argv[1]));
+		exit_shell((char)ft_atoi(argv[1]), 0);
 	else if (i > 2 && str_is_numeric(argv[1]))
 	{
 		data->exit_status = 1;
@@ -53,7 +53,6 @@ void	exit_cmd(char **argv, t_data *data)
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(argv[1], STDERR_FILENO);
 		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-		// system("leaks minishell");
 		exit(255);
 	}
 }

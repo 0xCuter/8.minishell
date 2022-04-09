@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/09 15:52:16 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 15:59:51 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 17:42:46 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	close_free(int *fd)
 	free(fd);
 }
 
-char	free_ret_1(char *arg)
+char	free_ret(char *arg, char r)
 {
 	free(arg);
-	return (1);
+	return (r);
 }

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 16:17:46 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 17:42:55 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define DEFAULT_PATH "PATH=/usr/local/bin:/usr/local/sbin:\
 /usr/bin:/usr/sbin:/bin:/sbin:."
 # define DEFAULT_PROMPT "Minishell$ "
+# define PROMPT_HEAD "\001\e[1;33m\002@42\001\e[1;32m\002Nice\001\e[0m\002:\001\e[1;36m\002"
 # define WAIT_PROMPT "> "
 # define VAR_CHARS " \t\n\v\f\r|<>\"'?$="
 # define METACHARS " \t\n\v\f\r|<>\"'"
@@ -67,14 +68,16 @@ typedef struct s_globs {
 
 extern t_globs	g_globs;
 
-//main.c
+//prompt.c
 char	*prompt(t_data *data);
+char	trailing_pipeline(char **line, t_data *data);
 
 //utils.c
-void	exit_shell(int status);
+void	exit_shell(int status, char ctrl_d);
 void	error(const char *error);
 void	free_null(void **elem);
 char	in_quotes(const char *s, char *r);
+char	err_ret_1(t_data *data, int error);
 
 //str_utils.c
 char	*ft_str_replace(char *s, int start, int end, char *fit);
@@ -96,19 +99,25 @@ char	*find_key(t_data *data, char *str);
 char	*get_env(t_data *data, char *key);
 void	replace_env(t_data *data, char *envar, char *line);
 
-//init.c
-void	init_envs(t_data *data, char **envp);
-void	init_path_split(t_data *data);
-char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char);
-
 //signals.c
 void	setup_signals(void);
 void	signal_handler(int sig);
 void	heredoc_signal(void);
 
+//syntax.c
+char	check_syntax(char *line, t_data *data);
+
+//parse.c
+char	*get_meta_arg(char *meta, int *meta_sub_size, t_data *data);
+
 //replace_input.c
 char	*replace_vars(char *s, t_data *data);
 void	replace_quotes(char **s, t_data *data, int *pos);
+
+//init.c
+void	init_envs(t_data *data, char **envp);
+void	init_path_split(t_data *data);
+char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char);
 
 //init_cmds.c
 t_list	*init_cmds(char *line, t_data *data);
@@ -122,11 +131,7 @@ char	init_redir_stdout(t_command *cmd, char **cur, t_data *data);
 //init_redirs_utils.c
 void	error_open(int **fd, char *arg, char *r);
 void	close_free(int *fd);
-char	free_ret_1(char *arg);
-
-//syntax.c
-char	check_syntax(char *line, t_data *data);
-char	*get_meta_arg(char *meta, int *meta_sub_size, t_data *data);
+char	free_ret(char *arg, char r);
 
 //execs/
 // exec.c
