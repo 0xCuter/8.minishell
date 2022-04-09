@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 10:34:49 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/09 12:32:06 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,67 @@ char	*prompt(t_data *data)
 	return (str);
 }
 
+static char	*get_last_pipe(char *line)
+{
+	char	*last_pipe;
+	char	*temp;
+
+	last_pipe = ft_strchr(line, '|');
+	while (in_quotes(line, last_pipe))
+	{
+		temp = ft_strchr(last_pipe + 1, '|');
+		last_pipe = temp;
+	}
+	temp = last_pipe;
+	while (temp)
+	{
+		temp = ft_strchr(temp + 1, '|');
+		while (in_quotes(line, last_pipe))
+		{
+			temp = ft_strchr(last_pipe + 1, '|');
+			last_pipe = temp;
+		}
+		if (temp)
+			last_pipe = temp;
+	}
+	return (last_pipe);
+}
+
+//Waits for input when a pipe has no argument
+//True if it read line
+static char	trailing_pipeline(char **line, t_data *data)
+{
+	char	*temp;
+	char	*last_pipe;
+	char	*l;
+	int		i;
+
+	last_pipe = get_last_pipe(*line);
+	if (last_pipe == NULL)
+		return (0);
+	i = 0;
+	temp = get_meta_arg(last_pipe, &i, data);
+	if (temp)
+	{
+		free(temp);
+		return (0);
+	}
+	free_null((void *)&temp);
+	l = readline(WAIT_PROMPT);
+	if (l == NULL)
+	{
+		free(l);
+		return (0);
+	}
+	temp = ft_strjoin(*line, " ");
+	free(*line);
+	*line = ft_strjoin(temp, l);
+	free(l);
+	free(temp);
+	*line = replace_vars(*line, data);
+	return (1);
+}
+
 //Reads line indefinitely
 static void	loop_prompt(t_data *data)
 {
@@ -72,6 +133,7 @@ static void	loop_prompt(t_data *data)
 			write(STDIN_FILENO, "\b\b  \b\b", 6);
 			exit_shell(data->exit_status);
 		}
+		while (trailing_pipeline(&line, data));
 		if (*line != 0)
 			add_history(line);
 		line = replace_vars(line, data);

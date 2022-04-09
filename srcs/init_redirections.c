@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 14:35:46 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 13:43:43 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/09 13:46:46 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,23 +71,34 @@ char	init_heredoc(t_command *cmd, char **cur_char, t_data *data)
 }
 
 //>>
-void	init_append(t_command *cmd, char **cur_char, t_data *data)
+char	init_append(t_command *cmd, char **cur_char, t_data *data)
 {
 	char	*meta_arg;
 	int		meta_length;
+	char	r;
 
 	++*cur_char;
 	meta_arg = get_meta_arg(*cur_char, &meta_length, data);
 	if (meta_arg == NULL)
-		return ;
+		return (1);
 	cmd->redir_stdout = malloc(sizeof(int));
 	if (cmd->redir_stdout == NULL)
-		return ;
+		return (1);
 	*cmd->redir_stdout = open(meta_arg, O_WRONLY | O_CREAT | O_APPEND, 0777);
-	free(meta_arg);
+	r = 0;
 	if (*cmd->redir_stdout == -1)
-		error("OPEN");
+	{
+		free(cmd->redir_stdout);
+		cmd->redir_stdout = NULL;
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(meta_arg, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		perror(meta_arg);
+		r = 1;
+	}
+	free(meta_arg);
 	*cur_char += meta_length;
+	return (r);
 }
 
 //<
@@ -130,7 +141,10 @@ char	init_redir_stdout(t_command *cmd, char **cur_char, t_data *data)
 	r = 0;
 	meta_arg = get_meta_arg(*cur_char, &meta_length, data);
 	if (meta_arg == NULL)
+	{
+		ft_putendl_fd("minishell: : No such file or directory", STDERR_FILENO);
 		return (1);
+	}
 	cmd->redir_stdout = malloc(sizeof(int));
 	if (cmd->redir_stdout == NULL)
 		return (1);
@@ -141,6 +155,8 @@ char	init_redir_stdout(t_command *cmd, char **cur_char, t_data *data)
 		free(cmd->redir_stdout);
 		cmd->redir_stdout = NULL;
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(meta_arg, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
 		perror(meta_arg);
 		r = 1;
 	}

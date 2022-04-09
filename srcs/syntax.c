@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:01:49 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 18:12:09 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 13:38:12 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 //Writes the syntax error on STDERR
 static void	print_syntax_error(char *meta, char *line)
 {
-	ft_putstr_fd("-minishell: syntax error near unexpected token `", 2);
+	ft_putstr_fd("-minishell: syntax error near unexpected token `", STDERR_FILENO);
 	if (meta && *meta == '|')
-		write(2, "||", 2);
+		ft_putstr_fd("||", STDERR_FILENO);
 	else if (meta && ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES) != line + ft_strlen(line))
 		write(2, ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES), 1);
 	else
-		write(2, "newline", 7);
-	write(2, "'\n", 2);
+		ft_putstr_fd("newline", STDERR_FILENO);
+	ft_putstr_fd("'\n", STDERR_FILENO);
 }
 
-static char	*get_met_arg_with_quotes(char *meta, int *meta_sub_size, t_data *data)
+static char	*get_meta_arg_with_quotes(char *meta, int *meta_sub_size, t_data *data)
 {
 	char	*meta_sub;
 	char	*end_quote;
@@ -51,30 +51,33 @@ char	*get_meta_arg(char *meta, int *meta_sub_size, t_data *data)
 
 	*meta_sub_size = 0;
 	first_char = ft_str_chrset_rev(meta + 1, METACHARS_WHITE_SPACES);
-	if (ft_strchr(METACHARS, *first_char))
+	if (ft_strchr(METACHARS_NO_QUOTES, *first_char) && ft_strchr(METACHARS_NO_QUOTES, *first_char)[0] != 0)
 		return (NULL);
-	if (*first_char)
+	if (first_char)
 	{
 		*meta_sub_size += first_char - meta;
 		meta = first_char;
 	}
 	if (*meta == '\'' || *meta == '"')
 	{
-		meta_sub = get_met_arg_with_quotes(meta, meta_sub_size, data);
+		meta_sub = get_meta_arg_with_quotes(meta, meta_sub_size, data);
 		if (meta_sub == NULL)
 			return (NULL);
 	}
 	else
 	{
-		meta_sub = ft_substr(meta, 0, ft_str_chrset(meta + 1, METACHARS) - meta);
+		if (*meta == 0)
+			return (NULL);
+		else
+			meta_sub = ft_substr(meta, 0, ft_str_chrset(meta + 1, METACHARS) - meta);
 		if (meta_sub == NULL)
 			return (NULL);
 		*meta_sub_size += ft_strlen(meta_sub);
-	}
-	if (*meta_sub == 0)
-	{
-		free(meta_sub);
-		return (NULL);
+		if (*meta_sub == 0)
+		{
+			free(meta_sub);
+			return (NULL);
+		}
 	}
 	return (meta_sub);
 }
@@ -91,8 +94,8 @@ static char	meta_no_arg(char *line, char **meta, t_data *data)
 	{
 		if (*meta && **meta == '|')
 		{
-			if (ft_str_chrset(*meta + 1, METACHARS_NO_WHITE_SPACES) != line + ft_strlen(line))
-				*meta = ft_str_chrset(*meta + 1, METACHARS_NO_WHITE_SPACES);
+			if (**meta != 0)
+				++*meta;
 			else
 				*meta = NULL;
 		}
@@ -117,8 +120,18 @@ char	check_syntax(char *line, t_data *data)
 		data->exit_status = 258;
 		return (1);
 	}
-	meta = ft_str_chrset(line, METACHARS_NO_WHITE_SPACES);
-	while (meta && *meta && meta < line + ft_strlen(line))
+	meta = ft_str_chrset_rev(line, METACHARS_WHITE_SPACES);
+	if (meta && *meta == '|')
+	{
+		if (meta[1] == '|')
+			ft_putendl_fd("-minishell: syntax error near unexpected token `||'", STDERR_FILENO);
+		else
+			ft_putendl_fd("-minishell: syntax error near unexpected token `|'", STDERR_FILENO);
+		data->exit_status = 258;
+		return (1);
+	}
+	meta = ft_str_chrset(meta, METACHARS_NO_WHITE_SPACES);
+	while (meta && *meta)
 	{
 		if ((meta[0] == '<' && meta[1] == '<')
 			|| (meta[0] == '>' && meta[1] == '>'))

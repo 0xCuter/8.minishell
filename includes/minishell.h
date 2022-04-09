@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 12:57:08 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/09 13:46:46 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ t_list	*init_cmds(char *line, t_data *data);
 
 //init_redirections.c
 char	init_heredoc(t_command *cmd, char **cur, t_data *data);
-void	init_append(t_command *cmd, char **cur, t_data *data);
+char	init_append(t_command *cmd, char **cur, t_data *data);
 char	init_redir_stdin(t_command *cmd, char **cur, t_data *data);
 char	init_redir_stdout(t_command *cmd, char **cur, t_data *data);
 
