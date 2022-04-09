@@ -6,15 +6,13 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:06:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 14:13:11 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 14:21:09 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-pid_t	*g_pids;
-char	g_last_child;
-char	g_heredocing;
+t_globs globs;
 
 char	*prompt(t_data *data)
 {
@@ -156,11 +154,11 @@ int	main(int argc, char **argv, char **envp)
 		exit(2);
 	}
 	rl_catch_signals = 0;
-	g_last_child = 1;
-	g_heredocing = 0;
+	globs.last_child = 1;
+	globs.heredocing = 0;
+	globs.pids = NULL;
 	data.exec_name = argv[0];
 	init_envs(&data, envp);
-	g_pids = NULL;
 	setup_signals();
 	loop_prompt(&data);
 }

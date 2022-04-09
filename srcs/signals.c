@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 12:07:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 10:58:47 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/09 14:22:38 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	heredoc_signal(void)
 {
-	g_heredocing = 1;
+	globs.heredocing = 1;
 	close(STDIN_FILENO);
 }
 
@@ -29,7 +29,7 @@ static void	signal_parent(int sig)
 	}
 	if (sig == SIGQUIT)
 	{
-		if (g_heredocing == 1)
+		if (globs.heredocing == 1)
 			write(STDERR_FILENO, WAIT_PROMPT, ft_strlen(WAIT_PROMPT));
 		write(STDERR_FILENO, "  \a\b\b", 5);
 		rl_redisplay();
@@ -43,16 +43,16 @@ void	signal_handler(int sig)
 {
 	int	i;
 
-	if (g_last_child)
+	if (globs.last_child)
 	{
-		if (g_pids)
+		if (globs.pids)
 		{
 			if (sig == SIGQUIT)
 				write(STDERR_FILENO, "Quit: 3", ft_strlen("Quit: 3"));
 			write(STDERR_FILENO, "\n", 1);
 			i = 0;
-			while (g_pids[i])
-				kill(g_pids[i++], SIGINT);
+			while (globs.pids[i])
+				kill(globs.pids[i++], SIGINT);
 		}
 		else
 			signal_parent(sig);
