@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:01:49 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 13:26:39 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 13:38:12 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ char	check_syntax(char *line, t_data *data)
 
 	if (line == NULL)
 	{
-		data->exit_status = 2;
+		data->exit_status = 258;
 		return (1);
 	}
 	meta = ft_str_chrset_rev(line, METACHARS_WHITE_SPACES);
@@ -127,7 +127,7 @@ char	check_syntax(char *line, t_data *data)
 			ft_putendl_fd("-minishell: syntax error near unexpected token `||'", STDERR_FILENO);
 		else
 			ft_putendl_fd("-minishell: syntax error near unexpected token `|'", STDERR_FILENO);
-		data->exit_status = 2;
+		data->exit_status = 258;
 		return (1);
 	}
 	meta = ft_str_chrset(meta, METACHARS_NO_WHITE_SPACES);
@@ -152,7 +152,7 @@ char	check_syntax(char *line, t_data *data)
 		{
 			if (meta_no_arg(line, &meta, data))
 			{
-				data->exit_status = 2;
+				data->exit_status = 258;
 				return (1);
 			}
 			if (meta && *meta)
