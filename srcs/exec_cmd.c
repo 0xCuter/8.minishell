@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 18:38:35 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 10:06:51 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,20 @@ static char	*find_cmd_in_path(char *cmd, t_data *data, char *allocated, struct s
 	return (NULL);
 }
 
+//Returns 1 if the cmd is an absolute or relative path
+// (if it start with / or ./ or ../)
+//Else 0
+static char	cmd_is_path(char *cmd)
+{
+	if (cmd[0] != 0
+		&& (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/')))
+		return (1);
+	else if (cmd[0] != 0 && cmd[1] != 0
+			&& (cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/'))
+		return (1);
+	return (0);
+}
+
 //Searches for the `cmd` path
 //Returns the command path if it is not a directory and
 // the user has the permission to execute it
@@ -62,7 +76,7 @@ static char	*find_cmd(char *cmd, t_data *data, char *allocated)
 		g_last_child = 0;
 	*allocated = 0;
 	cmd_path = NULL;
-	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
+	if (cmd_is_path(cmd))
 	{
 		if (stat(cmd, &s))
 		{
