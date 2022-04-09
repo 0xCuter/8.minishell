@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:01:49 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 12:27:40 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/09 12:49:10 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*get_meta_arg(char *meta, int *meta_sub_size, t_data *data)
 
 	*meta_sub_size = 0;
 	first_char = ft_str_chrset_rev(meta + 1, METACHARS_WHITE_SPACES);
-	if (ft_strchr(METACHARS, *first_char))
+	if (ft_strchr(METACHARS_NO_QUOTES, *first_char) && ft_strchr(METACHARS_NO_QUOTES, *first_char) != 0)
 		return (NULL);
 	if (*first_char)
 	{
