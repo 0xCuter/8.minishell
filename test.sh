@@ -3,6 +3,8 @@
 # Negative number tests are bound to fail with "KO"
 # Appends to "test.log" if KO
 
+MAC=0
+
 case $1 in
    -2) TEST='echo "	a	$SHELL'
    ;;
@@ -71,10 +73,14 @@ case $1 in
    ;;
 esac
 
-# echo "Test: $1"
-# echo "Leak result:"
-# echo $TEST | valgrind --leak-check=full --track-fds=yes ./minishell 2>&1 | grep "lost:\|FILE DESCRIPTORS:"
-# echo $TEST | ./minishell 2>&1 | grep "LEAK"
+if [[ $MAC == 0 ]]
+then
+   echo "Test: $1"
+   echo "Leak result:"
+   echo $TEST | valgrind --leak-check=full --track-fds=yes ./minishell 2>&1 | grep "lost:\|FILE DESCRIPTORS:"
+else
+   echo $TEST | ./minishell 2>&1 | grep "LEAK"
+fi
 echo
 MINI_RES=`echo $TEST | ./minishell 2>&-`
 echo "Minishell result:"
@@ -85,14 +91,22 @@ echo "$BASH_RES"
 
 if [[ $MINI_RES == $BASH_RES ]]
 then
-   echo "\033[1;33m-- OK --\033[0m"
-#    echo -en "\e[1;33m"
-#    echo "-- OK --"
-#    echo -en "\e[0m"
+   if [[ $MAC == 1 ]]
+   then
+      echo "\033[1;33m-- OK --\033[0m"
+   else
+      echo -en "\e[1;36m"
+      echo "-- OK --"
+      echo -en "\e[0m"
+   fi
 else
    echo "$1 failed" >>test.log
-   echo "\033[1;31m-- KO --\033[0m"
-#    echo -en "\e[1;31m"
-#    echo "-- KO --"
-#    echo -en "\e[0m"
+   if [[ $MAC == 1 ]]
+   then
+      echo "\033[1;31m-- KO --\033[0m"
+   else
+      echo -en "\e[1;31m"
+      echo "-- KO --"
+      echo -en "\e[0m"
+   fi
 fi

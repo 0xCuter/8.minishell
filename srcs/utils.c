@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:38:16 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/08 17:39:36 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/09 11:45:00 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ char	in_quotes(const char *s, char *r)
 	char	*quote;
 	char	*quote_end;
 
+	if (s == NULL || r == NULL)
+		return (0);
 	quote = ft_str_chrset(s, METACHARS_QUOTES);
 	while (quote && *quote)
 	{
