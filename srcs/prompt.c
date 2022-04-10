@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/09 17:30:15 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 21:10:23 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 14:54:02 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*create_prompt(char *user_var, char **prompt)
+static void	create_prompt(char *user_var, char **prompt)
 {
 	char	*cwd;
 	int		len;
@@ -24,21 +24,19 @@ static char	*create_prompt(char *user_var, char **prompt)
 		*prompt = mod_strjoin(*prompt, user_var);
 		*prompt = mod_strjoin(*prompt, PROMPT_HEAD);
 		cwd = getcwd(NULL, 0);
+		if (!cwd)
+			return (*prompt = mod_strjoin(*prompt, DEFAULT_PROMPT));
 		len = ft_strlen(cwd);
 		slash = 0;
-		while (len && slash < 3)
-		{
-			len--;
+		while (len-- && slash < 3)
 			if (cwd[len] == '/')
 				slash++;
-		}
-		*prompt = mod_strjoin(*prompt, cwd + len);
+		*prompt = mod_strjoin(*prompt, cwd + len + 1);
 		*prompt = mod_strjoin(*prompt, "\001\e[0m\002$ ");
 		free(cwd);
 	}
 	else
 		*prompt = mod_strjoin(*prompt, DEFAULT_PROMPT);
-	return (*prompt);
 }
 
 //Returns the prompt string
