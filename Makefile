@@ -6,7 +6,7 @@
 #    By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/22 08:53:40 by vvandenb          #+#    #+#              #
-#    Updated: 2022/04/09 17:38:23 by vvandenb         ###   ########.fr        #
+#    Updated: 2022/04/10 07:46:48 by vvandenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ HEADERS_DIR = includes/
 HEADERS = $(HEADERS_DIR)minishell.h
 NAME = minishell
 SRCS =	$(SRCS_DIR)main.c $(SRCS_DIR)prompt.c $(SRCS_DIR)signals.c	\
-		$(SRCS_DIR)utils.c $(SRCS_DIR)str_utils.c $(SRCS_DIR)tab_utils.c $(SRCS_DIR)init_redirs_utils.c $(SRCS_DIR)envs_utils.c	\
+		$(SRCS_DIR)utils/utils.c $(SRCS_DIR)utils/str_utils.c $(SRCS_DIR)utils/tab_utils.c	\
+		$(SRCS_DIR)utils/init_redirs_utils.c $(SRCS_DIR)utils/envs_utils.c	\
 		$(SRCS_DIR)parse.c $(SRCS_DIR)syntax.c $(SRCS_DIR)replace_input.c	\
 		$(SRCS_DIR)init.c $(SRCS_DIR)init_redirs.c $(SRCS_DIR)init_cmds.c	\
 		$(SRCS_DIR)exec/exec.c $(SRCS_DIR)exec/exec_builtin.c $(SRCS_DIR)exec/exec_cmd.c $(SRCS_DIR)exec/exec_utils.c \

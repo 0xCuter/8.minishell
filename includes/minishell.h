@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 17:42:55 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 07:47:45 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,33 +72,6 @@ extern t_globs	g_globs;
 char	*prompt(t_data *data);
 char	trailing_pipeline(char **line, t_data *data);
 
-//utils.c
-void	exit_shell(int status, char ctrl_d);
-void	error(const char *error);
-void	free_null(void **elem);
-char	in_quotes(const char *s, char *r);
-char	err_ret_1(t_data *data, int error);
-
-//str_utils.c
-char	*ft_str_replace(char *s, int start, int end, char *fit);
-char	*ft_str_chrset_ign_quotes(const char *s, const char *set);
-char	*ft_str_chrset(const char *s, const char *set);
-char	*ft_str_chrset_rev(const char *s, const char *set);
-char	*mod_strjoin(char *s1, char *s2);
-
-//tab_utils.c
-char	**duplicate_tab(char **tab);
-void	sort_tab(char **tab);
-char	**add_line(char *line, char **tab);
-char	**remove_line(char *line, char **tab);
-void	free_tab(char **tab);
-
-//env_utils.c
-char	*find_envar(t_data *data, char *var_name);
-char	*find_key(t_data *data, char *str);
-char	*get_env(t_data *data, char *key);
-void	replace_env(t_data *data, char *envar, char *line);
-
 //signals.c
 void	setup_signals(void);
 void	signal_handler(int sig);
@@ -128,7 +101,31 @@ char	init_append(t_command *cmd, char **cur, t_data *data);
 char	init_redir_stdin(t_command *cmd, char **cur, t_data *data);
 char	init_redir_stdout(t_command *cmd, char **cur, t_data *data);
 
-//init_redirs_utils.c
+//utils/
+// utils.c
+void	exit_shell(int status, char ctrl_d);
+void	error(const char *error);
+void	free_null(void **elem);
+char	in_quotes(const char *s, char *r);
+char	err_ret_1(t_data *data, int error);
+// str_utils.c
+char	*ft_str_replace(char *s, int start, int end, char *fit);
+char	*ft_str_chrset_ign_quotes(const char *s, const char *set);
+char	*ft_str_chrset(const char *s, const char *set);
+char	*ft_str_chrset_rev(const char *s, const char *set);
+char	*mod_strjoin(char *s1, char *s2);
+// tab_utils.c
+char	**duplicate_tab(char **tab);
+void	sort_tab(char **tab);
+char	**add_line(char *line, char **tab);
+char	**remove_line(char *line, char **tab);
+void	free_tab(char **tab);
+// env_utils.c
+char	*find_envar(t_data *data, char *var_name);
+char	*find_key(t_data *data, char *str);
+char	*get_env(t_data *data, char *key);
+void	replace_env(t_data *data, char *envar, char *line);
+// init_redirs_utils.c
 void	error_open(int **fd, char *arg, char *r);
 void	close_free(int *fd);
 char	free_ret(char *arg, char r);
