@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/10 09:00:58 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 15:13:07 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static pid_t	exec_cmd_elem(t_command *cmd, t_data *data, int *pipes[2])
 		{
 			if (is_builtin(argv[0]))
 			{
-				pid = -1;
+				pid = NO_PID;
 				exec_builtin(cmd, data, argv);
 			}
 			else
@@ -112,12 +112,17 @@ void	exec_cmd_list(t_list *c_list, t_data *data)
 	while (cmd_elem)
 	{
 		pid = exec_cmd_elem(cmd_elem->content, data, pipes);
-		if (pid != -1)
+		if (pid == FORK_ERROR)
+			break ;
+		if (pid != NO_PID)
 			add_g_pids(pid);
 		cmd_elem = cmd_elem->next;
 	}
 	close_pipes(0, pipes, 1);
-	wait_children(data, pid);
+	if (pid == FORK_ERROR)
+		kill_children();
+	else
+		wait_children(data, pid);
 	g_globs.last_child = 1;
 	if (c_list)
 		ft_lstclear(&c_list, clear_cmd);

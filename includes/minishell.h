@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/10 09:01:06 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 15:22:32 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@
 # define METACHARS_NO_QUOTES " \t\n\v\f\r|<>"
 # define METACHARS_WHITE_SPACES " \t\n\v\f\r"
 # define METACHARS_NO_WHITE_SPACES "|<>\"'"
+
+# define NO_PID -1
+# define FORK_ERROR -2
 
 typedef struct s_command {
 	int		id;
@@ -139,13 +142,14 @@ void	exec_cmd_list(t_list *cmds, t_data *data);
 // exec_utils.c
 void	setup_redirs(t_command *cmd, int *old_stdin, int *old_stdout);
 char	*error_ret_null(t_data *data, int error, char *s1, char *s2);
+void	kill_children(void);
 void	wait_children(t_data *data, int last_pid);
-void	add_g_pids(pid_t pid);
 void	clear_cmd(void *cmd_void);
 // exec_builtin.c
 char	is_builtin(char *cmd_name);
 void	exec_builtin(t_command *cmd, t_data *data, char **argv);
 // exec_cmd.c
+void	add_g_pids(pid_t pid);
 int		exec_cmd(t_command *cmd, char **argv, t_data *data);
 // find_cmd.c
 char	*find_cmd(char *cmd, t_data *data, char *allocated);

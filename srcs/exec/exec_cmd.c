@@ -6,11 +6,41 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 09:35:37 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/10 08:21:35 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 15:22:34 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+//Inits the global PIDs list or adds a PID to it
+void	add_g_pids(pid_t pid)
+{
+	pid_t	*temp;
+	pid_t	*temp_bis;
+	int		i;
+
+	if (g_globs.pids == NULL)
+	{
+		g_globs.pids = ft_calloc(2, sizeof(pid_t));
+		g_globs.pids[0] = pid;
+	}
+	else
+	{
+		i = 0;
+		while (g_globs.pids[i])
+			++i;
+		temp = ft_calloc(i + 2, sizeof(pid_t));
+		temp[i--] = pid;
+		while (i >= 0)
+		{
+			temp[i] = g_globs.pids[i];
+			--i;
+		}
+		temp_bis = g_globs.pids;
+		g_globs.pids = temp;
+		free(temp_bis);
+	}
+}
 
 static void	child_process_error(char *cmd_path)
 {
@@ -58,8 +88,11 @@ pid_t	exec_cmd(t_command *cmd, char **argv, t_data *data)
 	{
 		pid = fork();
 		if (pid == -1)
-			error("FORK");
-		if (pid == 0)
+		{
+			perror("minishell: fork");
+			pid = FORK_ERROR;
+		}
+		else if (pid == 0)
 		{
 			setup_pipes(cmd);
 			setup_redirs(cmd, NULL, NULL);

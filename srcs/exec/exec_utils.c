@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/09 14:40:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/10 09:01:51 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 15:22:09 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,27 @@ char	*error_ret_null(t_data *data, int error, char *s1, char *s2)
 	return (NULL);
 }
 
+//Kills all children and waits for them
+void	kill_children(void)
+{
+	pid_t	*temp;
+	int		waited_pid;
+	int		i;
+
+	i = 0;
+	while (g_globs.pids && g_globs.pids[i])
+	{
+		kill(g_globs.pids[i], SIGKILL);
+		++i;
+	}
+	waited_pid = wait(NULL);
+	while (waited_pid > 0)
+		waited_pid = wait(NULL);
+	temp = g_globs.pids;
+	g_globs.pids = NULL;
+	free(temp);
+}
+
 //Waits for all children
 //If `last_pid != -1`, saves the last one's exit status to `data`
 void	wait_children(t_data *data, int last_pid)
@@ -60,7 +81,7 @@ void	wait_children(t_data *data, int last_pid)
 	pid_t	*temp;
 
 	waited_pid = wait(&waited_status);
-	if (last_pid != -1 && waited_pid == last_pid)
+	if (last_pid != NO_PID && last_pid != FORK_ERROR && waited_pid == last_pid)
 	{
 		data->exit_status = WEXITSTATUS(waited_status);
 		if (WIFSIGNALED(waited_status))
@@ -69,7 +90,8 @@ void	wait_children(t_data *data, int last_pid)
 	while (waited_pid > 0)
 	{
 		waited_pid = wait(&waited_status);
-		if (last_pid != -1 && waited_pid == last_pid)
+		if (last_pid != NO_PID && last_pid != FORK_ERROR
+			&& waited_pid == last_pid)
 		{
 			data->exit_status = WEXITSTATUS(waited_status);
 			if (WIFSIGNALED(waited_status))
@@ -79,36 +101,6 @@ void	wait_children(t_data *data, int last_pid)
 	temp = g_globs.pids;
 	g_globs.pids = NULL;
 	free(temp);
-}
-
-//Inits the global PIDs list or adds a PID to it
-void	add_g_pids(pid_t pid)
-{
-	pid_t	*temp;
-	pid_t	*temp_bis;
-	int		i;
-
-	if (g_globs.pids == NULL)
-	{
-		g_globs.pids = ft_calloc(2, sizeof(pid_t));
-		g_globs.pids[0] = pid;
-	}
-	else
-	{
-		i = 0;
-		while (g_globs.pids[i])
-			++i;
-		temp = ft_calloc(i + 2, sizeof(pid_t));
-		temp[i--] = pid;
-		while (i >= 0)
-		{
-			temp[i] = g_globs.pids[i];
-			--i;
-		}
-		temp_bis = g_globs.pids;
-		g_globs.pids = temp;
-		free(temp_bis);
-	}
 }
 
 //Frees a command structure
