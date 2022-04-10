@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/10 15:22:32 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 16:00:06 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # define DEFAULT_PROMPT "Minishell$ "
 # define PROMPT_HEAD "\001\e[1;33m\002@42\001\e[1;32m\002Nice\001\e[0m\002:\001\e[1;36m\002"
 # define WAIT_PROMPT "> "
-# define VAR_CHARS " \t\n\v\f\r|<>\"'?$="
+# define VAR_CHARS " \t\n\v\f\r|<>\"'?$=:"
 # define METACHARS " \t\n\v\f\r|<>\"'"
 # define METACHARS_DOLLAR_SIGN " \t\n\v\f\r|<>\"'$"
 # define METACHARS_QUOTES "\"'"
