@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/09 14:40:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 17:01:47 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 08:20:47 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,6 @@ void	setup_redirs(t_command *cmd, int *old_stdin, int *old_stdout)
 			error("CLOSE");
 		free_null((void *)&cmd->redir_stdout);
 	}
-}
-
-//Returns 1 if the cmd is an absolute or relative path
-// (if it start with / or ./ or ../)
-//Else 0
-char	cmd_is_path(char *cmd)
-{
-	if (cmd[0] != 0
-		&& (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/')))
-		return (1);
-	else if (cmd[0] != 0 && cmd[1] != 0
-		&& (cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/'))
-		return (1);
-	return (0);
 }
 
 //`data->exit_status` is set to `error`
