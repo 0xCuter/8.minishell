@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:01:49 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/10 08:09:58 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 15:25:20 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ char	check_syntax(char *line, t_data *data)
 	char	*last_meta;
 
 	if (check_first_pipes(line, &meta))
-		return (err_ret_1(data, 127));
+		return (err_ret_1(data, 258));
 	meta = ft_str_chrset(meta, METACHARS_NO_WHITE_SPACES);
 	while (meta && *meta)
 	{
@@ -108,7 +108,7 @@ char	check_syntax(char *line, t_data *data)
 		else
 		{
 			if (meta_no_arg(line, &meta, data))
-				return (err_ret_1(data, 127));
+				return (err_ret_1(data, 258));
 			if (meta && *meta)
 				meta = ft_str_chrset(meta + 1, METACHARS_NO_WHITE_SPACES);
 		}
