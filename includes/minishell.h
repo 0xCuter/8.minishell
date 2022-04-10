@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/10 08:53:01 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 09:01:06 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,12 +134,14 @@ char	free_ret(char *arg, char r);
 
 //execs/
 // exec.c
-void	clear_cmd(void *cmd_void);
 void	execute(t_data *data, char *line);
 void	exec_cmd_list(t_list *cmds, t_data *data);
 // exec_utils.c
 void	setup_redirs(t_command *cmd, int *old_stdin, int *old_stdout);
 char	*error_ret_null(t_data *data, int error, char *s1, char *s2);
+void	wait_children(t_data *data, int last_pid);
+void	add_g_pids(pid_t pid);
+void	clear_cmd(void *cmd_void);
 // exec_builtin.c
 char	is_builtin(char *cmd_name);
 void	exec_builtin(t_command *cmd, t_data *data, char **argv);

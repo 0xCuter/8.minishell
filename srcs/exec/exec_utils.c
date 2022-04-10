@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/09 14:40:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/10 08:20:47 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 09:01:51 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,85 @@ char	*error_ret_null(t_data *data, int error, char *s1, char *s2)
 	ft_putendl_fd(s2, STDERR_FILENO);
 	free(s2);
 	return (NULL);
+}
+
+//Waits for all children
+//If `last_pid != -1`, saves the last one's exit status to `data`
+void	wait_children(t_data *data, int last_pid)
+{
+	int		waited_pid;
+	int		waited_status;
+	pid_t	*temp;
+
+	waited_pid = wait(&waited_status);
+	if (last_pid != -1 && waited_pid == last_pid)
+	{
+		data->exit_status = WEXITSTATUS(waited_status);
+		if (WIFSIGNALED(waited_status))
+			data->exit_status = 128 + WTERMSIG(waited_status);
+	}
+	while (waited_pid > 0)
+	{
+		waited_pid = wait(&waited_status);
+		if (last_pid != -1 && waited_pid == last_pid)
+		{
+			data->exit_status = WEXITSTATUS(waited_status);
+			if (WIFSIGNALED(waited_status))
+				data->exit_status = 128 + WTERMSIG(waited_status);
+		}
+	}
+	temp = g_globs.pids;
+	g_globs.pids = NULL;
+	free(temp);
+}
+
+//Inits the global PIDs list or adds a PID to it
+void	add_g_pids(pid_t pid)
+{
+	pid_t	*temp;
+	pid_t	*temp_bis;
+	int		i;
+
+	if (g_globs.pids == NULL)
+	{
+		g_globs.pids = ft_calloc(2, sizeof(pid_t));
+		g_globs.pids[0] = pid;
+	}
+	else
+	{
+		i = 0;
+		while (g_globs.pids[i])
+			++i;
+		temp = ft_calloc(i + 2, sizeof(pid_t));
+		temp[i--] = pid;
+		while (i >= 0)
+		{
+			temp[i] = g_globs.pids[i];
+			--i;
+		}
+		temp_bis = g_globs.pids;
+		g_globs.pids = temp;
+		free(temp_bis);
+	}
+}
+
+//Frees a command structure
+void	clear_cmd(void *cmd_void)
+{
+	t_command	*cmd;
+
+	cmd = (t_command *)cmd_void;
+	if (cmd->redir_stdin)
+	{
+		close(cmd->redir_stdin[0]);
+		free(cmd->redir_stdin);
+	}
+	if (cmd->redir_stdout)
+	{
+		close(*cmd->redir_stdout);
+		free(cmd->redir_stdout);
+	}
+	if (cmd->argv)
+		free_tab(cmd->argv);
+	free(cmd);
 }

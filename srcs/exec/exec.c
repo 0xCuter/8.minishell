@@ -6,32 +6,11 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 15:37:08 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 14:29:44 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 09:00:58 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-//Frees a command structure
-void	clear_cmd(void *cmd_void)
-{
-	t_command	*cmd;
-
-	cmd = (t_command *)cmd_void;
-	if (cmd->redir_stdin)
-	{
-		close(cmd->redir_stdin[0]);
-		free(cmd->redir_stdin);
-	}
-	if (cmd->redir_stdout)
-	{
-		close(*cmd->redir_stdout);
-		free(cmd->redir_stdout);
-	}
-	if (cmd->argv)
-		free_tab(cmd->argv);
-	free(cmd);
-}
 
 //Assigns one of two pipes to the command
 static void	init_pipes(t_command *cmd, int *pipes[2])
@@ -92,39 +71,8 @@ static void	close_pipes(int cmd_id, int *pipes[2], char end)
 		close_pipe(&pipes[0]);
 }
 
-//Waits for all children
-//If `last_pid != -1`, saves the last one's exit status to `data`
-static void	wait_children(t_data *data, int last_pid)
-{
-	int		waited_pid;
-	int		waited_status;
-	pid_t	*temp;
-
-	waited_pid = wait(&waited_status);
-	if (last_pid != -1 && waited_pid == last_pid)
-	{
-		data->exit_status = WEXITSTATUS(waited_status);
-		if (WIFSIGNALED(waited_status))
-			data->exit_status = 128 + WTERMSIG(waited_status);
-	}
-	while (waited_pid > 0)
-	{
-		waited_pid = wait(&waited_status);
-		if (last_pid != -1 && waited_pid == last_pid)
-		{
-			data->exit_status = WEXITSTATUS(waited_status);
-			if (WIFSIGNALED(waited_status))
-				data->exit_status = 128 + WTERMSIG(waited_status);
-		}
-	}
-	temp = g_globs.pids;
-	g_globs.pids = NULL;
-	free(temp);
-}
-
 //Executes a command or a builtin
-static pid_t	exec_cmd_elem(t_command *cmd, \
-	t_data *data, int *pipes[2])
+static pid_t	exec_cmd_elem(t_command *cmd, t_data *data, int *pipes[2])
 {
 	char	**argv;
 	pid_t	pid;
@@ -149,37 +97,6 @@ static pid_t	exec_cmd_elem(t_command *cmd, \
 			data->exit_status = 1;
 	}
 	return (pid);
-}
-
-//Inits the global PIDs list or adds a PID to it
-static void	add_g_pids(pid_t pid)
-{
-	pid_t	*temp;
-	pid_t	*temp_bis;
-	int		i;
-
-	if (g_globs.pids == NULL)
-	{
-		g_globs.pids = ft_calloc(2, sizeof(pid_t));
-		g_globs.pids[0] = pid;
-	}
-	else
-	{
-		i = 0;
-		while (g_globs.pids[i])
-			++i;
-		temp = ft_calloc(i + 2, sizeof(pid_t));
-		temp[i] = pid;
-		--i;
-		while (i >= 0)
-		{
-			temp[i] = g_globs.pids[i];
-			--i;
-		}
-		temp_bis = g_globs.pids;
-		g_globs.pids = temp;
-		free(temp_bis);
-	}
 }
 
 //Executes the commands or builtins
