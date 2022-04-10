@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:01:49 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/10 15:25:20 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 17:06:18 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ static char	meta_no_arg(char *line, char **meta, t_data *data)
 	int		meta_arg_size;
 
 	meta_arg = get_meta_arg(*meta, &meta_arg_size, data);
-	if ((meta_arg == NULL
+	if ((meta_arg == NULL && **meta != '|')
+		|| (meta_arg == NULL && **meta == '|'
 			&& ft_str_chrset(*meta + 1, METACHARS_NO_WHITE_SPACES)[0] == 0)
-			|| (meta_arg != NULL && *meta_arg == '|'))
+		|| (meta_arg != NULL && *meta_arg == '|'))
 	{
 		if (*meta && **meta == '|')
 		{
