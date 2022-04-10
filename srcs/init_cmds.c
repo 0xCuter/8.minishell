@@ -6,68 +6,15 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 09:59:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/09 15:07:55 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 08:53:53 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//Inits the argument list, or adds an argument
-static void	add_arg(t_command *cmd, char *arg)
+static void	init_cmd_ter(char **cur, t_data *d, t_command *c)
 {
-	if (cmd->argv == NULL)
-	{
-		cmd->argv = ft_calloc(2, sizeof(char *));
-		if (cmd->argv == NULL)
-			return ;
-		cmd->argv[0] = arg;
-	}
-	else
-	{
-		cmd->argv = add_line(arg, cmd->argv);
-		free(arg);
-	}
-}
-
-//Adds the current token to the command argv list
-//Also replaces the environment variables and quotes in that token
-static void	add_argv(t_command *cmd, char **cur_char, t_data *data)
-{
-	char	*arg;
-	int		i;
-	int		arg_len;
-
-	arg_len = ft_str_chrset_ign_quotes(*cur_char,
-			METACHARS_NO_QUOTES) - (*cur_char);
-	arg = ft_substr(*cur_char, 0, arg_len);
-	if (arg == NULL)
-		return ;
-	*cur_char += arg_len;
-	i = 0;
-	if (arg && arg[0] == 0)
-	{
-		free(arg);
-		return ;
-	}
-	while (arg && arg[i])
-	{
-		if (arg[i] == '\'' || arg[i] == '"')
-			replace_quotes(&arg, data, &i);
-		else
-			++i;
-	}
-	if (arg)
-		add_arg(cmd, arg);
-}
-
-static char	init_cmd_bis(char **cur, t_data *d, char *stdout_p, t_command *c)
-{
-	if ((*cur)[0] == '|')
-	{
-		if (init_pipe(c, stdout_p, cur))
-			return (1);
-	}
-	else if ((*cur)[0] == '<' && (*cur)[1] == '<')
+	if ((*cur)[0] == '<' && (*cur)[1] == '<')
 	{
 		if (init_heredoc(c, cur, d))
 			c->error_init = 1;
@@ -89,6 +36,17 @@ static char	init_cmd_bis(char **cur, t_data *d, char *stdout_p, t_command *c)
 	}
 	else
 		add_argv(c, cur, d);
+}
+
+static char	init_cmd_bis(char **cur, t_data *d, char *stdout_p, t_command *c)
+{
+	if ((*cur)[0] == '|')
+	{
+		if (init_pipe(c, stdout_p, cur))
+			return (1);
+	}
+	else
+		init_cmd_ter(cur, d, c);
 	return (0);
 }
 
@@ -118,7 +76,6 @@ t_list	*init_cmds(char *line, t_data *data)
 	t_list		*c_list;
 	char		stdout_pipe;
 	int			cmd_id;
-	void		*new_cmd;
 
 	c_list = NULL;
 	stdout_pipe = 1;
@@ -132,9 +89,7 @@ t_list	*init_cmds(char *line, t_data *data)
 		{
 			++data->cmd_count;
 			cmd->id = cmd_id++;
-			new_cmd = ft_lstnew(cmd);
-			if (new_cmd != NULL)
-				ft_lstadd_back(&c_list, new_cmd);
+			ft_lstadd_back(&c_list, ft_lstnew(cmd));
 		}
 	}
 	return (c_list);

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 09:08:58 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/10 08:32:17 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 08:53:01 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ void	replace_quotes(char **s, t_data *data, int *pos);
 //init.c
 void	init_envs(t_data *data, char **envp);
 void	init_path_split(t_data *data);
-char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char);
 
 //init_cmds.c
 t_list	*init_cmds(char *line, t_data *data);
@@ -100,6 +99,9 @@ char	init_heredoc(t_command *cmd, char **cur, t_data *data);
 char	init_append(t_command *cmd, char **cur, t_data *data);
 char	init_redir_stdin(t_command *cmd, char **cur, t_data *data);
 char	init_redir_stdout(t_command *cmd, char **cur, t_data *data);
+//init_cmds_bis.c
+char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char);
+void	add_argv(t_command *cmd, char **cur_char, t_data *data);
 
 //utils/
 // utils.c

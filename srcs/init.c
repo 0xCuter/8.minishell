@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 16:01:52 by scuter            #+#    #+#             */
-/*   Updated: 2022/04/09 12:54:53 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/10 08:50:58 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,22 +68,4 @@ void	init_envs(t_data *data, char **envp)
 	}
 	data->envs[i] = NULL;
 	increase_shlvl(data);
-}
-
-//|
-char	init_pipe(t_command *cmd, char *stdout_pipe, char **cur_char)
-{
-	if (*stdout_pipe)
-	{
-		cmd->stdout_piped = 1;
-		*stdout_pipe = 0;
-		return (1);
-	}
-	else
-	{
-		cmd->stdin_piped = 1;
-		*stdout_pipe = 1;
-		++*cur_char;
-	}
-	return (0);
 }
