@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 08:20:11 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/10 08:35:11 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/04/10 15:35:18 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,11 +100,13 @@ char	*find_cmd(char *cmd, t_data *data, char *allocated)
 	if (cmd_is_path(cmd))
 		cmd_path = cmd_is_path_check(cmd, data, &s);
 	else
+	{
 		cmd_path = find_cmd_in_path(cmd, data, allocated, &s);
-	if (cmd_path == NULL)
-		return (error_ret_null(data, 127, NULL,
-				ft_strjoin(cmd, ": command not found")));
-	else if (!(s.st_mode & S_IXUSR))
+		if (cmd_path == NULL)
+			return (error_ret_null(data, 127, NULL,
+					ft_strjoin(cmd, ": command not found")));
+	}
+	if (cmd_path != NULL && !(s.st_mode & S_IXUSR))
 	{
 		if (*allocated)
 			free(cmd_path);
