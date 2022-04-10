@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/09 17:30:15 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/04/10 14:54:02 by scuter           ###   ########.fr       */
+/*   Updated: 2022/04/10 15:28:51 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	create_prompt(char *user_var, char **prompt)
 		*prompt = mod_strjoin(*prompt, PROMPT_HEAD);
 		cwd = getcwd(NULL, 0);
 		if (!cwd)
-			return (*prompt = mod_strjoin(*prompt, DEFAULT_PROMPT));
+			return ;
 		len = ft_strlen(cwd);
 		slash = 0;
 		while (len-- && slash < 3)
